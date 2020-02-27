@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -62,81 +67,73 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void attemptRegistration() {
-        if(!registrationFormIsValid()) {
-            return;
+        if(emailIsValid() & passwordIsValid() & usernameIsValid()) {
+            createAccount();
         }
         else {
-            createAccount();
+            return;
         }
     }
 
     private void attemptSignin() {
-        if(!signinFormIsValid()) {
-            return;
-        }
-        else {
+        if(emailIsValid() & passwordIsValid() & usernameIsValid()) {
             String email = emailField.getText().toString().trim();
             String password = passwordField.getText().toString().trim();
             signIn(email, password);
         }
+        else {
+            return;
+        }
     }
 
-    private boolean registrationFormIsValid() {
-        boolean valid = true;
+    boolean emailIsValid() {
+        String email = emailField.getText().toString().trim();
 
+        if(email.isEmpty()) {
+            emailField.setError("Please enter your email.");
+            return false;
+        }
+        else if(!Pattern.matches("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$", email)) {
+            emailField.setError("Invalid Email");
+            return false;
+        }
+
+        emailField.setError(null);
+        return true;
+    }
+
+    boolean passwordIsValid() {
+        String password = passwordField.getText().toString().trim();
+
+        if(password.isEmpty()) {
+            passwordField.setError("A password is required.");
+            return false;
+        }
+        else if(password.length() < 6) {
+            passwordField.setError("The password must be at least 6 characters.");
+            return false;
+        }
+
+        emailField.setError(null);
+        return true;
+    }
+
+    private boolean usernameIsValid() {
         String userName = usernameField.getText().toString().trim();
-        if (userName.isEmpty()) {
-            usernameField.setError("Please enter a username.");
-            valid = false;
-        } else {
-            usernameField.setError(null);
+
+        if(userName.isEmpty()) {
+            usernameField.setError("A unique username is required.");
+            return false;
         }
 
-        String email = emailField.getText().toString().trim();
-        if (email.isEmpty()) {
-            emailField.setError("Please enter a username");
-            valid = false;
-        } else {
-            emailField.setError(null);
-        }
-
-        String password = passwordField.getText().toString().trim();
-        if (password.isEmpty()) {
-            passwordField.setError("Please enter a password.");
-            valid = false;
-        } else {
-            passwordField.setError(null);
-        }
-
-        return valid;
-    }
-
-    private boolean signinFormIsValid() {
-        boolean valid = true;
-
-        String email = emailField.getText().toString().trim();
-        if (email.isEmpty()) {
-            emailField.setError("Please enter a username");
-            valid = false;
-        } else {
-            emailField.setError(null);
-        }
-
-        String password = passwordField.getText().toString().trim();
-        if (password.isEmpty()) {
-            passwordField.setError("Please enter a password.");
-            valid = false;
-        } else {
-            passwordField.setError(null);
-        }
-
-        return valid;
+        usernameField.setError(null);
+        return true;
     }
 
     private void createAccount() {
 
         String email = emailField.getText().toString().trim();
-        String password = emailField.getText().toString().trim();
+        String password = passwordField.getText().toString().trim();
 
         myAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -144,8 +141,22 @@ public class RegisterActivity extends AppCompatActivity {
                 if(task.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "You're Signed Up", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Signup Failed.", Toast.LENGTH_SHORT).show();
-                    Log.e("AUTH_ERROR: ", task.getException().toString());
+
+                    try {
+                        throw task.getException();
+                    }
+                    catch (FirebaseAuthEmailException e) {
+                        Toast.makeText(RegisterActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                    }
+                    catch (FirebaseAuthWeakPasswordException e) {
+                        Toast.makeText(RegisterActivity.this, "Invalid Password", Toast.LENGTH_SHORT).show();
+                    }
+                    catch (FirebaseAuthUserCollisionException e) {
+                        Toast.makeText(RegisterActivity.this, "Email already in use.", Toast.LENGTH_SHORT).show();
+                    }
+                    catch (Exception e) {
+                        Log.e("EXCEPTION THROWN: ", e.toString());
+                    }
                 }
             }
         });
@@ -166,10 +177,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void goToDashboardPage() {
-        goToDashboardPage();
         Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
+        finish();
     }
-
-
 }
