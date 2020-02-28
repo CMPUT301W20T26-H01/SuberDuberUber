@@ -44,4 +44,19 @@ public class Car {
         return model;
     }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }
