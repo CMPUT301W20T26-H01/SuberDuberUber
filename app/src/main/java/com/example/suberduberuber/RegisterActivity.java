@@ -27,8 +27,8 @@ import java.util.regex.Pattern;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
+
     private FirebaseFirestore myDb = FirebaseFirestore.getInstance();
-    private DocumentReference userRef = myDb.document("Users/");
 
     private EditText usernameField;
     private EditText emailField;
@@ -51,19 +51,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         myAuth = FirebaseAuth.getInstance();
         myDb = FirebaseFirestore.getInstance();
-        userRef = myDb.document("Users/");
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attemptRegistration();
-            }
-        });
-
-        signinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptSignin();
             }
         });
     }
@@ -76,17 +68,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void attemptRegistration() {
         if(emailIsValid() & passwordIsValid() & usernameIsValid()) {
             createAccount();
-        }
-        else {
-            return;
-        }
-    }
-
-    private void attemptSignin() {
-        if(emailIsValid() & passwordIsValid() & usernameIsValid()) {
-            String email = emailField.getText().toString().trim();
-            String password = passwordField.getText().toString().trim();
-            signIn(email, password);
         }
         else {
             return;
@@ -139,14 +120,15 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void createAccount() {
 
-        String email = emailField.getText().toString().trim();
+        final String email = emailField.getText().toString().trim();
         String password = passwordField.getText().toString().trim();
+        final String username = usernameField.getText().toString().trim();
 
         myAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    saveUserData();
+                    saveUserData(email, username);
                     Toast.makeText(RegisterActivity.this, "You're Signed Up", Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -170,27 +152,27 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserData() {
+    private void saveUserData(String email, String username) {
+        User user = new Rider(username, email);
 
+        myDb.collection("Users")
+                .document(myAuth.getUid())
+                .set(user)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            redirectToLogin();
+                        }
+                    }
+                });
     }
 
-    private void signIn(String email, String password) {
-        myAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    goToDashboardPage();
-                } else {
-                    Toast.makeText(RegisterActivity.this, "Signin Failed", Toast.LENGTH_SHORT).show();
-                    Log.e("FAILED_AUTH", task.getException().toString());
-                }
-            }
-        });
-    }
+    private void redirectToLogin() {
 
-    private void goToDashboardPage() {
-        Intent intent = new Intent(this, DashboardActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
+
 }

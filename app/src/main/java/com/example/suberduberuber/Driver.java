@@ -8,8 +8,8 @@ public class Driver extends User {
     private ArrayList<String> acceptedRequests; // TODO: Need to change once request class is created
     private boolean isAvailable;
 
-    public Driver(String username, String phoneNumber, String emailAddress) {
-        super(username, phoneNumber, emailAddress);
+    public Driver(String username, String emailAddress) {
+        super(username, emailAddress);
         this.car = "";
         this.currentRide = "";
         this.acceptedRequests = new ArrayList<String>();
