@@ -19,12 +19,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
+    private FirebaseFirestore myDb = FirebaseFirestore.getInstance();
+    private DocumentReference userRef = myDb.document("Users/");
+
     private EditText usernameField;
     private EditText emailField;
     private EditText passwordField;
@@ -45,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
         signinButton = findViewById(R.id.signin_button);
 
         myAuth = FirebaseAuth.getInstance();
+        myDb = FirebaseFirestore.getInstance();
+        userRef = myDb.document("Users/");
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
+                    saveUserData();
                     Toast.makeText(RegisterActivity.this, "You're Signed Up", Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -160,6 +168,10 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void saveUserData() {
+
     }
 
     private void signIn(String email, String password) {
