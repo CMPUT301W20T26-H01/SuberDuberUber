@@ -1,6 +1,7 @@
 package com.example.suberduberuber;
 
 public class Car {
+    public static final String DEFAULT = "Default"; // Default value for basic constructor
     private String make;
     private String model;
     private int year;
@@ -13,6 +14,14 @@ public class Car {
         this.year = year;
         this.licensePlate = licensePlate;
         this.color = color;
+    }
+
+    public Car(String licensePlate) {
+        this.licensePlate = licensePlate;
+        this.make = DEFAULT;
+        this.model = DEFAULT;
+        this.color = DEFAULT;
+        this.year = -1;
     }
 
     public int getYear() {

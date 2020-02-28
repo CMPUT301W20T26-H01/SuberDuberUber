@@ -1,7 +1,7 @@
 package com.example.suberduberuber;
 
 public class Path {
-    public static final double COST_FACTOR = 0.05;
+    private static final double COST_FACTOR = 0.05;
     private Location startLocation;
     private Location destination;
     private double estimatedFare;
