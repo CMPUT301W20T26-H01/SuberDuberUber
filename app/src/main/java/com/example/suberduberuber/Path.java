@@ -1,9 +1,7 @@
 package com.example.suberduberuber;
 
 public class Path {
-<<<<<<< HEAD
 
-=======
     private static final double COST_FACTOR = 0.05;
     private Location startLocation;
     private Location destination;
@@ -33,5 +31,5 @@ public class Path {
         this.startLocation = startLocation;
         this.generateEstimatedFare();
     }
->>>>>>> fb98ccea1fd9ea1fefaeaabd8b4ac8acc5f230fd
+
 }
