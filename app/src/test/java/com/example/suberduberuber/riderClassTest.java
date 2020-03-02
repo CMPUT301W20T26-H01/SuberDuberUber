@@ -1,18 +1,56 @@
 package com.example.suberduberuber;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class riderClassTest {
+    Rider r;
     private Rider createRider() {
         Rider r = new Rider("testUsername", "000-000-0000", "test@test.ca");
         return r;
     }
 
+    @Before
+    public void setup() {
+        r = createRider();
+    }
+
+    @Test
+    public void testGetInfo() {
+        ArrayList<String> info = r.getInfo();
+        assertEquals("000-000-0000", info.get(0));
+        assertEquals("test@test.ca", info.get(1));
+    }
+
+    @Test
+    public void testSetInfo() {
+        String newPh = "123-456-7890";
+        String newEmail = "newtest@new.ca";
+        r.setInfo(newPh, newEmail);
+
+        assertEquals(newPh, r.getInfo().get(0));
+        assertEquals(newEmail, r.getInfo().get(1));
+    }
+
+    @Test
+    public void testSetGetRating() {
+        assertEquals(0, r.getRating());
+
+        r.setRating(50);
+        assertEquals(50, r.getRating());
+    }
+
+    @Test
+    public void testGetWallet() {
+        assertEquals("", r.getQRBucksWallet());
+    }
+
     @Test
     public void testAddRide() {
-        Rider r = createRider();
         String ride = "Ride1";
         r.addRide(ride);
 
@@ -25,7 +63,6 @@ public class riderClassTest {
 
     @Test
     public void testRemoveRide() {
-        Rider r = createRider();
         String ride = "Ride1";
         r.addRide(ride);
         r.removeRide(ride);
@@ -35,7 +72,6 @@ public class riderClassTest {
 
     @Test
     public void testAddRequest() {
-        Rider r = createRider();
         String req = "Request1";
         r.addRequest(req);
 
@@ -48,7 +84,6 @@ public class riderClassTest {
 
     @Test
     public void testRemoveRequest() {
-        Rider r = createRider();
         String req = "Request1";
         r.addRequest(req);
         r.removeRequest(req);
