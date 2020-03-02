@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "353740391016",
+    "firebase_url": "https://suberduberuber-8087a.firebaseio.com",
+    "project_id": "suberduberuber-8087a",
+    "storage_bucket": "suberduberuber-8087a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353740391016:android:c20465b306947c587b71dd",
+        "android_client_info": {
+          "package_name": "com.example.suberduberuber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "353740391016-7ah7k3s7gd76fg5fjh3c6era2ulhoktl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe2Z2EGciZSGj_aFILwXWzQlWmF9bdGlY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "353740391016-7ah7k3s7gd76fg5fjh3c6era2ulhoktl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
