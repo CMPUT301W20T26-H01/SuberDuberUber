@@ -14,6 +14,27 @@ public class Request {
     private String status;
 
     /**
+     * Request object constructor
+     * @param requestID
+     * The ID number of he request
+     * @param requestingUser
+     * The user submitting the request
+     * @param path
+     * The path requested by the user
+     * @param time
+     * The chosen time of pickup for the ride request
+     * @param status
+     * The current status of the ride request
+     */
+    public Request(int requestID, User requestingUser, Path path, String time, String status) {
+        this.requestID = requestID;
+        this.requestingUser = requestingUser;
+        this.path = path;
+        this.time = time;
+        changeStatus(status);
+    }
+
+    /**
      * Change the status of the request
      * @param newStatus
      * The new status of the request, either "initiated", "in-progress", or "completed"
