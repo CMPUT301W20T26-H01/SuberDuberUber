@@ -15,16 +15,11 @@ public class Request {
 
     /**
      * Request object constructor
-     * @param requestID
-     * The ID number of he request
-     * @param requestingUser
-     * The user submitting the request
-     * @param path
-     * The path requested by the user
-     * @param time
-     * The chosen time of pickup for the ride request
-     * @param status
-     * The current status of the ride request
+     * @param requestID         The ID number of he request
+     * @param requestingUser    The user submitting the request
+     * @param path              The path requested by the user
+     * @param time              The chosen time of pickup for the ride request
+     * @param status            The current status of the ride request
      */
     public Request(int requestID, User requestingUser, Path path, String time, String status) {
         this.requestID = requestID;
@@ -36,10 +31,8 @@ public class Request {
 
     /**
      * Change the status of the request
-     * @param newStatus
-     * The new status of the request, either "initiated", "in-progress", or "completed"
-     * @throws IllegalArgumentException
-     * If newStatus is not one of the three accepted options
+     * @param newStatus                     The new status of the request, either "initiated", "in-progress", or "completed"
+     * @throws IllegalArgumentException     If newStatus is not one of the three accepted options
      */
     public void changeStatus(String newStatus) throws IllegalArgumentException {
         if (Objects.equals(newStatus, "initiated")) {
@@ -51,6 +44,46 @@ public class Request {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    /**
+     * Returns an ID number
+     * @return      The ID number of the request
+     */
+    public int getRequestID() {
+        return this.requestID;
+    }
+
+    /**
+     * Returns a User
+     * @return      The User that sent the request
+     */
+    public User getRequestingUser() {
+        return this.requestingUser;
+    }
+
+    /**
+     * Returns a Path
+     * @return      The path in which the request's corresponding ride would follow
+     */
+    public Path getPath() {
+        return this.path;
+    }
+
+    /**
+     * Returns a time in String format
+     * @return      The pickup time of the requested ride
+     */
+    public String getTime() {
+        return this.time;
+    }
+
+    /**
+     * Returns a String (either initiated, in-progress, or completed)
+     * @return      The status of the ride request
+     */
+    public String getStatus() {
+        return status;
     }
 
 }
