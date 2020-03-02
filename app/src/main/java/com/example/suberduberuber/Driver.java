@@ -3,7 +3,7 @@ package com.example.suberduberuber;
 import java.util.ArrayList;
 
 public class Driver extends User {
-    private String car; // TODO: Need to change once car class is created
+    private Car car;
     private String currentRide; // TODO: Need to change once ride class is created
     private ArrayList<String> acceptedRequests; // TODO: Need to change once request class is created
     private boolean isAvailable;
@@ -19,7 +19,7 @@ public class Driver extends User {
      */
     public Driver(String username, String phoneNumber, String emailAddress) {
         super(username, phoneNumber, emailAddress);
-        this.car = "";
+        this.car = null;
         this.currentRide = "";
         this.acceptedRequests = new ArrayList<String>();
         this.isAvailable = true;
@@ -30,7 +30,7 @@ public class Driver extends User {
      * @param car
      *      Driver's car
      */
-    public void setCar(String car) {
+    public void setCar(Car car) {
         this.car = car;
     }
 
@@ -39,7 +39,7 @@ public class Driver extends User {
      * @return
      *      Driver's car
      */
-    public String getCar() {
+    public Car getCar() {
         return this.car;
     }
 

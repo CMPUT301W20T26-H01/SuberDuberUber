@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class driverClassTest {
     Driver d;
@@ -51,10 +52,10 @@ public class driverClassTest {
 
     @Test
     public void testSetGetCar() {
-        assertEquals("", d.getCar());
-
-        d.setCar("NewCar");
-        assertEquals("NewCar", d.getCar());
+        assertNull(d.getCar());
+        Car c = new Car("ABC123");
+        d.setCar(c);
+        assertEquals(c, d.getCar());
     }
 
     @Test
