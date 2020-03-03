@@ -27,6 +27,9 @@ public class Rider extends User {
      *      Ride to be added
      */
     public void addRide(String ride) {
+        if (this.rides.contains(ride)) {
+            throw new IllegalArgumentException();
+        }
         this.rides.add(ride);
     }
 
@@ -39,6 +42,9 @@ public class Rider extends User {
         if (this.rides.contains(ride)) {
             this.rides.remove(ride);
         }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -47,6 +53,9 @@ public class Rider extends User {
      *      Request to be added
      */
     public void addRequest(Request request) {
+        if (this.requests.contains(request)) {
+            throw new IllegalArgumentException();
+        }
         this.requests.add(request);
     }
 
@@ -58,6 +67,9 @@ public class Rider extends User {
     public void removeRequest(Request request) {
         if (this.requests.contains(request)) {
             this.requests.remove(request);
+        }
+        else {
+            throw new IllegalArgumentException();
         }
     }
 

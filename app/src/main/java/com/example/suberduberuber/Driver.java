@@ -67,6 +67,9 @@ public class Driver extends User {
      *      New accepted request
      */
     public void addAcceptedRequests(Request request) {
+        if (this.acceptedRequests.contains(request)) {
+            throw new IllegalArgumentException();
+        }
         this.acceptedRequests.add(request);
     }
 
@@ -78,6 +81,9 @@ public class Driver extends User {
     public void removeAcceptedRequests(Request request) {
         if (this.acceptedRequests.contains(request)) {
             this.acceptedRequests.remove(request);
+        }
+        else {
+            throw new IllegalArgumentException();
         }
     }
 
