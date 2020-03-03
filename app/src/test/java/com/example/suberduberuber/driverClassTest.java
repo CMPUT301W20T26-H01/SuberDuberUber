@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class driverClassTest {
     Driver d;
     private Driver createDriver() {
-        Driver r = new Driver("testUsername", "000-000-0000", "test@test.ca");
+        Driver r = new Driver("testUsername", "test@test.ca");
         return r;
     }
 
@@ -21,7 +21,7 @@ public class driverClassTest {
     @Test
     public void testGetInfo() {
         ArrayList<String> info = d.getInfo();
-        assertEquals("000-000-0000", info.get(0));
+        assertEquals("", info.get(0));
         assertEquals("test@test.ca", info.get(1));
     }
 
@@ -66,7 +66,7 @@ public class driverClassTest {
 
     @Test
     public void testAddAcceptedReq() {
-        Rider r = new Rider("rider1", "000-000-0000", "ride@rider.ca");
+        Rider r = new Rider("rider1", "ride@rider.ca");
         Request req1 = new Request(1, r, null, "time", "initiated");
         Request req2 = new Request(2, r, null, "time", "initiated");
         d.addAcceptedRequests(req1);
@@ -79,7 +79,7 @@ public class driverClassTest {
 
     @Test
     public void testRemoveAcceptedReq() {
-        Rider r = new Rider("rider1", "000-000-0000", "ride@rider.ca");
+        Rider r = new Rider("rider1", "ride@rider.ca");
         Request req1 = new Request(1, r, null, "time", "initiated");
         d.addAcceptedRequests(req1);
         d.removeAcceptedRequests(req1);
@@ -89,7 +89,7 @@ public class driverClassTest {
 
     @Test
     public void testGetAcceptedReq() {
-        Rider r = new Rider("rider1", "000-000-0000", "ride@rider.ca");
+        Rider r = new Rider("rider1", "ride@rider.ca");
         Request req1 = new Request(1, r, null, "time", "initiated");
         Request req2 = new Request(2, r, null, "time", "initiated");
         ArrayList<Request> a = new ArrayList<>();

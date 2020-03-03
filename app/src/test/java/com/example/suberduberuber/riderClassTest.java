@@ -11,13 +11,13 @@ public class riderClassTest {
 
     @BeforeEach
     public void setup() {
-        r = new Rider("testUsername", "000-000-0000", "test@test.ca");
+        r = new Rider("testUsername", "test@test.ca");
     }
 
     @Test
     public void testGetInfo() {
         ArrayList<String> info = r.getInfo();
-        assertEquals("000-000-0000", info.get(0));
+        assertEquals("", info.get(0));
         assertEquals("test@test.ca", info.get(1));
     }
 
