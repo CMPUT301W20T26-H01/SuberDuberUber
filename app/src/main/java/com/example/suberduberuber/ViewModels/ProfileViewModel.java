@@ -7,28 +7,28 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.example.suberduberuber.FirestoreRepository;
+import com.example.suberduberuber.UserRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+// A class that exposes all of the data and data manipulation methods relevant to the user profile page.
 public class ProfileViewModel extends AndroidViewModel {
 
     private static String TAG = "PROFILE_VIEW_MODEL";
 
-    private FirestoreRepository firestoreRepository;
+    private UserRepository firestoreRepository;
 
     private MutableLiveData<User> currentUser = new MutableLiveData<User>();
 
     public ProfileViewModel(Application application) {
         super(application);
-        firestoreRepository = new FirestoreRepository();
+        firestoreRepository = new UserRepository();
     }
 
-    // get the current user and setup listening for live updates
+    // Get the current user and setup listening for live updates
     public LiveData<User> getCurrentUser() {
         firestoreRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -41,6 +41,7 @@ public class ProfileViewModel extends AndroidViewModel {
                 }
             }
         });
+
         return currentUser;
     }
 }

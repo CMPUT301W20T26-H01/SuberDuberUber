@@ -9,7 +9,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class FirestoreRepository {
+// A class that serves to handle data structure specific logic and interactions with Fire store,  specifically for user related interactions.
+public class UserRepository {
 
     FirebaseAuth myAuth = FirebaseAuth.getInstance();
     FirebaseFirestore myDb = FirebaseFirestore.getInstance();

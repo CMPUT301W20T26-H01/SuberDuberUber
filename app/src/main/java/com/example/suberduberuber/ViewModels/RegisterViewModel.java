@@ -5,21 +5,21 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModel;
 
-import com.example.suberduberuber.FirestoreRepository;
+import com.example.suberduberuber.UserRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 
+// A class that exposes all of the data and data manipulation methods relevant to the registration page.
 public class RegisterViewModel extends AndroidViewModel {
 
     private static String TAG = "IN_REGISTRATION_VIEWMODEL";
 
-    private FirestoreRepository firestoreRepository;
+    private UserRepository firestoreRepository;
 
     public RegisterViewModel(Application application) {
         super(application);
-        firestoreRepository = new FirestoreRepository();
+        firestoreRepository = new UserRepository();
     }
 
     public void createNewUser(User user) {
