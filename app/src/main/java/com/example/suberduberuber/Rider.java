@@ -6,8 +6,8 @@ public class Rider extends User {
     private ArrayList<String> rides; // TODO: Change String to Ride when class is created
     private ArrayList<String> requests; // TODO: Change String to Request when class is created
 
-    public Rider(String username, String phoneNumber, String emailAddress) {
-        super(username, phoneNumber, emailAddress);
+    public Rider(String username, String emailAddress) {
+        super(username, emailAddress);
         this.rides = new ArrayList<String>();
         this.requests = new ArrayList<String>();
     }
