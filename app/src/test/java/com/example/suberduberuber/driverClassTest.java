@@ -68,8 +68,9 @@ public class driverClassTest {
 
     @Test
     public void testAddAcceptedReq() {
-        String req1 = "Accepted Req 1";
-        String req2 = "Accepted Req 2";
+        Rider r = new Rider("rider1", "000-000-0000", "ride@rider.ca");
+        Request req1 = new Request(1, r, null, "time", "initiated");
+        Request req2 = new Request(2, r, null, "time", "initiated");
         d.addAcceptedRequests(req1);
 
         assertEquals(req1, d.getAcceptedRequests().get(0));
@@ -79,7 +80,8 @@ public class driverClassTest {
 
     @Test
     public void testRemoveAcceptedReq() {
-        String req1 = "Req 1";
+        Rider r = new Rider("rider1", "000-000-0000", "ride@rider.ca");
+        Request req1 = new Request(1, r, null, "time", "initiated");
         d.addAcceptedRequests(req1);
         d.removeAcceptedRequests(req1);
         assertEquals(0, d.getAcceptedRequests().size());
@@ -87,9 +89,10 @@ public class driverClassTest {
 
     @Test
     public void testGetAcceptedReq() {
-        String req1 = "Req1";
-        String req2 = "Req2";
-        ArrayList<String> a = new ArrayList<>();
+        Rider r = new Rider("rider1", "000-000-0000", "ride@rider.ca");
+        Request req1 = new Request(1, r, null, "time", "initiated");
+        Request req2 = new Request(2, r, null, "time", "initiated");
+        ArrayList<Request> a = new ArrayList<>();
         a.add(req1);
         a.add(req2);
 

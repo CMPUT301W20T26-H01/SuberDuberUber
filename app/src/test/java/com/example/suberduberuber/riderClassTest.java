@@ -72,19 +72,20 @@ public class riderClassTest {
 
     @Test
     public void testAddRequest() {
-        String req = "Request1";
-        r.addRequest(req);
+        Request req1 = new Request(1, r, null, "time", "initiated");
+        r.addRequest(req1);
 
-        assertEquals(req, r.getRequests().get(0));
-        r.addRequest("Request2");
+        assertEquals(req1, r.getRequests().get(0));
+        Request req2 = new Request(2, r, null, "time", "initiated");
+        r.addRequest(req2);
 
         assertEquals(2, r.getRequests().size());
-        assertEquals("Request2", r.getRequests().get(1));
+        assertEquals(2, r.getRequests().get(1).getRequestID());
     }
 
     @Test
     public void testRemoveRequest() {
-        String req = "Request1";
+        Request req = new Request(1, r, null, "time", "initiated");
         r.addRequest(req);
         r.removeRequest(req);
 
