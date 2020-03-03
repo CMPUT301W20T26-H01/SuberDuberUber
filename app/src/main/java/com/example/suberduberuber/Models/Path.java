@@ -7,6 +7,9 @@ public class Path {
     private Location destination;
     private double estimatedFare;
 
+    // Empty public constructor needed by Cloud Firestore for serializability
+    public Path() { }
+
     public Path(Location startLocation, Location destination) {
         this.startLocation = startLocation;
         this.destination = destination;

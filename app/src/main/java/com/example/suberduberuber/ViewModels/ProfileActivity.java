@@ -1,8 +1,7 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.ViewModels;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -10,6 +9,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.suberduberuber.Models.User;
+import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.ProfileViewModel;
 
 public class ProfileActivity extends AppCompatActivity {
 

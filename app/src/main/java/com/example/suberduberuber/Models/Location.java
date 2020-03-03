@@ -5,6 +5,9 @@ public class Location {
     private String locationName;
     private String address;
 
+    // Empty public constructor needed by Cloud Firestore for serializability
+    public Location() { }
+
     public Location(String coordinate, String locationName, String address) {
         this.coordinate = coordinate;
         this. locationName = locationName;

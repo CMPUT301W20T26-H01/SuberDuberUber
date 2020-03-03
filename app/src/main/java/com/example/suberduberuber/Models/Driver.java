@@ -8,6 +8,9 @@ public class Driver extends User {
     private ArrayList<String> acceptedRequests; // TODO: Need to change once request class is created
     private boolean isAvailable;
 
+    // Empty public constructor needed by Cloud Firestore for serializability
+    public Driver() { }
+
     public Driver(String username, String emailAddress) {
         super(username, emailAddress);
         this.car = "";

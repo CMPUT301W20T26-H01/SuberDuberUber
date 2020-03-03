@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.ViewModels;
 
 import android.app.Application;
 import android.util.Log;
@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 
+import com.example.suberduberuber.FirestoreRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 

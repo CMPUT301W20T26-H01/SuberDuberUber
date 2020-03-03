@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.ViewModels;
 
 import android.app.Application;
 import android.util.Log;
@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.suberduberuber.FirestoreRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
