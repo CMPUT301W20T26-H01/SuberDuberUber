@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Rider extends User {
     private ArrayList<String> rides; // TODO: Change String to Ride when class is created
-    private ArrayList<String> requests; // TODO: Change String to Request when class is created
+    private ArrayList<Request> requests; // TODO: Change String to Request when class is created
 
     /**
      * Creates a rider user
@@ -18,7 +18,7 @@ public class Rider extends User {
     public Rider(String username, String phoneNumber, String emailAddress) {
         super(username, phoneNumber, emailAddress);
         this.rides = new ArrayList<String>();
-        this.requests = new ArrayList<String>();
+        this.requests = new ArrayList<Request>();
     }
 
     /**
@@ -46,7 +46,7 @@ public class Rider extends User {
      * @param request
      *      Request to be added
      */
-    public void addRequest(String request) {
+    public void addRequest(Request request) {
         this.requests.add(request);
     }
 
@@ -55,7 +55,7 @@ public class Rider extends User {
      * @param request
      *      Request to be removed
      */
-    public void removeRequest(String request) {
+    public void removeRequest(Request request) {
         if (this.requests.contains(request)) {
             this.requests.remove(request);
         }
@@ -75,7 +75,7 @@ public class Rider extends User {
      * @return
      *      Array list of requests
      */
-    public ArrayList<String> getRequests() {
+    public ArrayList<Request> getRequests() {
         return this.requests;
     }
 }

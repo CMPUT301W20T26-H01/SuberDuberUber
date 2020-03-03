@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Driver extends User {
     private Car car;
     private String currentRide; // TODO: Need to change once ride class is created
-    private ArrayList<String> acceptedRequests; // TODO: Need to change once request class is created
+    private ArrayList<Request> acceptedRequests; // TODO: Need to change once request class is created
     private boolean isAvailable;
 
     /**
@@ -21,7 +21,7 @@ public class Driver extends User {
         super(username, phoneNumber, emailAddress);
         this.car = null;
         this.currentRide = "";
-        this.acceptedRequests = new ArrayList<String>();
+        this.acceptedRequests = new ArrayList<Request>();
         this.isAvailable = true;
     }
 
@@ -66,7 +66,7 @@ public class Driver extends User {
      * @param request
      *      New accepted request
      */
-    public void addAcceptedRequests(String request) {
+    public void addAcceptedRequests(Request request) {
         this.acceptedRequests.add(request);
     }
 
@@ -75,7 +75,7 @@ public class Driver extends User {
      * @param request
      *      Request to be removed
      */
-    public void removeAcceptedRequests(String request) {
+    public void removeAcceptedRequests(Request request) {
         if (this.acceptedRequests.contains(request)) {
             this.acceptedRequests.remove(request);
         }
@@ -86,7 +86,7 @@ public class Driver extends User {
      * @return
      *      Array list of all accepted requests
      */
-    public ArrayList<String> getAcceptedRequests() {
+    public ArrayList<Request> getAcceptedRequests() {
         return this.acceptedRequests;
     }
 }
