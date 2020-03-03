@@ -1,10 +1,14 @@
 package com.example.suberduberuber;
 
+import com.google.firebase.firestore.DocumentId;
+
 import java.util.ArrayList;
 
 public abstract class User {
     private String username;
     private String phoneNumber;
+
+    @DocumentId
     private String emailAddress;
     private int rating;
     private String QRBucksWallet; // TODO: Change to Wallet class when it is created
@@ -13,15 +17,13 @@ public abstract class User {
      * This generates an user with an unique username, phone number and email address
      * @param username
      *      User's identifier
-     * @param phoneNumber
-     *      User's phone number
      * @param emailAddress
      *      User's unique email address
      *
      */
-    public User(String username, String phoneNumber, String emailAddress) {
+    public User(String username, String emailAddress) {
         this.username = username;
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = "";
         this.emailAddress = emailAddress;
         this.rating = 0;
         this.QRBucksWallet = "";

@@ -12,13 +12,11 @@ public class Driver extends User {
      * Creates a driver user
      * @param username
      *      User's identifier
-     * @param phoneNumber
-     *      User's phone number
      * @param emailAddress
      *      User's unique email address
      */
-    public Driver(String username, String phoneNumber, String emailAddress) {
-        super(username, phoneNumber, emailAddress);
+    public Driver(String username, String emailAddress) {
+        super(username, emailAddress);
         this.car = null;
         this.currentRide = "";
         this.acceptedRequests = new ArrayList<Request>();

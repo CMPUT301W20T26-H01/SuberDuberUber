@@ -10,13 +10,11 @@ public class Rider extends User {
      * Creates a rider user
      * @param username
      *      User's identifier
-     * @param phoneNumber
-     *      User's phone number
      * @param emailAddress
      *      User's unique email address
      */
-    public Rider(String username, String phoneNumber, String emailAddress) {
-        super(username, phoneNumber, emailAddress);
+    public Rider(String username, String emailAddress) {
+        super(username, emailAddress);
         this.rides = new ArrayList<String>();
         this.requests = new ArrayList<Request>();
     }
