@@ -1,12 +1,10 @@
 package com.example.suberduberuber;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class driverClassTest {
     Driver d;
@@ -15,7 +13,7 @@ public class driverClassTest {
         return r;
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         d = createDriver();
     }
@@ -76,6 +74,7 @@ public class driverClassTest {
         assertEquals(req1, d.getAcceptedRequests().get(0));
         d.addAcceptedRequests(req2);
         assertEquals(req2, d.getAcceptedRequests().get(1));
+        assertThrows(IllegalArgumentException.class, () -> { d.addAcceptedRequests(req1); });
     }
 
     @Test
@@ -85,6 +84,7 @@ public class driverClassTest {
         d.addAcceptedRequests(req1);
         d.removeAcceptedRequests(req1);
         assertEquals(0, d.getAcceptedRequests().size());
+        assertThrows(IllegalArgumentException.class, () -> { d.removeAcceptedRequests(req1); });
     }
 
     @Test

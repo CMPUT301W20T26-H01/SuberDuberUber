@@ -1,22 +1,17 @@
 package com.example.suberduberuber;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 public class riderClassTest {
     Rider r;
-    private Rider createRider() {
-        Rider r = new Rider("testUsername", "000-000-0000", "test@test.ca");
-        return r;
-    }
 
-    @Before
+    @BeforeEach
     public void setup() {
-        r = createRider();
+        r = new Rider("testUsername", "000-000-0000", "test@test.ca");
     }
 
     @Test
@@ -59,6 +54,7 @@ public class riderClassTest {
 
         assertEquals(2, r.getRides().size());
         assertEquals("Ride2", r.getRides().get(1));
+        assertThrows(IllegalArgumentException.class, () -> { r.addRide(ride); });
     }
 
     @Test
@@ -68,6 +64,7 @@ public class riderClassTest {
         r.removeRide(ride);
 
         assertEquals(0, r.getRides().size());
+        assertThrows(IllegalArgumentException.class, () -> { r.removeRide(ride); });
     }
 
     @Test
@@ -81,6 +78,7 @@ public class riderClassTest {
 
         assertEquals(2, r.getRequests().size());
         assertEquals(2, r.getRequests().get(1).getRequestID());
+        assertThrows(IllegalArgumentException.class, () -> { r.addRequest(req1); });
     }
 
     @Test
@@ -90,6 +88,7 @@ public class riderClassTest {
         r.removeRequest(req);
 
         assertEquals(0, r.getRequests().size());
+        assertThrows(IllegalArgumentException.class, () -> { r.removeRequest(req); });
     }
 
 
