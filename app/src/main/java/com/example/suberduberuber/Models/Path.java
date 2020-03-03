@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Models;
 
 public class Path {
 

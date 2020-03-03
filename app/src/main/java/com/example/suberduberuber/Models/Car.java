@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Models;
 
 public class Car {
     public static final String DEFAULT = "Default"; // Default value for basic constructor
@@ -7,6 +7,10 @@ public class Car {
     private int year;
     private String licensePlate;
     private String color;
+
+    public Car() {
+        // Firestore needs empty constructor for serializability
+    }
 
     public Car(String make, String model, String licensePlate, String color, int year) {
         this.make = make;

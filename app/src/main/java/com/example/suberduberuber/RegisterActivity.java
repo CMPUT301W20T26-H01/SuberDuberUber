@@ -10,7 +10,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
+import com.example.suberduberuber.Models.Rider;
+import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
 
-    private FirebaseFirestore myDb = FirebaseFirestore.getInstance();
+    private RegisterViewModel registerViewModel;
 
     private EditText usernameField;
     private EditText emailField;
@@ -40,6 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel.class);
+
         usernameField = findViewById(R.id.username_field);
         emailField = findViewById(R.id.email_field);
         passwordField = findViewById(R.id.password_field);
@@ -48,7 +54,6 @@ public class RegisterActivity extends AppCompatActivity {
         signinButton = findViewById(R.id.signin_button);
 
         myAuth = FirebaseAuth.getInstance();
-        myDb = FirebaseFirestore.getInstance();
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,17 +158,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void saveUserData(String email, String username) {
         User user = new Rider(username, email);
 
-        myDb.collection("Users")
-                .document(myAuth.getUid())
-                .set(user)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            redirectToLogin();
-                        }
-                    }
-                });
+        registerViewModel.createNewUser(user);
     }
 
     private void redirectToLogin() {

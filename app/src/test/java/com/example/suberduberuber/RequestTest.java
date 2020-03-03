@@ -1,5 +1,7 @@
 package com.example.suberduberuber;
 
+import com.example.suberduberuber.Models.Request;
+
 import org.junit.jupiter.api.Test;
 import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
