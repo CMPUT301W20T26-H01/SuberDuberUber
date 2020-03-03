@@ -9,12 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewModels.ProfileActivity"></activity>
-        <activity android:name=".ViewModels.DashboardActivity" />
-        <activity android:name=".ViewModels.RegisterActivity" />
-        <activity android:name=".ViewModels.MainActivity" />
+        <activity android:name=".Activities.ProfileActivity"></activity>
+        <activity android:name=".Activities.DashboardActivity" />
+        <activity android:name=".Activities.RegisterActivity" />
+        <activity android:name=".Activities.MainActivity" />
         <activity
-            android:name=".ViewModels.LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

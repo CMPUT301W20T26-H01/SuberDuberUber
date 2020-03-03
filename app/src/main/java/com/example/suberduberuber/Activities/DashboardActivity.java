@@ -1,4 +1,4 @@
-package com.example.suberduberuber.ViewModels;
+package com.example.suberduberuber.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
