@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ public class QRCodeFragment extends Fragment {
     private UserRepository firestoreRepository;
 
     private Button genQRCodeButton;
+    private ImageView qrImageView;
     private Bitmap bitmap;
     public final static int qrWidth = 500;
 
@@ -51,13 +53,14 @@ public class QRCodeFragment extends Fragment {
         DocumentReference user = firestoreRepository.getCurrentUser();
 
         genQRCodeButton = view.findViewById(R.id.qrGen_button);
+        qrImageView = view.findViewById(R.id.qrCodeImage);
         genQRCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String id = user.getId();
                 try {
                     bitmap = generateQRCode(id);
-                    // imageView.setImageBitmap(bitmap);
+                    qrImageView.setImageBitmap(bitmap);
                 }
                 catch (WriterException e) {
                     e.printStackTrace();
