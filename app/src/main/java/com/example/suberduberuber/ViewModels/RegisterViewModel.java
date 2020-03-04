@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.suberduberuber.UserRepository;
+import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 

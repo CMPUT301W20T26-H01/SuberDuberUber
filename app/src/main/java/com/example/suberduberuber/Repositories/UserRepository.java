@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Repositories;
 
 import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,10 +16,9 @@ public class UserRepository {
     FirebaseFirestore myDb = FirebaseFirestore.getInstance();
     FirebaseUser currentUser = myAuth.getCurrentUser();
 
-    public Task<Void> saveUser(User user) {
+    public Task<DocumentReference> saveUser(User user) {
         return myDb.collection("users")
-                .document(currentUser.getEmail())
-                .set(user);
+                .add(user);
     }
 
     public DocumentReference getCurrentUser() {
