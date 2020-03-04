@@ -18,6 +18,14 @@ public class User implements Serializable {
         // Firestore needs this to serialize properly
     }
 
+    /**
+     * This generates an user with an unique username, phone number and email address
+     * @param username
+     *      User's identifier
+     * @param emailAddress
+     *      User's unique email address
+     *
+     */
     public User(String username, String emailAddress) {
         this.username = username;
         this.phoneNumber = "";
@@ -38,6 +46,11 @@ public class User implements Serializable {
         return this.QRBucksWallet;
     }
 
+    /**
+     * Gets the info of an user (phone number and email address)
+     * @return
+     *      An array list of phone number [0] and email address [1]
+     */
     public ArrayList<String> getInfo() {
         ArrayList<String> info = new ArrayList<String>();
         info.add(this.phoneNumber);
@@ -45,12 +58,25 @@ public class User implements Serializable {
         return info;
     }
 
+    /**
+     * Set the info of a user
+     * @param phoneNumber
+     *      New phone number
+     * @param emailAddress
+     *      New email address
+     */
     public void setInfo(String phoneNumber, String emailAddress) {
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
     }
 
+    /**
+     * Sets a new rating value for the user
+     * @param rating
+     *      New rating value
+     */
     public void setRating(int rating) {
         this.rating = rating;
     }
+
 }
