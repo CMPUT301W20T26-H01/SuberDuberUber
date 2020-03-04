@@ -8,7 +8,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.suberduberuber.UserRepository;
+import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -19,18 +20,18 @@ public class ProfileViewModel extends AndroidViewModel {
 
     private static String TAG = "PROFILE_VIEW_MODEL";
 
-    private UserRepository firestoreRepository;
+    private UserRepository userRepository;
 
     private MutableLiveData<User> currentUser = new MutableLiveData<User>();
 
     public ProfileViewModel(Application application) {
         super(application);
-        firestoreRepository = new UserRepository();
+        userRepository = new UserRepository();
     }
 
     // Get the current user and setup listening for live updates
     public LiveData<User> getCurrentUser() {
-        firestoreRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        userRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if(e != null) {

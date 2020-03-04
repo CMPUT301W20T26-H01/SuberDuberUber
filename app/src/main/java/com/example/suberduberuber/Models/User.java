@@ -78,5 +78,4 @@ public class User implements Serializable {
     public void setRating(int rating) {
         this.rating = rating;
     }
-
 }

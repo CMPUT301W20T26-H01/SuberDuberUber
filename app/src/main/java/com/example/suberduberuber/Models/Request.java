@@ -1,5 +1,7 @@
 package com.example.suberduberuber.Models;
 
+import com.google.firebase.firestore.DocumentId;
+
 import java.util.Objects;
 
 /**
@@ -7,7 +9,8 @@ import java.util.Objects;
  */
 public class Request {
 
-    private int requestID;
+    @DocumentId
+    private String requestID;
     private User requestingUser;
     private Path path;
     private String time;
@@ -15,14 +18,12 @@ public class Request {
 
     /**
      * Request object constructor
-     * @param requestID         The ID number of he request
      * @param requestingUser    The user submitting the request
      * @param path              The path requested by the user
      * @param time              The chosen time of pickup for the ride request
      * @param status            The current status of the ride request
      */
-    public Request(int requestID, User requestingUser, Path path, String time, String status) {
-        this.requestID = requestID;
+    public Request(User requestingUser, Path path, String time, String status) {
         this.requestingUser = requestingUser;
         this.path = path;
         this.time = time;
@@ -52,7 +53,7 @@ public class Request {
      * Returns an ID number
      * @return      The ID number of the request
      */
-    public int getRequestID() {
+    public String getRequestID() {
         return this.requestID;
     }
 
@@ -88,4 +89,19 @@ public class Request {
         return status;
     }
 
+    public void setRequestingUser(User user) {
+        this.requestingUser = user;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
