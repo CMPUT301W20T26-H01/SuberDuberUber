@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Models;
 
 import java.util.Objects;
 
@@ -29,6 +29,8 @@ public class Request {
         changeStatus(status);
     }
 
+    // Empty public constructor needed by Cloud Firestore for serializability
+    public Request() { }
     /**
      * Change the status of the request
      * @param newStatus                     The new status of the request, either "initiated", "in-progress", or "completed"

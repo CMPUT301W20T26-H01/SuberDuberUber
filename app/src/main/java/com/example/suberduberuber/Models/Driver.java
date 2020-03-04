@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Models;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,9 @@ public class Driver extends User {
     private String currentRide; // TODO: Need to change once ride class is created
     private ArrayList<Request> acceptedRequests; // TODO: Need to change once request class is created
     private boolean isAvailable;
+
+    // Empty public constructor needed by Cloud Firestore for serializability
+    public Driver() { }
 
     /**
      * Creates a driver user

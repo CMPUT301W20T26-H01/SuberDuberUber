@@ -1,10 +1,11 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Models;
 
 import com.google.firebase.firestore.DocumentId;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class User {
+public class User implements Serializable {
     private String username;
     private String phoneNumber;
 
@@ -12,6 +13,10 @@ public abstract class User {
     private String emailAddress;
     private int rating;
     private String QRBucksWallet; // TODO: Change to Wallet class when it is created
+
+    public User() {
+        // Firestore needs this to serialize properly
+    }
 
     /**
      * This generates an user with an unique username, phone number and email address
@@ -27,6 +32,18 @@ public abstract class User {
         this.emailAddress = emailAddress;
         this.rating = 0;
         this.QRBucksWallet = "";
+    }
+
+    public String getEmail() {
+        return emailAddress;
+    }
+    public String getUsername() {return username ;}
+    public String getPhoneNumber() {return phoneNumber;}
+    public int getRating() {
+        return this.rating;
+    }
+    public String getQRBucksWallet() {
+        return this.QRBucksWallet;
     }
 
     /**
@@ -62,21 +79,4 @@ public abstract class User {
         this.rating = rating;
     }
 
-    /**
-     * Retrieves the rating value of the user
-     * @return
-     *      Rating value of the user
-     */
-    public int getRating() {
-        return this.rating;
-    }
-
-    /**
-     * Gets the wallet of the user
-     * @return
-     *      QR Bucks Wallet of the user
-     */
-    public String getQRBucksWallet() {
-        return this.QRBucksWallet;
-    }
 }
