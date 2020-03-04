@@ -5,6 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -14,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.GetRideViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +27,8 @@ import com.example.suberduberuber.R;
 public class SelectOriginFragment extends Fragment {
 
     private NavController navController;
+
+    private GetRideViewModel getRideViewModel;
 
     private EditText field;
     private Button submitButton;
@@ -45,10 +52,19 @@ public class SelectOriginFragment extends Fragment {
         field = view.findViewById(R.id.origin_field);
         submitButton = view.findViewById(R.id.submit_button);
 
+        getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.action_selectOriginFragment_to_confirmRideFragment2);
+            }
+        });
+
+        getRideViewModel.getTempRequest().observe(getViewLifecycleOwner(), new Observer<Request>() {
+            @Override
+            public void onChanged(Request request) {
+                field.setHint(request.getStatus());
             }
         });
     }

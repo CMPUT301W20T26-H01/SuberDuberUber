@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,7 +19,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.suberduberuber.Models.Location;
+import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 
@@ -28,6 +33,7 @@ public class SelectDestinationFragment extends Fragment {
 
     private NavController navController;
 
+    private GetRideViewModel getRideViewModel;
 
     private EditText field;
     private Button submitButton;
@@ -60,11 +66,20 @@ public class SelectDestinationFragment extends Fragment {
         field = view.findViewById(R.id.destination_field);
         submitButton = view.findViewById(R.id.submit_button);
 
+        getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveRequest();
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
             }
         });
+    }
+
+    private void saveRequest() {
+        Request tempRequest = new Request();
+
+        getRideViewModel.saveTempRequest(tempRequest);
     }
 }
