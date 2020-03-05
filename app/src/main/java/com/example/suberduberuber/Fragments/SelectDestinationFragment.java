@@ -32,6 +32,8 @@ public class SelectDestinationFragment extends Fragment {
     private EditText field;
     private Button submitButton;
 
+    private Button paymentButton;
+
     public SelectDestinationFragment() {
         // Required empty public constructor
     }
@@ -60,10 +62,19 @@ public class SelectDestinationFragment extends Fragment {
         field = view.findViewById(R.id.destination_field);
         submitButton = view.findViewById(R.id.submit_button);
 
+        paymentButton = view.findViewById(R.id.qr_button);
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
+            }
+        });
+
+        paymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_selectDestinationFragment_to_qrcodeFragment);
             }
         });
     }

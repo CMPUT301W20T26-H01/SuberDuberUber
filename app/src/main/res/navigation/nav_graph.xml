@@ -40,6 +40,15 @@
         <action
             android:id="@+id/action_selectDestinationFragment_to_selectOriginFragment"
             app:destination="@id/selectOriginFragment" />
+        <action
+            android:id="@+id/action_selectDestinationFragment_to_qrcodeFragment"
+            app:destination="@id/qrCodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
+        android:label="fragment_qr_code"
+        tools:layout="@layout/fragment_qrcode_page">
     </fragment>
     <fragment
         android:id="@+id/selectOriginFragment"
