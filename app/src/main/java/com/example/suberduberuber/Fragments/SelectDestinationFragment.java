@@ -1,5 +1,6 @@
 package com.example.suberduberuber.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,10 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +39,10 @@ public class SelectDestinationFragment extends Fragment {
     private Button submitButton;
 
     private Button paymentButton;
+
+    private Button scanButton;
+    private LinearLayout layoutDest;
+    private TextView qrCodeText;
 
     public SelectDestinationFragment() {
         // Required empty public constructor
@@ -63,6 +73,9 @@ public class SelectDestinationFragment extends Fragment {
         submitButton = view.findViewById(R.id.submit_button);
 
         paymentButton = view.findViewById(R.id.qr_button);
+        scanButton = view.findViewById(R.id.scan_qr_button);
+        layoutDest = view.findViewById(R.id.dest_layout);
+        qrCodeText = view.findViewById(R.id.qrcodetext);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,5 +90,37 @@ public class SelectDestinationFragment extends Fragment {
                 navController.navigate(R.id.action_selectDestinationFragment_to_qrcodeFragment);
             }
         });
+
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_selectDestinationFragment_to_scanqrcodeFragment);
+//                layoutDest.setVisibility(View.GONE);
+//                IntentIntegrator integrator = new IntentIntegrator(getActivity());
+//                integrator.setPrompt("Scan a QR Code");
+//                integrator.setOrientationLocked(true);
+//                integrator.forSupportFragment(SelectDestinationFragment.this).initiateScan(IntentIntegrator.QR_CODE_TYPES);
+            }
+        });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                layoutDest.setVisibility(View.GONE);
+            }
+            else {
+                layoutDest.setVisibility(View.VISIBLE);
+                qrCodeText.setText(result.getContents());
+            }
+            layoutDest.setVisibility(View.VISIBLE);
+            qrCodeText.setText(result.getContents());
+        }
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

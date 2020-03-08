@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.ConfirmRideFragment"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    android:id="@+id/scan_qr_layout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Scanned QR"
+        android:textSize="15dp"
+        android:layout_marginTop="6dp">
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/qrCodeString"
+        android:text="No QR Code Scanned"
+        android:textSize="15dp"
+        android:layout_marginTop="6dp">
+    </TextView>
+
+</LinearLayout>

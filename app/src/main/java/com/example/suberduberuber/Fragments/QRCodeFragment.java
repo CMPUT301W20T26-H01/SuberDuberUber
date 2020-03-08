@@ -29,7 +29,7 @@ public class QRCodeFragment extends Fragment {
     private Button genQRCodeButton;
     private ImageView qrImageView;
     private Bitmap bitmap;
-    public final static int qrWidth = 500;
+    public final static int qrWidth = 1000;
 
 
     public QRCodeFragment() {
@@ -90,7 +90,7 @@ public class QRCodeFragment extends Fragment {
             }
         }
         Bitmap bp = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
-        bp.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
+        bp.setPixels(pixels, 0, 1000, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bp;
     }
 }

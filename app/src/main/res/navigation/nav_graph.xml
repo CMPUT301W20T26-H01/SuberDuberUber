@@ -43,12 +43,21 @@
         <action
             android:id="@+id/action_selectDestinationFragment_to_qrcodeFragment"
             app:destination="@id/qrCodeFragment" />
+        <action
+            android:id="@+id/action_selectDestinationFragment_to_scanqrcodeFragment"
+            app:destination="@id/scanQRCodeFragment" />
     </fragment>
     <fragment
         android:id="@+id/qrCodeFragment"
         android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
         android:label="fragment_qr_code"
         tools:layout="@layout/fragment_qrcode_page">
+    </fragment>
+    <fragment
+        android:id="@+id/scanQRCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.ScanQRCodeFragment"
+        android:label="fragment_scan_qr_code"
+        tools:layout="@layout/fragment_scan_qrcode">
     </fragment>
     <fragment
         android:id="@+id/selectOriginFragment"
