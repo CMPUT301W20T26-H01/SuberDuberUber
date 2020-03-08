@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Request {
 
     @DocumentId
-    private String requestID;
+    private int requestID;
     private User requestingUser;
     private Path path;
     private String time;
@@ -23,7 +23,8 @@ public class Request {
      * @param time              The chosen time of pickup for the ride request
      * @param status            The current status of the ride request
      */
-    public Request(User requestingUser, Path path, String time, String status) {
+    public Request(int requestId, User requestingUser, Path path, String time, String status) {
+        this.requestID = requestId;
         this.requestingUser = requestingUser;
         this.path = path;
         this.time = time;
@@ -53,7 +54,7 @@ public class Request {
      * Returns an ID number
      * @return      The ID number of the request
      */
-    public String getRequestID() {
+    public int getRequestID() {
         return this.requestID;
     }
 
