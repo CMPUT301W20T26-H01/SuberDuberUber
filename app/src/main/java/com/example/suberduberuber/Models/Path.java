@@ -35,4 +35,12 @@ public class Path {
         this.generateEstimatedFare();
     }
 
+    public Location getStartLocation() {
+        return this.startLocation;
+    }
+
+    public Location getDestination() {
+        return this.destination;
+    }
+
 }

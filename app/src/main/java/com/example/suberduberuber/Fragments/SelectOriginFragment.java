@@ -16,7 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.suberduberuber.Models.Location;
+import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
@@ -29,6 +32,7 @@ public class SelectOriginFragment extends Fragment {
     private NavController navController;
 
     private GetRideViewModel getRideViewModel;
+    private Request tempRequest;
 
     private EditText field;
     private Button submitButton;
@@ -53,6 +57,9 @@ public class SelectOriginFragment extends Fragment {
         submitButton = view.findViewById(R.id.submit_button);
 
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+        tempRequest = getRideViewModel.getTempRequest().getValue();
+        TextView destination = view.findViewById(R.id.destination);
+        destination.setText(tempRequest.getPath().getStartLocation().getLocationName());
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +71,7 @@ public class SelectOriginFragment extends Fragment {
         getRideViewModel.getTempRequest().observe(getViewLifecycleOwner(), new Observer<Request>() {
             @Override
             public void onChanged(Request request) {
-                field.setHint(request.getStatus());
+                field.setHint("testing onChanged method of observer model");
             }
         });
     }

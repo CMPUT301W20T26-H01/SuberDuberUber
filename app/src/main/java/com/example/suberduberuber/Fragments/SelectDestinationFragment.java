@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.suberduberuber.Models.Location;
 import com.example.suberduberuber.Models.Path;
@@ -32,7 +33,6 @@ import com.example.suberduberuber.ViewModels.GetRideViewModel;
 public class SelectDestinationFragment extends Fragment {
 
     private NavController navController;
-
     private GetRideViewModel getRideViewModel;
 
     private EditText field;
@@ -78,8 +78,8 @@ public class SelectDestinationFragment extends Fragment {
     }
 
     private void saveRequest() {
-        Request tempRequest = new Request();
-
+        Request tempRequest = new Request(-1, null, new Path(), "null", "initiated");
+        tempRequest.getPath().setStartLocation(new Location(null, field.getText().toString(), null));
         getRideViewModel.saveTempRequest(tempRequest);
     }
 }
