@@ -58,12 +58,17 @@ public class SelectOriginFragment extends Fragment {
 
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         tempRequest = getRideViewModel.getTempRequest().getValue();
-        TextView destination = view.findViewById(R.id.destination);
-        destination.setText(tempRequest.getPath().getStartLocation().getLocationName());
+
+        TextView destinationTextView = view.findViewById(R.id.destination);
+        destinationTextView.setText(tempRequest.getPath().getDestination().getLocationName());
+        TextView pickupTimeTextView = view.findViewById(R.id.pickupTime);
+        pickupTimeTextView.setText(tempRequest.getTime());
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tempRequest.getPath().setStartLocation(new Location(null, field.getText().toString(), null));
+                saveRequest();
                 navController.navigate(R.id.action_selectOriginFragment_to_confirmRideFragment2);
             }
         });
@@ -74,5 +79,9 @@ public class SelectOriginFragment extends Fragment {
                 field.setHint("testing onChanged method of observer model");
             }
         });
+    }
+
+    private void saveRequest() {
+        getRideViewModel.saveTempRequest(tempRequest);
     }
 }

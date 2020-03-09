@@ -34,6 +34,7 @@ public class SelectDestinationFragment extends Fragment {
 
     private NavController navController;
     private GetRideViewModel getRideViewModel;
+    private Request tempRequest;
 
     private EditText field;
     private Button submitButton;
@@ -67,10 +68,16 @@ public class SelectDestinationFragment extends Fragment {
         submitButton = view.findViewById(R.id.submit_button);
 
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+        tempRequest = new Request(-1, null, new Path(), "12:00 AM", "initiated");
+        saveRequest();
+
+        TextView pickupTimeTextView = view.findViewById(R.id.pickupTime);
+        pickupTimeTextView.setText(tempRequest.getTime());
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tempRequest.getPath().setDestination(new Location(null, field.getText().toString(), null));
                 saveRequest();
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
             }
@@ -78,8 +85,6 @@ public class SelectDestinationFragment extends Fragment {
     }
 
     private void saveRequest() {
-        Request tempRequest = new Request(-1, null, new Path(), "null", "initiated");
-        tempRequest.getPath().setStartLocation(new Location(null, field.getText().toString(), null));
         getRideViewModel.saveTempRequest(tempRequest);
     }
 }
