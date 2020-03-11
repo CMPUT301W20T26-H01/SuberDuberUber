@@ -17,7 +17,10 @@ public class Path {
     }
 
     public void generateEstimatedFare() {
-        double distance = startLocation.getDistanceBetween(destination);
+        double distance = 0;
+        if (startLocation != null && destination != null) {
+            distance = startLocation.getDistanceBetween(destination);
+        }
         this.estimatedFare = distance * COST_FACTOR;
     }
 
@@ -33,6 +36,14 @@ public class Path {
     public void setStartLocation(Location startLocation) {
         this.startLocation = startLocation;
         this.generateEstimatedFare();
+    }
+
+    public Location getStartLocation() {
+        return this.startLocation;
+    }
+
+    public Location getDestination() {
+        return this.destination;
     }
 
 }
