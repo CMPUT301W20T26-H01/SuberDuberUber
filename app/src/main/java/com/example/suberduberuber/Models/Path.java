@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Models;
 
 public class Path {
 
@@ -7,6 +7,9 @@ public class Path {
     private Location destination;
     private double estimatedFare;
 
+    // Empty public constructor needed by Cloud Firestore for serializability
+    public Path() { }
+
     public Path(Location startLocation, Location destination) {
         this.startLocation = startLocation;
         this.destination = destination;
@@ -14,7 +17,10 @@ public class Path {
     }
 
     public void generateEstimatedFare() {
-        double distance = startLocation.getDistanceBetween(destination);
+        double distance = 0;
+        if (startLocation != null && destination != null) {
+            distance = startLocation.getDistanceBetween(destination);
+        }
         this.estimatedFare = distance * COST_FACTOR;
     }
 
@@ -30,6 +36,14 @@ public class Path {
     public void setStartLocation(Location startLocation) {
         this.startLocation = startLocation;
         this.generateEstimatedFare();
+    }
+
+    public Location getStartLocation() {
+        return this.startLocation;
+    }
+
+    public Location getDestination() {
+        return this.destination;
     }
 
 }
