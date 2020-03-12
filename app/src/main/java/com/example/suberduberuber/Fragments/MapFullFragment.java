@@ -15,31 +15,13 @@ package com.example.suberduberuber.Fragments;
  * limitations under the License.
  */
 
-import com.example.suberduberuber.Models.PlaceAutoSuggestAdapter;
-import com.example.suberduberuber.R;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -49,7 +31,26 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.R;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+
 import java.util.Arrays;
+import java.util.List;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 
 public class MapFullFragment extends Fragment implements OnMapReadyCallback {
@@ -59,7 +60,9 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation = null;
 
-    AutoCompleteTextView autoCompleteTextView;
+    TextView textView;
+    int AUTOCOMPLETE_REQUEST_CODE = 1;
+    Place currentPlace;
 
 
     private NavController navController;
@@ -76,18 +79,46 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         mMapView = (MapView) view.findViewById(R.id.full_map);
         // Initialize the SDK
         Places.initialize(getActivity().getApplicationContext(), getString(R.string.google_map_api_key));
-// Create a new Places client instance
+        // Create a new Places client instance
         PlacesClient placesClient = Places.createClient(getContext());
 
-        autoCompleteTextView = view.findViewById(R.id.autocomplete);
-        autoCompleteTextView.setAdapter(new PlaceAutoSuggestAdapter(getContext(), android.R.layout.simple_list_item_1));
+        textView = view.findViewById(R.id.autocomplete);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+        // Set the fields to specify which types of place data to
+        // return after the user has made a selection.
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
 
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        // Start the autocomplete intent.
+                Intent intent = new Autocomplete.IntentBuilder(
+                        AutocompleteActivityMode.OVERLAY, fields)
+                        .build(getContext());
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+            }
+        });
         initGoogleMap(savedInstanceState);
         return view;
-}
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                currentPlace = Autocomplete.getPlaceFromIntent(data);
+                textView.setText(currentPlace.getName());
+                Log.i(TAG, "Place: " + currentPlace.getName() + ", " + currentPlace.getId());
+
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -138,20 +169,9 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onStop();
     }
 
-    public void getCurrentLocation() {
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if (task.isSuccessful()) {
-                    currentLocation = task.getResult();
-                }
-            }
-        });
-    }
 
     @Override
     public void onMapReady(GoogleMap map) {
-        getCurrentLocation();
         if (!(currentLocation == null)) {
             map.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("You Are Here"));
         }

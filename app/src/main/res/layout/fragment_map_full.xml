@@ -7,7 +7,7 @@
     tools:context=".Fragments.MapFullFragment"
     android:orientation="vertical"
     android:layout_margin="20dp">
-    <AutoCompleteTextView
+    <TextView
         android:hint="Search Location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
