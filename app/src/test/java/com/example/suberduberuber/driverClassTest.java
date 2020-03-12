@@ -1,5 +1,10 @@
 package com.example.suberduberuber;
 
+import com.example.suberduberuber.Models.Car;
+import com.example.suberduberuber.Models.Driver;
+import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.Rider;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
