@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.suberduberuber.Fragments.SelectDestinationFragment;
 import com.example.suberduberuber.Fragments.profileFragment;
 import com.example.suberduberuber.Fragments.requestFragment;
 import com.example.suberduberuber.R;
@@ -93,26 +94,23 @@ public class DashboardActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment f = null;
                 int itemId = menuItem.getItemId();
 
-                if (itemId == R.id.profile) {
-                    //f = new ProfileFragment();
-                    f = new profileFragment();
+                if (itemId == R.id.menu_home) {
+                    navController.navigate(R.id.action_to_dest_home_page);
+                }
+                else if (itemId == R.id.profile) {
+                    navController.navigate(R.id.action_to_profile_page);
                 }
                 else if (itemId == R.id.requests) {
-                    //f = new RequestFragment();
-                    f = new requestFragment();
+                    navController.navigate(R.id.action_to_request_page);
+                }
+                else {
+                    return false;
                 }
 
-                if (f != null) {
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment, f);
-                    transaction.commit();
-                    drawerLayout.closeDrawers();
-                    return true;
-                }
-                return false;
+                drawerLayout.closeDrawers();
+                return true;
             }
         });
     }
