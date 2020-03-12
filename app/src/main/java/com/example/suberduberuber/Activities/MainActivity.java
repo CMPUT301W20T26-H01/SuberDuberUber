@@ -1,7 +1,9 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.suberduberuber.R;
 
 public class MainActivity extends AppCompatActivity {
 

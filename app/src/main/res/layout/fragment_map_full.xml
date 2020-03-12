@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.MapFullFragment"
+    android:orientation="vertical"
+    android:layout_margin="20dp">
+    <AutoCompleteTextView
+        android:hint="Search Location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/autocomplete" />
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/full_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

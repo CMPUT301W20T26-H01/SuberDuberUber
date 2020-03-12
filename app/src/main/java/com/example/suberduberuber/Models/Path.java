@@ -1,4 +1,4 @@
-package com.example.suberduberuber;
+package com.example.suberduberuber.Models;
 
 public class Path {
 
@@ -6,6 +6,9 @@ public class Path {
     private Location startLocation;
     private Location destination;
     private double estimatedFare;
+
+    // Empty public constructor needed by Cloud Firestore for serializability
+    public Path() { }
 
     /**
      * Path Object Constructor
