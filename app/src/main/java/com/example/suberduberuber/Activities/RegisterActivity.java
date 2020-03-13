@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,9 +38,20 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText usernameField;
     private EditText emailField;
     private EditText passwordField;
+    private EditText passConf;
+
+    private EditText carYear;
+    private EditText carMake;
+    private EditText carModel;
+    private EditText carColor;
+    private EditText carPlate;
+
+    private TextView carInfo;
+
+    private Switch isDriverSwitch;
+    private boolean isDriver;
 
     private Button registerButton;
-    private Button signinButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +63,53 @@ public class RegisterActivity extends AppCompatActivity {
         usernameField = findViewById(R.id.username_field);
         emailField = findViewById(R.id.email_field);
         passwordField = findViewById(R.id.password_field);
+        passConf = findViewById(R.id.password_field_confirm);
+
+        carYear = findViewById(R.id.year_field);
+        carMake = findViewById(R.id.make_field);
+        carModel = findViewById(R.id.model_field);
+        carColor = findViewById(R.id.color_field);
+        carPlate = findViewById(R.id.plate_field);
+
+        carInfo = findViewById(R.id.car_info);
+
+        isDriverSwitch = findViewById(R.id.isDriver);
+        isDriver = false;
 
         registerButton = findViewById(R.id.register_button);
-        signinButton = findViewById(R.id.signin_button);
 
         myAuth = FirebaseAuth.getInstance();
+
+        carInfo.setVisibility(View.GONE);
+        carYear.setVisibility(View.GONE);
+        carMake.setVisibility(View.GONE);
+        carModel.setVisibility(View.GONE);
+        carColor.setVisibility(View.GONE);
+        carPlate.setVisibility(View.GONE);
+
+        isDriverSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    isDriver = false;
+                    carInfo.setVisibility(View.GONE);
+                    carYear.setVisibility(View.GONE);
+                    carMake.setVisibility(View.GONE);
+                    carModel.setVisibility(View.GONE);
+                    carColor.setVisibility(View.GONE);
+                    carPlate.setVisibility(View.GONE);
+                }
+                if (isChecked) {
+                    isDriver = true;
+                    carInfo.setVisibility(View.VISIBLE);
+                    carYear.setVisibility(View.VISIBLE);
+                    carMake.setVisibility(View.VISIBLE);
+                    carModel.setVisibility(View.VISIBLE);
+                    carColor.setVisibility(View.VISIBLE);
+                    carPlate.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     boolean passwordIsValid() {
         String password = passwordField.getText().toString().trim();
+        String confirm = passConf.getText().toString().trim();
 
         if(password.isEmpty()) {
             passwordField.setError("A password is required.");
@@ -102,6 +159,10 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else if(password.length() < 6) {
             passwordField.setError("The password must be at least 6 characters.");
+            return false;
+        }
+        else if(!password.equals(confirm)) {
+            passConf.setError("The passwords must match!");
             return false;
         }
 
