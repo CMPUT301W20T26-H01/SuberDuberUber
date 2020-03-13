@@ -6,13 +6,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class User implements Serializable {
-    private String username;
-    private String phoneNumber;
 
     @DocumentId
-    private String emailAddress;
+    private String email;
+    private String username;
+    private String phone;
     private int rating;
-    private String QRBucksWallet; // TODO: Change to Wallet class when it is created
+    private boolean driver;
 
     public User() {
         // Firestore needs this to serialize properly
@@ -28,53 +28,39 @@ public class User implements Serializable {
      */
     public User(String username, String emailAddress) {
         this.username = username;
-        this.phoneNumber = "";
-        this.emailAddress = emailAddress;
+        this.phone = "";
+        this.email = emailAddress;
         this.rating = 0;
-        this.QRBucksWallet = "";
     }
 
     public String getEmail() {
-        return emailAddress;
+        return email;
     }
     public String getUsername() {return username ;}
-    public String getPhoneNumber() {return phoneNumber;}
+    public String getPhoneNumber() {return phone;}
     public int getRating() {
         return this.rating;
     }
-    public String getQRBucksWallet() {
-        return this.QRBucksWallet;
+    public boolean getDriver() {
+        return this.driver;
     }
 
-    /**
-     * Gets the info of an user (phone number and email address)
-     * @return
-     *      An array list of phone number [0] and email address [1]
-     */
-    public ArrayList<String> getInfo() {
-        ArrayList<String> info = new ArrayList<String>();
-        info.add(this.phoneNumber);
-        info.add(this.emailAddress);
-        return info;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    /**
-     * Set the info of a user
-     * @param phoneNumber
-     *      New phone number
-     * @param emailAddress
-     *      New email address
-     */
-    public void setInfo(String phoneNumber, String emailAddress) {
-        this.phoneNumber = phoneNumber;
-        this.emailAddress = emailAddress;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    /**
-     * Sets a new rating value for the user
-     * @param rating
-     *      New rating value
-     */
+    public void setDriver(boolean driver) {
+        this.driver = driver;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public void setRating(int rating) {
         this.rating = rating;
     }
