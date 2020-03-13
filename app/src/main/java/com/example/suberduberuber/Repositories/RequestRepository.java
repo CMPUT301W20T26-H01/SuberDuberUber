@@ -33,8 +33,8 @@ public class RequestRepository {
 
     public Task<QuerySnapshot> getUsersRequests(User currentUser) {
         return myDb.collection("requests")
-                .whereEqualTo("requestingUser", currentUser)
-                .limit(1)
+                .whereEqualTo("requestingUser.email", currentUser.getEmail())
+                .limit(10)
                 .get();
     }
 

@@ -48,13 +48,16 @@ public class SelectOriginFragment extends MapFullFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        textView.setHint("Search Pickup Location");
+
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         tempRequest = getRideViewModel.getTempRequest().getValue();
 
+        confirmButton.setText("Confirm Pickup Location");
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tempRequest.getPath().setStartLocation(new CustomLocation(null, currentPlace.getName(), null));
+                tempRequest.getPath().setStartLocation(new CustomLocation(null, currentPlace.getName(), currentPlace.getAddress()));
                 saveRequest();
                 navController.navigate(R.id.action_selectOriginFragment_to_confirmRideFragment2);
             }
