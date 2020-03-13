@@ -34,6 +34,7 @@ import androidx.navigation.Navigation;
 import com.example.suberduberuber.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,9 +55,15 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class MapFullFragment extends Fragment implements OnMapReadyCallback {
+    private static final float DEFAULT_ZOOM = 10;
     private MapView mMapView;
+    private GoogleMap mMap;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final String TAG = "Auto Complete Log";
+
+    private static final String KEY_CAMERA_POSITION = "camera_position";
+    private static final String KEY_LOCATION = "location";
+
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation = null;
 
@@ -89,7 +96,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
 
         // Set the fields to specify which types of place data to
         // return after the user has made a selection.
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS);
 
         // Start the autocomplete intent.
                 Intent intent = new Autocomplete.IntentBuilder(
@@ -108,6 +115,10 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
             if (resultCode == RESULT_OK) {
                 currentPlace = Autocomplete.getPlaceFromIntent(data);
                 textView.setText(currentPlace.getName());
+                if (currentPlace.getLatLng() != null) {
+                    mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title("Selected Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
+                }
                 Log.i(TAG, "Place: " + currentPlace.getName() + ", " + currentPlace.getId());
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -172,6 +183,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
+        mMap = map;
         if (!(currentLocation == null)) {
             map.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("You Are Here"));
         }
