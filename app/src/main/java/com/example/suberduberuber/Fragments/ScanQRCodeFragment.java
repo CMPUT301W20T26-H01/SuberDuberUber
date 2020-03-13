@@ -22,6 +22,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+/*
+    Fragment for scanning a QR code. Launches a zxing activity to the camera and
+    auto detection of a QR code. Once a QR code is scanned, returns to this fragment
+    to display the QR code string and next button to rate my driver fragment.
+ */
 public class ScanQRCodeFragment extends Fragment {
     private NavController navController;
     private UserRepository firestoreRepository;
@@ -63,8 +68,6 @@ public class ScanQRCodeFragment extends Fragment {
         });
 
         scanQRCode();
-
-        // add button then onClick is rescan code
 
     }
 
