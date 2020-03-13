@@ -73,6 +73,7 @@ public class SelectDestinationFragment extends MapFullFragment {
         textView.setHint("Search Destination");
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
 
+        confirmButton.setText("Request Ride Here");
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
