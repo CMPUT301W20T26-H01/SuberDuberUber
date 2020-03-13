@@ -19,6 +19,12 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+
+/**
+ * This is a ViewModelClass used to expose livedata to the fragments and activities that persists their
+ * Life cycle changes. Viewmodels also serve to data security by giving views access ONLY to the database
+ * opertaions that are relavent to them. In this case it provides the views with AuthRelated data.
+ */
 public class AuthViewModel extends AndroidViewModel {
 
     private static final String TAG = "AUTH_VIEW_MODEL";

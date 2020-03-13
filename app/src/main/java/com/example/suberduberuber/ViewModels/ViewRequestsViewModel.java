@@ -15,6 +15,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
+/**
+ * This is a ViewModelClass used to expose livedata to the fragments and activities that persists their
+ * Life cycle changes. Viewmodels also serve to data security by giving views access ONLY to the database
+ * opertaions that are relavent to them. Finally, if this viewmodel is shared between fragments it will
+ * serve as a data scope in which data can persist fragment changes, allowing for a form of inter-fragment
+ * communication more simple than intent extra passing. In this case the viewmodel will provide the
+ * requests to populate a recycler view.
+ */
 public class ViewRequestsViewModel extends AndroidViewModel {
 
     private RequestRepository requestRepository;

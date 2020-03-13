@@ -12,7 +12,11 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
-
+/**
+ * This class serves to encapsulate all he interactions with the Request collection in firebase. It keeps
+ * The system modular and keeps all the queries in one place, so that if database changes occur it can be
+ * fixed in one place. It exposes methods to whichever viewmodel needs to interact with this data class.
+ */
 public class RequestRepository {
 
     FirebaseFirestore myDb = FirebaseFirestore.getInstance();
