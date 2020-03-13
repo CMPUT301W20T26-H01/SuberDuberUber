@@ -7,24 +7,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.example.suberduberuber.Fragments.SelectDestinationFragment;
-import com.example.suberduberuber.Fragments.profileFragment;
-import com.example.suberduberuber.Fragments.requestFragment;
 import com.example.suberduberuber.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +28,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     private FirebaseUser currentUser;
 
-    private Toolbar toolbar;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
 
@@ -56,11 +46,8 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//
+
         navigationView = findViewById(R.id.nav_view);
-//        NavigationUI.setupWithNavController(navigationView, navController);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
@@ -72,7 +59,6 @@ public class DashboardActivity extends AppCompatActivity {
         configureNavigationDrawer();
     }
 
-    // for triple dot menu on right
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         getMenuInflater().inflate(R.menu.drawer_menu, navigationView.getMenu());
@@ -85,7 +71,6 @@ public class DashboardActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_menu_white);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        //actionBar.setTitle(R.string.app_name);
     }
 
     private void configureNavigationDrawer() {
