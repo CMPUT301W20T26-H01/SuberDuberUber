@@ -107,6 +107,6 @@ public class Request {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        changeStatus(status);
     }
 }
