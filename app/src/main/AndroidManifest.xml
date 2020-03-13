@@ -5,11 +5,12 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,8 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.ProfileActivity"></activity>
-        <activity android:name=".Activities.DashboardActivity" />
+        <activity android:name=".Activities.ProfileActivity" />
+        <activity android:name=".Activities.RiderDashboardActivity" />
+        <activity android:name=".Activities.DriverDashboardActivity" />
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.LoginActivity" />
         <activity
@@ -31,18 +33,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
-            tools:replace="screenOrientation"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity"
+            tools:replace="screenOrientation" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_map_api_key"/>
+            android:value="@string/google_map_api_key" />
 
         <uses-library
             android:name="org.apache.http.legacy"

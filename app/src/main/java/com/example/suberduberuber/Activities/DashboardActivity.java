@@ -2,7 +2,6 @@ package com.example.suberduberuber.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
@@ -18,42 +17,32 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.suberduberuber.Fragments.SelectDestinationFragment;
 import com.example.suberduberuber.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class DashboardActivity extends AppCompatActivity {
+abstract class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
-    private FirebaseUser currentUser;
-
-    private NavController navController;
-    private AppBarConfiguration appBarConfiguration;
+    protected NavController navController;
 
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
     private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(getContentViewId());
 
         myAuth = FirebaseAuth.getInstance();
 
-        currentUser = myAuth.getCurrentUser();
-
-
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, getNavHostId());
 
         navigationView = findViewById(R.id.nav_view);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
+        new AppBarConfiguration.Builder(navController.getGraph())
                 .setDrawerLayout(drawerLayout)
                 .build();
 
@@ -62,10 +51,13 @@ public class DashboardActivity extends AppCompatActivity {
         configureNavigationDrawer();
     }
 
+    abstract int getNavHostId();
+    abstract int getContentViewId();
+
     // for QR Code Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(getNavHostId());
         if (fragment != null) {
             fragment.onActivityResult(requestCode, resultCode, intent);
         }
@@ -105,6 +97,9 @@ public class DashboardActivity extends AppCompatActivity {
                 else if (itemId == R.id.genQRCode) {
                     navController.navigate(R.id.action_to_gen_qr_code);
                 }
+                else if(itemId == R.id.logout) {
+                    logout();
+                }
                 else {
                     return false;
                 }
@@ -125,6 +120,13 @@ public class DashboardActivity extends AppCompatActivity {
             return true;
         }
         return true;
+    }
+
+    private void logout() {
+        myAuth.signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity((intent));
+        finish();
     }
 
 

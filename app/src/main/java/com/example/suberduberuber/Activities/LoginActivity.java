@@ -1,12 +1,5 @@
 package com.example.suberduberuber.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,12 +13,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.example.suberduberuber.Models.Rider;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,14 +40,15 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth myAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore myDb = FirebaseFirestore.getInstance();
 
+    private AuthViewModel authViewModel;
+
     private EditText emailField;
     private EditText passwordField;
 
-    private Button registerButton;
     private Button signinButton;
 
 
-    private boolean locationPermissionGranted = false;
+    public boolean locationPermissionGranted = false;
     public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
     public static final int ERROR_DIALOG_REQUEST = 9001;
@@ -54,23 +58,27 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        authViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
+
         emailField = findViewById(R.id.email_field);
         passwordField = findViewById(R.id.password_field);
 
-        registerButton = findViewById(R.id.register_button);
         signinButton = findViewById(R.id.signin_button);
-
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                redirectToRegisterPage();
-            }
-        });
 
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attemptSignin();
+            }
+        });
+
+        myAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser() != null) {
+                    redirectUser();
+                }
             }
         });
     }
@@ -95,9 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         myAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    goToDashboardPage();
-                } else {
+                if(!task.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Signin Failed", Toast.LENGTH_SHORT).show();
                     Log.e("FAILED_AUTH", task.getException().toString());
                 }
@@ -137,8 +143,28 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void goToDashboardPage() {
-        Intent intent = new Intent(this, DashboardActivity.class);
+    private void redirectUser() {
+        authViewModel.getCurrentUser().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                if(user.getDriver()) {
+                    goToDriverDashboard();
+                }
+                else {
+                    goToRiderDashboard();
+                }
+            }
+        });
+    }
+
+    private void goToRiderDashboard() {
+        Intent intent = new Intent(this, RiderDashboardActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToDriverDashboard() {
+        Intent intent = new Intent(this, DriverDashboardActivity.class);
         startActivity(intent);
         finish();
     }

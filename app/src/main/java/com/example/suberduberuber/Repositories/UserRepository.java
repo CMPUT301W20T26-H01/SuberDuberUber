@@ -1,11 +1,11 @@
 package com.example.suberduberuber.Repositories;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,7 +19,6 @@ public class UserRepository {
 
     FirebaseAuth myAuth = FirebaseAuth.getInstance();
     FirebaseFirestore myDb = FirebaseFirestore.getInstance();
-    FirebaseUser currentUser = myAuth.getCurrentUser();
 
     public Task<DocumentReference> saveUser(User user) {
         return myDb.collection("users")
@@ -32,12 +31,12 @@ public class UserRepository {
     }
 
     public Query getCurrentUser() {
-        return myDb.collection("users").whereEqualTo("email", currentUser.getEmail());
+        return myDb.collection("users").whereEqualTo("email", myAuth.getCurrentUser().getEmail());
     }
 
     public Task<Void> updateCurrentUser(User user) {
         return myDb.collection("users")
-                .document(currentUser.getEmail())
+                .document(myAuth.getCurrentUser().getEmail())
                 .set(user);
     }
 }

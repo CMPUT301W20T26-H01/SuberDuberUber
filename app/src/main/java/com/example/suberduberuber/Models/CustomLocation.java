@@ -1,12 +1,12 @@
 package com.example.suberduberuber.Models;
 
-public class Location {
+public class CustomLocation {
     private String coordinate;
     private String locationName;
     private String address;
 
     // Empty public constructor needed by Cloud Firestore for serializability
-    public Location() { }
+    public CustomLocation() { }
 
     /**
      * Constructor for Location Object
@@ -17,7 +17,7 @@ public class Location {
      * @param address
      * String Representation of Address
      */
-    public Location(String coordinate, String locationName, String address) {
+    public CustomLocation(String coordinate, String locationName, String address) {
         this.coordinate = coordinate;
         this.locationName = locationName;
         this.address = address;
@@ -57,7 +57,7 @@ public class Location {
      * @return
      * Returns a double which stores Distance to Given Location from This Location
      */
-    public double getDistanceBetween(Location location) {
+    public double getDistanceBetween(CustomLocation location) {
         return 0; // TODO: Implement way to determine distance based on coordinates
     }
 }

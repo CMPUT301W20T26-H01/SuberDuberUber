@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Request {
 
     @DocumentId
-    private int requestID;
+    private String requestID; // Stored as a string as @DocumentID (Firestore) requires String type
     private User requestingUser;
     private Path path;
     private String time;
@@ -18,21 +18,25 @@ public class Request {
 
     /**
      * Request object constructor
+     * @param requestId         The int id of the request
      * @param requestingUser    The user submitting the request
      * @param path              The path requested by the user
      * @param time              The chosen time of pickup for the ride request
      * @param status            The current status of the ride request
      */
     public Request(int requestId, User requestingUser, Path path, String time, String status) {
-        this.requestID = requestId;
+        this.requestID = Integer.toString(requestId);
         this.requestingUser = requestingUser;
         this.path = path;
         this.time = time;
         changeStatus(status);
     }
 
-    // Empty public constructor needed by Cloud Firestore for serializability
+    /**
+     * Empty public constructor needed by Cloud Firestore for serializability
+      */
     public Request() { }
+
     /**
      * Change the status of the request
      * @param newStatus                     The new status of the request, either "initiated", "in-progress", or "completed"
@@ -55,7 +59,7 @@ public class Request {
      * @return      The ID number of the request
      */
     public int getRequestID() {
-        return this.requestID;
+        return Integer.parseInt(this.requestID);
     }
 
     /**
@@ -90,19 +94,39 @@ public class Request {
         return status;
     }
 
+    /**
+     * Changes the requesting user of a request
+     * @param user
+     *      New requesting user
+     */
     public void setRequestingUser(User user) {
         this.requestingUser = user;
     }
 
+    /**
+     * Changes the path of a request
+     * @param path
+     *      New desired path for request
+     */
     public void setPath(Path path) {
         this.path = path;
     }
 
+    /**
+     * Changes the time of a request
+     * @param time
+     *      New desired time for request
+     */
     public void setTime(String time) {
         this.time = time;
     }
 
+    /**
+     * Changes the status of a request
+     * @param status
+     *      New desired status for request
+     */
     public void setStatus(String status) {
-        this.status = status;
+        changeStatus(status);
     }
 }

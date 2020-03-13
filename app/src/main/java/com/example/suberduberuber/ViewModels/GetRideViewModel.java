@@ -14,8 +14,10 @@ import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.RequestRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -34,14 +36,12 @@ public class GetRideViewModel extends AndroidViewModel {
     private static final String TAG = "GET_RIDE_VIEWMODEL";
 
     private RequestRepository requestRepository;
-    private UserRepository userRepository;
 
     private MutableLiveData<Request> tempRequest = new MutableLiveData<Request>();
 
     public GetRideViewModel(Application application) {
         super(application);
         requestRepository = new RequestRepository();
-        userRepository = new UserRepository();
     }
 
     public LiveData<Request> getTempRequest() {
@@ -50,5 +50,14 @@ public class GetRideViewModel extends AndroidViewModel {
 
     public void saveTempRequest(Request request) {
         tempRequest.setValue(request);
+    }
+
+    public void commitTempRequest() {
+        requestRepository.saveRequest(tempRequest.getValue()).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, e.toString());
+            }
+        });
     }
 }

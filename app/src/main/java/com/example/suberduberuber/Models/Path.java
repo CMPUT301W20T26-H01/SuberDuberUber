@@ -3,8 +3,8 @@ package com.example.suberduberuber.Models;
 public class Path {
 
     private static final double COST_FACTOR = 0.05;
-    private Location startLocation;
-    private Location destination;
+    private CustomLocation startLocation;
+    private CustomLocation destination;
     private double estimatedFare;
 
     // Empty public constructor needed by Cloud Firestore for serializability
@@ -17,7 +17,7 @@ public class Path {
      * @param destination
      * The Destination Location for the Path (Location Object)
      */
-    public Path(Location startLocation, Location destination) {
+    public Path(CustomLocation startLocation, CustomLocation destination) {
         this.startLocation = startLocation;
         this.destination = destination;
         this.generateEstimatedFare();
@@ -49,7 +49,7 @@ public class Path {
      * @param destination
      * Location Object to be set as the Destination Location of the Path
      */
-    public void setDestination(Location destination) {
+    public void setDestination(CustomLocation destination) {
         this.destination = destination;
         this.generateEstimatedFare();
     }
@@ -59,7 +59,7 @@ public class Path {
      * @param startLocation
      * Location Object to be set as the Start Location of the Path
      */
-    public void setStartLocation(Location startLocation) {
+    public void setStartLocation(CustomLocation startLocation) {
         this.startLocation = startLocation;
         this.generateEstimatedFare();
     }
@@ -69,7 +69,7 @@ public class Path {
      * @return
      * Returns a Location Object which is the Destination Location for the Path
      */
-    public Location getDestination() {
+    public CustomLocation getDestination() {
         return destination;
     }
 
@@ -78,7 +78,7 @@ public class Path {
      * @return
      * Retunrs as Location Object which is the Start Location for the Path
      */
-    public Location getStartLocation() {
+    public CustomLocation getStartLocation() {
         return startLocation;
     }
 }
