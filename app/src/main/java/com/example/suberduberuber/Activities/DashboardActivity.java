@@ -33,11 +33,11 @@ import com.google.firebase.auth.FirebaseUser;
     (redirects back to log in page and logs out user).
  */
 
-public class DashboardActivity extends AppCompatActivity {
+abstract class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
 
-    private NavController navController;
+    protected NavController navController;
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -45,11 +45,11 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(getContentViewId());
 
         myAuth = FirebaseAuth.getInstance();
 
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, getNavHostId());
 
         navigationView = findViewById(R.id.nav_view);
 
@@ -62,6 +62,9 @@ public class DashboardActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
         configureNavigationDrawer();
     }
+
+    abstract int getNavHostId();
+    abstract int getContentViewId();
 
     // for QR Code Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
