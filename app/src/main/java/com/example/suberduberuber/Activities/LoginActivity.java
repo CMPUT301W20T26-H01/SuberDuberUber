@@ -18,8 +18,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
+import com.example.suberduberuber.Models.Rider;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore myDb = FirebaseFirestore.getInstance();
+
+    private AuthViewModel authViewModel;
 
     private EditText emailField;
     private EditText passwordField;
@@ -51,6 +58,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        authViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
+
         emailField = findViewById(R.id.email_field);
         passwordField = findViewById(R.id.password_field);
 
@@ -60,6 +70,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 attemptSignin();
+            }
+        });
+
+        myAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser() != null) {
+                    redirectUser();
+                }
             }
         });
     }
@@ -84,9 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         myAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    goToDashboardPage();
-                } else {
+                if(!task.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Signin Failed", Toast.LENGTH_SHORT).show();
                     Log.e("FAILED_AUTH", task.getException().toString());
                 }
@@ -126,8 +143,28 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void goToDashboardPage() {
-        Intent intent = new Intent(this, DashboardActivity.class);
+    private void redirectUser() {
+        authViewModel.getCurrentUser().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                if(user.getDriver()) {
+                    goToDriverDashboard();
+                }
+                else {
+                    goToRiderDashboard();
+                }
+            }
+        });
+    }
+
+    private void goToRiderDashboard() {
+        Intent intent = new Intent(this, RiderDashboardActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToDriverDashboard() {
+        Intent intent = new Intent(this, DriverDashboardActivity.class);
         startActivity(intent);
         finish();
     }

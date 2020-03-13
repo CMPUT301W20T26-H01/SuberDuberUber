@@ -2,7 +2,6 @@ package com.example.suberduberuber.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
@@ -18,17 +17,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.suberduberuber.Fragments.SelectDestinationFragment;
 import com.example.suberduberuber.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class DashboardActivity extends AppCompatActivity {
+abstract class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
 
-    private NavController navController;
+    protected NavController navController;
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -36,11 +33,11 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(getContentViewId());
 
         myAuth = FirebaseAuth.getInstance();
 
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, getNavHostId());
 
         navigationView = findViewById(R.id.nav_view);
 
@@ -54,10 +51,13 @@ public class DashboardActivity extends AppCompatActivity {
         configureNavigationDrawer();
     }
 
+    abstract int getNavHostId();
+    abstract int getContentViewId();
+
     // for QR Code Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(getNavHostId());
         if (fragment != null) {
             fragment.onActivityResult(requestCode, resultCode, intent);
         }
