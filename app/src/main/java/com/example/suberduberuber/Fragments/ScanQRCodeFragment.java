@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.UserRepository;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -47,7 +48,7 @@ public class ScanQRCodeFragment extends Fragment {
 
         firestoreRepository = new UserRepository();
 
-        DocumentReference user = firestoreRepository.getCurrentUser();
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         scanQRLayout = view.findViewById(R.id.scan_qr_layout);
         qrCodeText = view.findViewById(R.id.qrCodeString);

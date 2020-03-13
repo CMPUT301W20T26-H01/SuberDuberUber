@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.UserRepository;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -50,14 +51,14 @@ public class QRCodeFragment extends Fragment {
 
         firestoreRepository = new UserRepository();
 
-        DocumentReference user = firestoreRepository.getCurrentUser();
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         genQRCodeButton = view.findViewById(R.id.qrGen_button);
         qrImageView = view.findViewById(R.id.qrCodeImage);
         genQRCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = user.getId();
+                String id = userEmail;
                 try {
                     bitmap = generateQRCode(id);
                     qrImageView.setImageBitmap(bitmap);
