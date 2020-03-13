@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/selectDestinationFragment">
+    app:startDestination="@id/rateDriverFragment">
 
     <fragment
         android:id="@+id/confirmRideFragment2"
@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_rate_driver" >
         <action
             android:id="@+id/action_rateDriverFragment_to_selectDestinationFragment"
-            app:destination="@id/selectDestinationFragment" />
+            app:destination="@id/mapFullFragment2" />
     </fragment>
     <fragment
         android:id="@+id/ridePendingFragment"
@@ -68,4 +68,30 @@
             android:id="@+id/action_selectOriginFragment_to_confirmRideFragment2"
             app:destination="@id/confirmRideFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/mapFullFragment2"
+        android:name="com.example.suberduberuber.Fragments.MapFullFragment"
+        android:label="fragment_map_full"
+        tools:layout="@layout/fragment_map_full" >
+        <action
+            android:id="@+id/action_mapFullFragment2_to_selectDestinationFragment2"
+            app:destination="@id/selectDestinationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewProfileFragment"
+        android:name="com.example.suberduberuber.Fragments.profileFragment"
+        android:label="profileFragment" />
+    <action
+        android:id="@+id/action_to_profile_page"
+        app:destination="@id/viewProfileFragment" />
+    <fragment
+        android:id="@+id/viewRequestFragment"
+        android:name="com.example.suberduberuber.Fragments.requestFragment"
+        android:label="requestFragment" />
+    <action
+        android:id="@+id/action_to_request_page"
+        app:destination="@id/viewRequestFragment" />
+    <action
+        android:id="@+id/action_to_dest_home_page"
+        app:destination="@id/selectDestinationFragment" />
 </navigation>

@@ -5,12 +5,16 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +23,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView;
 
+import com.example.suberduberuber.Models.Location;
+import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 
@@ -33,16 +41,15 @@ import com.google.zxing.integration.android.IntentResult;
 public class SelectDestinationFragment extends Fragment {
 
     private NavController navController;
-
+    private GetRideViewModel getRideViewModel;
+    private Request tempRequest;
 
     private EditText field;
     private Button submitButton;
 
-    private Button paymentButton;
+    private DrawerLayout drawerLayout;
 
-    private Button scanButton;
-    private LinearLayout layoutDest;
-    private TextView qrCodeText;
+    private AppBarConfiguration appBarConfiguration;
 
     public SelectDestinationFragment() {
         // Required empty public constructor
@@ -72,6 +79,13 @@ public class SelectDestinationFragment extends Fragment {
         field = view.findViewById(R.id.destination_field);
         submitButton = view.findViewById(R.id.submit_button);
 
+        getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+        tempRequest = new Request(-1, null, new Path(), "12:00 AM", "initiated");
+        saveRequest();
+
+        TextView pickupTimeTextView = view.findViewById(R.id.pickupTime);
+        pickupTimeTextView.setText(tempRequest.getTime());
+
         paymentButton = view.findViewById(R.id.qr_button);
         scanButton = view.findViewById(R.id.scan_qr_button);
         layoutDest = view.findViewById(R.id.dest_layout);
@@ -80,6 +94,8 @@ public class SelectDestinationFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tempRequest.getPath().setDestination(new Location(null, field.getText().toString(), null));
+                saveRequest();
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
             }
         });
@@ -122,5 +138,14 @@ public class SelectDestinationFragment extends Fragment {
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+
+        drawerLayout = view.findViewById(R.id.drawer_layout);
+//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
+//                .setDrawerLayout(drawerLayout)
+//                .build();
+    }
+
+    private void saveRequest() {
+        getRideViewModel.saveTempRequest(tempRequest);
     }
 }
