@@ -19,6 +19,7 @@ import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class requestFragment extends Fragment {
     private ArrayAdapter<Request> requestListAdapter;
 
     private GetRideViewModel getRideViewModel;
+    private AuthViewModel authViewModel;
 
     public requestFragment() {
         // Required empty public constructor
@@ -43,13 +45,14 @@ public class requestFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
         listView = view.findViewById(R.id.requestList);
 
         setListView();
     }
 
     public void setListView() {
-        getRideViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 getRideViewModel.getCurrentUsersRequests(user).observe(getViewLifecycleOwner(), new Observer<ArrayList<Request>>() {

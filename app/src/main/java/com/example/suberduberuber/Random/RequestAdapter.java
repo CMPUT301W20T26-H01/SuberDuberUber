@@ -17,7 +17,7 @@ import java.util.List;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestViewHolder> {
 
-    List<Request> dataset;
+    List<Request> dataset = new ArrayList<Request>();
 
     @NonNull
     @Override
