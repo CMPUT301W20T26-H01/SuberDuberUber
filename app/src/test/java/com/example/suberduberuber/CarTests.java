@@ -1,4 +1,6 @@
 package com.example.suberduberuber;
+import com.example.suberduberuber.Models.Car;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
