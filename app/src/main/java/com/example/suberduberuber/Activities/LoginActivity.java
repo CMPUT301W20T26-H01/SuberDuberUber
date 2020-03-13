@@ -159,12 +159,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToRiderDashboard() {
         Intent intent = new Intent(this, RiderDashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
 
     private void goToDriverDashboard() {
         Intent intent = new Intent(this, DriverDashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }

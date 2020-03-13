@@ -8,18 +8,18 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="86dp"
         android:layout_margin="5dp"
-        app:contentPadding="5dp"
-        >
+        app:contentPadding="5dp">
+
 
         <TextView
             android:id="@+id/origin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:text="Origin"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:layout_gravity="right"
             tools:layout_editor_absoluteX="201dp"
             tools:layout_editor_absoluteY="115dp" />
 
@@ -27,18 +27,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:text="To"
-            />
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
 
         <TextView
             android:id="@+id/destination"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
             android:text="Destination"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:layout_gravity="right|bottom"
             tools:layout_editor_absoluteX="95dp"
             tools:layout_editor_absoluteY="52dp" />
 
@@ -46,8 +45,8 @@
             android:id="@+id/rider_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rider's Name"
             android:layout_gravity="top|left"
+            android:text="Rider's Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:layout_editor_absoluteX="95dp"
             tools:layout_editor_absoluteY="171dp" />
@@ -56,11 +55,17 @@
             android:id="@+id/suggested_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$12.87"
             android:layout_gravity="center|left"
+            android:text="$12.87"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             tools:layout_editor_absoluteX="51dp"
             tools:layout_editor_absoluteY="115dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:text="Accept Request?" />
     </androidx.cardview.widget.CardView>
 
 
