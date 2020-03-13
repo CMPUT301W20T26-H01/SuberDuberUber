@@ -78,4 +78,12 @@ public class User implements Serializable {
     public void setRating(int rating) {
         this.rating = rating;
     }
+
+    public void setQRBucksWallet(String QRBucksWallet) {
+        this.QRBucksWallet = QRBucksWallet;
+    };
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

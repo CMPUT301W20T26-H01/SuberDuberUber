@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.suberduberuber.Models.Location;
+import com.example.suberduberuber.Models.CustomLocation;
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
@@ -27,15 +27,10 @@ import com.example.suberduberuber.ViewModels.GetRideViewModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SelectOriginFragment extends Fragment {
-
-    private NavController navController;
+public class SelectOriginFragment extends MapFullFragment {
 
     private GetRideViewModel getRideViewModel;
     private Request tempRequest;
-
-    private EditText field;
-    private Button submitButton;
 
     public SelectOriginFragment() {
         // Required empty public constructor
@@ -46,28 +41,20 @@ public class SelectOriginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_select_origin, container, false);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
-        field = view.findViewById(R.id.origin_field);
-        submitButton = view.findViewById(R.id.submit_button);
 
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         tempRequest = getRideViewModel.getTempRequest().getValue();
 
-        TextView destinationTextView = view.findViewById(R.id.destination);
-        destinationTextView.setText(tempRequest.getPath().getDestination().getLocationName());
-        TextView pickupTimeTextView = view.findViewById(R.id.pickupTime);
-        pickupTimeTextView.setText(tempRequest.getTime());
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tempRequest.getPath().setStartLocation(new Location(null, field.getText().toString(), null));
+                tempRequest.getPath().setStartLocation(new CustomLocation(null, currentPlace.getName(), null));
                 saveRequest();
                 navController.navigate(R.id.action_selectOriginFragment_to_confirmRideFragment2);
             }
@@ -76,7 +63,7 @@ public class SelectOriginFragment extends Fragment {
         getRideViewModel.getTempRequest().observe(getViewLifecycleOwner(), new Observer<Request>() {
             @Override
             public void onChanged(Request request) {
-                field.setHint("testing onChanged method of observer model");
+                //field.setHint("testing onChanged method of observer model");
             }
         });
     }

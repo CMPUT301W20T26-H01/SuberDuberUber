@@ -63,6 +63,8 @@ public class ConfirmRideFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Submit ride to database
+                saveRequest();
+                getRideViewModel.commitTempRequest();
                 navController.navigate(R.id.action_confirmRideFragment2_to_ridePendingFragment);
             }
         });

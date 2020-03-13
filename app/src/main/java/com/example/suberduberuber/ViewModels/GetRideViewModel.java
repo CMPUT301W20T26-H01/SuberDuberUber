@@ -14,8 +14,10 @@ import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.RequestRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -50,5 +52,18 @@ public class GetRideViewModel extends AndroidViewModel {
 
     public void saveTempRequest(Request request) {
         tempRequest.setValue(request);
+    }
+
+    public void commitTempRequest() {
+        requestRepository.saveRequest(tempRequest.getValue()).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, e.toString());
+            }
+        });
+    }
+
+    public DocumentReference getCurrentUser() {
+        return userRepository.getCurrentUser();
     }
 }

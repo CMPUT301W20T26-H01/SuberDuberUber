@@ -67,13 +67,14 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation = null;
 
+    Button confirmButton;
     TextView textView;
     int AUTOCOMPLETE_REQUEST_CODE = 1;
     Place currentPlace;
 
 
-    private NavController navController;
-    private Button submitButton;
+    NavController navController;
+    Button submitButton;
 
     public MapFullFragment() {
         // Empty Constructor
@@ -88,6 +89,9 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         Places.initialize(getActivity().getApplicationContext(), getString(R.string.google_map_api_key));
         // Create a new Places client instance
         PlacesClient placesClient = Places.createClient(getContext());
+
+        confirmButton = view.findViewById(R.id.confirmButton);
+        confirmButton.setVisibility(View.GONE);
 
         textView = view.findViewById(R.id.autocomplete);
         textView.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +122,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
                 if (currentPlace.getLatLng() != null) {
                     mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title("Selected Location"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
+                    confirmButton.setVisibility(View.VISIBLE);
                 }
                 Log.i(TAG, "Place: " + currentPlace.getName() + ", " + currentPlace.getId());
 
@@ -211,5 +216,4 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
 }
