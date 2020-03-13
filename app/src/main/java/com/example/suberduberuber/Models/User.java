@@ -26,11 +26,12 @@ public class User implements Serializable {
      *      User's unique email address
      *
      */
-    public User(String username, String emailAddress) {
+    public User(String username, String emailAddress, boolean isDriver) {
         this.username = username;
         this.phone = "";
         this.email = emailAddress;
         this.rating = 0;
+        this.driver = isDriver;
     }
 
     public String getEmail() {
