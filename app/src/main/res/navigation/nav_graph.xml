@@ -59,4 +59,21 @@
             android:id="@+id/action_mapFullFragment2_to_selectDestinationFragment2"
             app:destination="@id/selectDestinationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/viewProfileFragment"
+        android:name="com.example.suberduberuber.Fragments.profileFragment"
+        android:label="profileFragment" />
+    <action
+        android:id="@+id/action_to_profile_page"
+        app:destination="@id/viewProfileFragment" />
+    <fragment
+        android:id="@+id/viewRequestFragment"
+        android:name="com.example.suberduberuber.Fragments.requestFragment"
+        android:label="requestFragment" />
+    <action
+        android:id="@+id/action_to_request_page"
+        app:destination="@id/viewRequestFragment" />
+    <action
+        android:id="@+id/action_to_dest_home_page"
+        app:destination="@id/selectDestinationFragment" />
 </navigation>
