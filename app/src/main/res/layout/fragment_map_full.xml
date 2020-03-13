@@ -17,9 +17,11 @@
 
         <TextView
             android:id="@+id/autocomplete"
+            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search Location" />
+            android:hint="Search Location"
+            android:textSize="18sp" />
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/full_map"
