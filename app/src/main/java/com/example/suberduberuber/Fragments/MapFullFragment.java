@@ -16,6 +16,7 @@ package com.example.suberduberuber.Fragments;
  */
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -34,12 +36,15 @@ import androidx.navigation.Navigation;
 import com.example.suberduberuber.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -55,7 +60,7 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class MapFullFragment extends Fragment implements OnMapReadyCallback {
-    private static final float DEFAULT_ZOOM = 10;
+    private static final float DEFAULT_ZOOM = 18;
     private MapView mMapView;
     private GoogleMap mMap;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -67,13 +72,18 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation = null;
 
+    Button confirmButton;
     TextView textView;
     int AUTOCOMPLETE_REQUEST_CODE = 1;
     Place currentPlace;
+    Location mLastKnownLocation;
+    LatLng mDefaultLocation = new LatLng(53.2734, -7.77832031);
+
+    FusedLocationProviderClient mFusedLocationProviderClient;
 
 
-    private NavController navController;
-    private Button submitButton;
+    NavController navController;
+    Button submitButton;
 
     public MapFullFragment() {
         // Empty Constructor
@@ -88,6 +98,11 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         Places.initialize(getActivity().getApplicationContext(), getString(R.string.google_map_api_key));
         // Create a new Places client instance
         PlacesClient placesClient = Places.createClient(getContext());
+
+        confirmButton = view.findViewById(R.id.confirmButton);
+        confirmButton.setVisibility(View.GONE);
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         textView = view.findViewById(R.id.autocomplete);
         textView.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +133,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
                 if (currentPlace.getLatLng() != null) {
                     mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title("Selected Location"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
+                    confirmButton.setVisibility(View.VISIBLE);
                 }
                 Log.i(TAG, "Place: " + currentPlace.getName() + ", " + currentPlace.getId());
 
@@ -184,14 +200,42 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-        if (!(currentLocation == null)) {
-            map.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("You Are Here"));
-        }
-        else{
-            map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Default"));
-
-        }
         map.setMyLocationEnabled(true);
+        getDeviceLocation();
+    }
+
+    private void getDeviceLocation() {
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
+        try {
+            if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+                //mLastKnownLocation = locationResult.getResult();
+                locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            // Set the map's camera position to the current location of the device.
+                            mLastKnownLocation = task.getResult();
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                    new LatLng(mLastKnownLocation.getLatitude(),
+                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                        }
+                    }
+                });
+            }
+        } catch(SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
     }
 
     @Override
@@ -211,5 +255,4 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
 }

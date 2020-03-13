@@ -1,11 +1,11 @@
 package com.example.suberduberuber.Repositories;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

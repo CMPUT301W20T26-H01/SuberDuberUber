@@ -1,16 +1,18 @@
 package com.example.suberduberuber;
+import com.example.suberduberuber.Models.CustomLocation;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LocationTests {
+public class CustomLocationTests {
 
-    private Location mockLocation() {
-        return new Location("X, Y", "Mother Do You Think They'll Drop The Bomb", "Mother Do You Think They'll Like This Song");
+    private CustomLocation mockLocation() {
+        return new CustomLocation("X, Y", "Mother Do You Think They'll Drop The Bomb", "Mother Do You Think They'll Like This Song");
     }
 
     @Test
     public void testGetters() {
-        Location location = mockLocation();
+        CustomLocation location = mockLocation();
 
         assertEquals("X, Y", location.getCoordinate());
         assertEquals("Mother Do You Think They'll Drop The Bomb", location.getLocationName());
@@ -22,8 +24,8 @@ public class LocationTests {
 
     @Test
     public void testGetDistanceBetween() {
-        Location location = mockLocation();
-        Location location1 = mockLocation();
+        CustomLocation location = mockLocation();
+        CustomLocation location1 = mockLocation();
         assertEquals(0, location.getDistanceBetween(location1)); //TODO Update once function has been implemented
     }
 }

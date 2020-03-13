@@ -7,13 +7,34 @@
     tools:context=".Fragments.MapFullFragment"
     android:orientation="vertical"
     android:layout_margin="20dp">
-    <TextView
-        android:hint="Search Location"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/autocomplete" />
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/full_map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom|center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/autocomplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search Location" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/full_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Request Ride Here"
+            tools:visibility="gone" />
+
+    </LinearLayout>
+
 </LinearLayout>

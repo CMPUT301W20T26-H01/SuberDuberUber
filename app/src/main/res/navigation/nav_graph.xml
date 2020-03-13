@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/rateDriverFragment">
+    app:startDestination="@id/selectDestinationFragment">
 
     <fragment
         android:id="@+id/confirmRideFragment2"
@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_rate_driver" >
         <action
             android:id="@+id/action_rateDriverFragment_to_selectDestinationFragment"
-            app:destination="@id/mapFullFragment2" />
+            app:destination="@id/selectDestinationFragment" />
     </fragment>
     <fragment
         android:id="@+id/ridePendingFragment"
@@ -69,11 +69,11 @@
         android:id="@+id/mapFullFragment2"
         android:name="com.example.suberduberuber.Fragments.MapFullFragment"
         android:label="fragment_map_full"
+        tools:layout="@layout/fragment_map_full" />
         tools:layout="@layout/fragment_map_full" >
         <action
             android:id="@+id/action_mapFullFragment2_to_selectDestinationFragment2"
             app:destination="@id/selectDestinationFragment" />
-    </fragment>
     <fragment
         android:id="@+id/viewProfileFragment"
         android:name="com.example.suberduberuber.Fragments.profileFragment"
@@ -94,4 +94,5 @@
     <action
         android:id="@+id/action_to_gen_qr_code"
         app:destination="@id/qrCodeFragment" />
+
 </navigation>
