@@ -1,6 +1,9 @@
 package com.example.suberduberuber;
 
+import com.example.suberduberuber.Models.CustomLocation;
+import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.User;
 
 import org.junit.jupiter.api.Test;
 import java.util.Objects;
@@ -49,5 +52,36 @@ public class RequestTest {
     public void testGetStatus() {
         Request request = mockRequest();
         assertTrue(Objects.equals("initiated", request.getStatus()));
+    }
+
+    @Test
+    public void testSetRequestingUser() {
+        Request request = mockRequest();
+        User user = new User("username", "email", false);
+        request.setRequestingUser(user);
+        assertEquals(user, request.getRequestingUser());
+    }
+
+    @Test
+    public void testSetPath() {
+        Request request = mockRequest();
+        Path path = new Path(new CustomLocation(), new CustomLocation());
+        request.setPath(path);
+        assertEquals(path, request.getPath());
+    }
+
+    @Test
+    public void testSetTime() {
+        Request request = mockRequest();
+        request.setTime("6:00");
+        assertEquals("6:00", request.getTime());
+    }
+
+    @Test
+    public void testSetStatus() {
+        Request request = mockRequest();
+        request.setStatus("completed");
+        assertEquals("completed", request.getStatus());
+        assertThrows(IllegalArgumentException.class, () -> {request.changeStatus("invalid");});
     }
 }
