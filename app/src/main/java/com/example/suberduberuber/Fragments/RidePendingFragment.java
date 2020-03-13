@@ -1,5 +1,6 @@
 package com.example.suberduberuber.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.suberduberuber.R;
 
@@ -24,6 +27,9 @@ public class RidePendingFragment extends Fragment {
     private NavController navController;
 
     private Button submitButton;
+
+    private LinearLayout layout;
+    private TextView qrCodeText;
 
     public RidePendingFragment() {
         // Required empty public constructor
@@ -44,10 +50,12 @@ public class RidePendingFragment extends Fragment {
 
         submitButton = view.findViewById(R.id.submit_button);
 
+        layout = view.findViewById(R.id.dest_layout);
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_ridePendingFragment_to_rateDriverFragment);
+                navController.navigate(R.id.action_ridePendingFragment_to_scanqrcodeFragment);
             }
         });
     }

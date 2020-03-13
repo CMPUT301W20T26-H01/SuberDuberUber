@@ -51,7 +51,6 @@ public class profileFragment extends Fragment {
         profileViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                if(user == null) return;
                 displayUserDetails(user);
             }
         });editButton.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +65,7 @@ public class profileFragment extends Fragment {
     private void displayUserDetails(User user) {
         usernamePro.setText(user.getUsername());
         emailPro.setText(user.getEmail());
-        phoneNumberPro.setText(user.getPhoneNumber());
+        phoneNumberPro.setText(user.getPhone());
         ratingPro.setText(String.format("%d", user.getRating()));
 
     }
@@ -77,9 +76,10 @@ public class profileFragment extends Fragment {
         bundle.putSerializable("User",user);
         assert user != null;
         bundle.putString("Username",user.getUsername());
-        bundle.putString("Email",user.getPhoneNumber());
-        bundle.putString("Phone Number", user.getPhoneNumber());
+        bundle.putString("Email",user.getPhone());
+        bundle.putString("Phone Number", user.getPhone());
         EditInformationFragment fragInfo = new EditInformationFragment();
         fragInfo.setArguments(bundle);
+
     }
 }

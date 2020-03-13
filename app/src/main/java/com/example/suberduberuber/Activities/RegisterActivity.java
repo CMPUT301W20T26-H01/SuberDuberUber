@@ -157,8 +157,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void saveUserData(String email, String username) {
         User user = new Rider(username, email);
-
         registerViewModel.createNewUser(user);
+        redirectToLogin();
     }
 
     private void redirectToLogin() {

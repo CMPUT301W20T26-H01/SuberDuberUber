@@ -23,22 +23,6 @@ public class driverClassTest {
         d = createDriver();
     }
 
-    @Test
-    public void testGetInfo() {
-        ArrayList<String> info = d.getInfo();
-        assertEquals("", info.get(0));
-        assertEquals("test@test.ca", info.get(1));
-    }
-
-    @Test
-    public void testSetInfo() {
-        String newPh = "123-456-7890";
-        String newEmail = "newtest@new.ca";
-        d.setInfo(newPh, newEmail);
-
-        assertEquals(newPh, d.getInfo().get(0));
-        assertEquals(newEmail, d.getInfo().get(1));
-    }
 
     @Test
     public void testSetGetRating() {
@@ -46,11 +30,6 @@ public class driverClassTest {
 
         d.setRating(50);
         assertEquals(50, d.getRating());
-    }
-
-    @Test
-    public void testGetWallet() {
-        assertEquals("", d.getQRBucksWallet());
     }
 
     @Test
