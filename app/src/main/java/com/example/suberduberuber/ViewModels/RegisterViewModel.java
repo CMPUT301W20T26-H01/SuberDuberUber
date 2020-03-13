@@ -10,7 +10,14 @@ import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 
-// A class that exposes all of the data and data manipulation methods relevant to the registration page.
+/**
+ * This is a ViewModelClass used to expose livedata to the fragments and activities that persists their
+ * Life cycle changes. Viewmodels also serve to data security by giving views access ONLY to the database
+ * opertaions that are relavent to them. Finally, if this viewmodel is shared between fragments it will
+ * serve as a data scope in which data can persist fragment changes, allowing for a form of inter-fragment
+ * communication more simple than intent extra passing. In this case this viewmodel is used for registration
+ * and auth operations.
+ */
 public class RegisterViewModel extends AndroidViewModel {
 
     private static String TAG = "IN_REGISTRATION_VIEWMODEL";

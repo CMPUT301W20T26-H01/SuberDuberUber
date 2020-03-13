@@ -35,6 +35,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Pattern;
 
+/**
+ * This activity uses the authModel to go through a login routine. It can check for valid form entries
+ * and report errors if entries are invalid. It also supports Auto-login where a user is automatically
+ * redirected to the home screen if they are still signed into a past session. The login will redirect
+ * Riders and Drivers to different dashboard pages.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth = FirebaseAuth.getInstance();

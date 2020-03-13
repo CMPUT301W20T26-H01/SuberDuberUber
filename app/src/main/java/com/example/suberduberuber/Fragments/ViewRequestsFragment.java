@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
-import com.example.suberduberuber.Random.RequestAdapter;
+import com.example.suberduberuber.Adapters.RequestAdapter;
 import com.example.suberduberuber.ViewModels.ViewRequestsViewModel;
 
 import java.util.List;
