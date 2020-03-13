@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.MapFullFragment"
     android:orientation="vertical"
-    android:layout_margin="20dp">
+    tools:context=".Fragments.MapFullFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,9 +16,15 @@
 
         <TextView
             android:id="@+id/autocomplete"
+            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search Location" />
+            android:hint="Search Location"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+>>>>>>> 5c72cdf15c01aaf1bc2c2385cd4fe9fd85d2b063
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/full_map"

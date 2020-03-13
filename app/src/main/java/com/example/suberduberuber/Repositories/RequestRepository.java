@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
@@ -32,8 +33,12 @@ public class RequestRepository {
 
     public Task<QuerySnapshot> getUsersRequests(User currentUser) {
         return myDb.collection("requests")
-                .whereEqualTo("requestingUser", currentUser)
-                .limit(1)
+                .whereEqualTo("requestingUser.email", currentUser.getEmail())
+                .limit(10)
                 .get();
+    }
+
+    public Query getAllRequests() {
+        return myDb.collection("requests");
     }
 }

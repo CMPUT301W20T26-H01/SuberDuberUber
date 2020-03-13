@@ -23,6 +23,14 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+/*
+    Fragment that generates a QR code based on the user's email.
+
+    Eventually will remove the on click button and have the QR
+    code generate automatically and may change the email string
+    to a user id.
+ */
+
 public class QRCodeFragment extends Fragment {
     private NavController navController;
     private UserRepository firestoreRepository;
