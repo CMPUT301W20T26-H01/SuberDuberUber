@@ -234,6 +234,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         mMap = map;
         map.setMyLocationEnabled(true);
         getDeviceLocation();
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
     @Override
     public void onPause() {
