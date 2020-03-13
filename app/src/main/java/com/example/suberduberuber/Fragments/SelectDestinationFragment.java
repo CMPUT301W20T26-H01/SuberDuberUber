@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,10 @@ public class SelectDestinationFragment extends Fragment {
 
     private EditText field;
     private Button submitButton;
+
+    private DrawerLayout drawerLayout;
+
+    private AppBarConfiguration appBarConfiguration;
 
     public SelectDestinationFragment() {
         // Required empty public constructor
@@ -82,6 +88,11 @@ public class SelectDestinationFragment extends Fragment {
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
             }
         });
+
+        drawerLayout = view.findViewById(R.id.drawer_layout);
+//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
+//                .setDrawerLayout(drawerLayout)
+//                .build();
     }
 
     private void saveRequest() {
