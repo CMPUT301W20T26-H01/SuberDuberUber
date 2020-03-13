@@ -59,8 +59,6 @@ public class ViewRequestsFragment extends Fragment implements RequestAdapter.Req
                 adapter.setRequestDataset(requests);
             }
         });
-
-
     }
 
     private void configureRecyclerView() {

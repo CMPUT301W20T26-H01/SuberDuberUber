@@ -17,12 +17,13 @@ import java.util.List;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestViewHolder> {
 
-    List<Request> dataset;
     private RequestCardTouchListener cardTouchListener;
 
     public RequestAdapter(RequestCardTouchListener listener) {
         this.cardTouchListener = listener;
     }
+
+    List<Request> dataset = new ArrayList<Request>();
 
     @NonNull
     @Override
@@ -75,7 +76,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         }
     }
     public void setRequestDataset(List<Request> requests) {
+
         dataset = requests;
+        notifyDataSetChanged();
     }
 
     public interface RequestCardTouchListener {

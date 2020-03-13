@@ -83,7 +83,6 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
 
 
     NavController navController;
-    Button submitButton;
 
     public MapFullFragment() {
         // Empty Constructor
@@ -202,6 +201,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         mMap = map;
         map.setMyLocationEnabled(true);
         getDeviceLocation();
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 
     private void getDeviceLocation() {
