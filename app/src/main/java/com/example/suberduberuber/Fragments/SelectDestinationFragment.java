@@ -27,6 +27,7 @@ import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +40,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 public class SelectDestinationFragment extends MapFullFragment {
 
     private GetRideViewModel getRideViewModel;
+    private AuthViewModel authViewModel;
     private Request tempRequest;
 
     private DrawerLayout drawerLayout;
@@ -72,6 +74,7 @@ public class SelectDestinationFragment extends MapFullFragment {
 
         textView.setHint("Search Destination");
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
         confirmButton.setText("Request Ride Here");
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +96,7 @@ public class SelectDestinationFragment extends MapFullFragment {
 
     private void createTempRequest() {
 
-        getRideViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 tempRequest = new Request(-1, user, new Path(), "12:00 AM", "initiated");
