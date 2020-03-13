@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/black">
 
     <TextView
         android:id="@+id/nameDisplay"
@@ -16,18 +17,21 @@
         android:textStyle="italic"
         android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/quantum_white_100"/>
 
     <TextView
         android:id="@+id/emailEdit"
         android:layout_width="match_parent"
-        android:layout_height="42dp">
+        android:layout_height="42dp"
+        android:textColor="@color/quantum_white_100">
 
     </TextView>
     <TextView
         android:id="@+id/phoneNumberEdit"
         android:layout_width="match_parent"
-        android:layout_height="42dp">
+        android:layout_height="42dp"
+        android:textColor="@color/quantum_white_100">
 
     </TextView>
 
@@ -42,8 +46,11 @@
             android:id="@+id/confirmButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/quantum_white_100"
             android:gravity="center|fill"
             android:text="@string/confirm"
+            android:textAlignment="center"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cancelButton"
             app:layout_constraintHorizontal_bias="0.5"
@@ -63,7 +70,9 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/confirmButton"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintVertical_bias="0.0"
+            android:background="@color/quantum_white_100"
+            android:textColor="@color/black">
 
         </Button>
     </androidx.constraintlayout.widget.ConstraintLayout>
