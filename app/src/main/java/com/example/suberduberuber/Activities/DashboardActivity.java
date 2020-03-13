@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,10 +13,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.suberduberuber.Fragments.SelectDestinationFragment;
 import com.example.suberduberuber.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,6 +62,15 @@ public class DashboardActivity extends AppCompatActivity {
         configureNavigationDrawer();
     }
 
+    // for QR Code Fragment
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        if (fragment != null) {
+            fragment.onActivityResult(requestCode, resultCode, intent);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         getMenuInflater().inflate(R.menu.drawer_menu, navigationView.getMenu());
@@ -89,6 +101,9 @@ public class DashboardActivity extends AppCompatActivity {
                 }
                 else if (itemId == R.id.requests) {
                     navController.navigate(R.id.action_to_request_page);
+                }
+                else if (itemId == R.id.genQRCode) {
+                    navController.navigate(R.id.action_to_gen_qr_code);
                 }
                 else {
                     return false;

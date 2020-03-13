@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.SelectDestinationFragment"
     android:orientation="vertical"
-    android:layout_margin="20dp">
+    android:layout_margin="20dp"
+    android:id="@+id/dest_layout">
 
     <TextView
         android:layout_width="match_parent"
