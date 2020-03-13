@@ -24,6 +24,7 @@ import java.util.Objects;
 
 public class EditInformationFragment extends Fragment implements View.OnClickListener{
     // Fragment that will display the current information in a given field (ie email) and allow user to edit
+    // edit can be done on phone number and email
     private static int id = 0;
     private User user;
 
