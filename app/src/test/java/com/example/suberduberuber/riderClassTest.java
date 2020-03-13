@@ -17,22 +17,6 @@ public class riderClassTest {
         r = new Rider("testUsername", "test@test.ca");
     }
 
-    @Test
-    public void testGetInfo() {
-        ArrayList<String> info = r.getInfo();
-        assertEquals("", info.get(0));
-        assertEquals("test@test.ca", info.get(1));
-    }
-
-    @Test
-    public void testSetInfo() {
-        String newPh = "123-456-7890";
-        String newEmail = "newtest@new.ca";
-        r.setInfo(newPh, newEmail);
-
-        assertEquals(newPh, r.getInfo().get(0));
-        assertEquals(newEmail, r.getInfo().get(1));
-    }
 
     @Test
     public void testSetGetRating() {
@@ -43,12 +27,7 @@ public class riderClassTest {
     }
 
     @Test
-    public void testGetWallet() {
-        assertEquals("", r.getQRBucksWallet());
-    }
-
-    @Test
-    public void testAddRide() {
+    public void testAddRider() {
         String ride = "Ride1";
         r.addRide(ride);
 

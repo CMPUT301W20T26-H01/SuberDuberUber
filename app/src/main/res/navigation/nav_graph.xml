@@ -29,8 +29,8 @@
         android:label="fragment_ride_pending"
         tools:layout="@layout/fragment_ride_pending" >
         <action
-            android:id="@+id/action_ridePendingFragment_to_rateDriverFragment"
-            app:destination="@id/rateDriverFragment" />
+            android:id="@+id/action_ridePendingFragment_to_scanqrcodeFragment"
+            app:destination="@id/scanQRCodeFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectDestinationFragment"
@@ -40,6 +40,21 @@
         <action
             android:id="@+id/action_selectDestinationFragment_to_selectOriginFragment"
             app:destination="@id/selectOriginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
+        android:label="fragment_qr_code"
+        tools:layout="@layout/fragment_qrcode_page">
+    </fragment>
+    <fragment
+        android:id="@+id/scanQRCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.ScanQRCodeFragment"
+        android:label="fragment_scan_qr_code"
+        tools:layout="@layout/fragment_scan_qrcode" >
+        <action
+            android:id="@+id/action_scanQRCode_to_rateDriverFragment"
+            app:destination="@id/rateDriverFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectOriginFragment"
@@ -55,4 +70,29 @@
         android:name="com.example.suberduberuber.Fragments.MapFullFragment"
         android:label="fragment_map_full"
         tools:layout="@layout/fragment_map_full" />
+        tools:layout="@layout/fragment_map_full" >
+        <action
+            android:id="@+id/action_mapFullFragment2_to_selectDestinationFragment2"
+            app:destination="@id/selectDestinationFragment" />
+    <fragment
+        android:id="@+id/viewProfileFragment"
+        android:name="com.example.suberduberuber.Fragments.profileFragment"
+        android:label="profileFragment" />
+    <action
+        android:id="@+id/action_to_profile_page"
+        app:destination="@id/viewProfileFragment" />
+    <fragment
+        android:id="@+id/viewRequestFragment"
+        android:name="com.example.suberduberuber.Fragments.requestFragment"
+        android:label="requestFragment" />
+    <action
+        android:id="@+id/action_to_request_page"
+        app:destination="@id/viewRequestFragment" />
+    <action
+        android:id="@+id/action_to_dest_home_page"
+        app:destination="@id/selectDestinationFragment" />
+    <action
+        android:id="@+id/action_to_gen_qr_code"
+        app:destination="@id/qrCodeFragment" />
+
 </navigation>

@@ -14,7 +14,7 @@ public class Rider extends User {
      *      User's unique email address
      */
     public Rider(String username, String emailAddress) {
-        super(username, emailAddress);
+        super(username, emailAddress, false);
         this.rides = new ArrayList<String>();
         this.requests = new ArrayList<Request>();
     }
