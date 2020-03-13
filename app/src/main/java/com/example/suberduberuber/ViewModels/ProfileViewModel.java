@@ -38,7 +38,6 @@ public class ProfileViewModel extends AndroidViewModel {
                     currentUser.setValue(null);
                     Log.w(TAG, "Failed listen to current user.", e);
                 } else {
-                    User user = documentSnapshot.toObject(User.class);
                     currentUser.setValue(documentSnapshot.toObject(User.class));
                 }
             }
