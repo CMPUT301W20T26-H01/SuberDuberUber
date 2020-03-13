@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -100,6 +101,9 @@ public class DashboardActivity extends AppCompatActivity {
                 }
                 else if (itemId == R.id.requests) {
                     navController.navigate(R.id.action_to_request_page);
+                }
+                else if (itemId == R.id.genQRCode) {
+                    navController.navigate(R.id.action_to_gen_qr_code);
                 }
                 else {
                     return false;

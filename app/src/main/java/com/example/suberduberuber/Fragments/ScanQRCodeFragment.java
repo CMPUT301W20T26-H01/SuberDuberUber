@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class ScanQRCodeFragment extends Fragment {
 
     private LinearLayout scanQRLayout;
     private TextView qrCodeText;
+    private Button nextButton;
 
     public ScanQRCodeFragment() {
         // Required empty public constructor
@@ -49,6 +51,15 @@ public class ScanQRCodeFragment extends Fragment {
 
         scanQRLayout = view.findViewById(R.id.scan_qr_layout);
         qrCodeText = view.findViewById(R.id.qrCodeString);
+
+        nextButton = view.findViewById(R.id.next_button);
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_scanQRCode_to_rateDriverFragment);
+            }
+        });
 
         scanQRCode();
 

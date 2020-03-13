@@ -25,27 +25,6 @@
         android:layout_height="wrap_content"
         android:text="Next" />
 
-    <Button
-        android:id="@+id/qr_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Payment"
-        android:layout_marginTop="20dp"/>
-
-    <Button
-        android:id="@+id/scan_qr_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scan QR Code"
-        android:layout_marginTop="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/qrcodetext"
-        android:text="No QR Code"
-        android:layout_marginTop="20dp"/>
-
     <TextView
         android:id="@+id/selectedTime"
         android:layout_width="match_parent"

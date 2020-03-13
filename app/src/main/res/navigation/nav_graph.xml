@@ -29,8 +29,8 @@
         android:label="fragment_ride_pending"
         tools:layout="@layout/fragment_ride_pending" >
         <action
-            android:id="@+id/action_ridePendingFragment_to_rateDriverFragment"
-            app:destination="@id/rateDriverFragment" />
+            android:id="@+id/action_ridePendingFragment_to_scanqrcodeFragment"
+            app:destination="@id/scanQRCodeFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectDestinationFragment"
@@ -40,12 +40,6 @@
         <action
             android:id="@+id/action_selectDestinationFragment_to_selectOriginFragment"
             app:destination="@id/selectOriginFragment" />
-        <action
-            android:id="@+id/action_selectDestinationFragment_to_qrcodeFragment"
-            app:destination="@id/qrCodeFragment" />
-        <action
-            android:id="@+id/action_selectDestinationFragment_to_scanqrcodeFragment"
-            app:destination="@id/scanQRCodeFragment" />
     </fragment>
     <fragment
         android:id="@+id/qrCodeFragment"
@@ -57,7 +51,10 @@
         android:id="@+id/scanQRCodeFragment"
         android:name="com.example.suberduberuber.Fragments.ScanQRCodeFragment"
         android:label="fragment_scan_qr_code"
-        tools:layout="@layout/fragment_scan_qrcode">
+        tools:layout="@layout/fragment_scan_qrcode" >
+        <action
+            android:id="@+id/action_scanQRCode_to_rateDriverFragment"
+            app:destination="@id/rateDriverFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectOriginFragment"
@@ -94,4 +91,7 @@
     <action
         android:id="@+id/action_to_dest_home_page"
         app:destination="@id/selectDestinationFragment" />
+    <action
+        android:id="@+id/action_to_gen_qr_code"
+        app:destination="@id/qrCodeFragment" />
 </navigation>

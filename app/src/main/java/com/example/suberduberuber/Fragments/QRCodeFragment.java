@@ -86,7 +86,7 @@ public class QRCodeFragment extends Fragment {
 
             for (int x = 0; x < bitMatrixWidth; x++) {
                 pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.QRCodeBlackColor): getResources().getColor(R.color.QRCodeWhiteColor);
+                        getResources().getColor(R.color.black): getResources().getColor(R.color.white);
             }
         }
         Bitmap bp = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
