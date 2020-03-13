@@ -69,6 +69,8 @@ public class SelectDestinationFragment extends MapFullFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        textView.setHint("Search Destination");
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +96,7 @@ public class SelectDestinationFragment extends MapFullFragment {
             @Override
             public void onChanged(User user) {
                 tempRequest = new Request(-1, user, new Path(), "12:00 AM", "initiated");
-                tempRequest.getPath().setDestination(new CustomLocation(null, currentPlace.getName(), null));
+                tempRequest.getPath().setDestination(new CustomLocation(null, currentPlace.getName(), currentPlace.getAddress()));
                 saveRequest();
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
             }
