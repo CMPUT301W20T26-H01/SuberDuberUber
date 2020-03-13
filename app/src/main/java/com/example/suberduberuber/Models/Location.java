@@ -19,8 +19,8 @@ public class Location {
      */
     public Location(String coordinate, String locationName, String address) {
         this.coordinate = coordinate;
-        this. locationName = locationName;
-        this. address = address;
+        this.locationName = locationName;
+        this.address = address;
     }
 
     /**

@@ -28,7 +28,10 @@ public class Path {
      * Uses distance between two locations and a set COST_FACTOR
      */
     public void generateEstimatedFare() {
-        double distance = startLocation.getDistanceBetween(destination);
+        double distance = 0;
+        if (startLocation != null && destination != null) {
+            distance = startLocation.getDistanceBetween(destination);
+        }
         this.estimatedFare = distance * COST_FACTOR;
     }
 
