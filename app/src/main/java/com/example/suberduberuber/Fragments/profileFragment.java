@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
@@ -20,6 +22,7 @@ import com.example.suberduberuber.ViewModels.ProfileViewModel;
 public class profileFragment extends Fragment {
 
     private ProfileViewModel profileViewModel;
+    private NavController navController;
     private TextView usernamePro;
     private TextView emailPro;
     private TextView ratingPro;
@@ -42,6 +45,7 @@ public class profileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
 
+        navController = Navigation.findNavController(view);
         usernamePro = view.findViewById(R.id.usernameProfile);
         emailPro = view.findViewById(R.id.emailProfile);
         ratingPro = view.findViewById(R.id.ratingProfile);
@@ -71,15 +75,7 @@ public class profileFragment extends Fragment {
     }
 
     private void editUserDetails(){
-        Bundle bundle = new Bundle();
-        User user = profileViewModel.getCurrentUser().getValue();
-        bundle.putSerializable("User",user);
-        assert user != null;
-        bundle.putString("Username",user.getUsername());
-        bundle.putString("Email",user.getPhone());
-        bundle.putString("Phone Number", user.getPhone());
-        EditInformationFragment fragInfo = new EditInformationFragment();
-        fragInfo.setArguments(bundle);
+        navController.navigate(R.id.action_viewProfileFragment_to_editInformationFragment);
 
     }
 }

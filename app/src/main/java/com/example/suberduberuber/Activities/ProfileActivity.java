@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.example.suberduberuber.ViewModels.ProfileViewModel;
 public class ProfileActivity extends AppCompatActivity {
 
     private ProfileViewModel profileViewModel;
+
 
     private LiveData<User> currentUser;
 
@@ -72,8 +74,8 @@ public class ProfileActivity extends AppCompatActivity {
         User user = profileViewModel.getCurrentUser().getValue();
         bundle.putSerializable("User",user);
         bundle.putString("Username",user.getUsername());
-        bundle.putString("Email",user.getPhoneNumber());
-        bundle.putString("Phone Number", user.getPhoneNumber());
+        bundle.putString("Email",user.getPhone());
+        bundle.putString("Phone Number", user.getPhone());
         EditInformationFragment fragInfo = new EditInformationFragment();
         fragInfo.setArguments(bundle);
     }

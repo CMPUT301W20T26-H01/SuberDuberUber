@@ -14,17 +14,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.ProfileViewModel;
 
 import java.util.Objects;
 
 public class EditInformationFragment extends Fragment implements View.OnClickListener{
     // Fragment that will display the current information in a given field (ie email) and allow user to edit
     // edit can be done on phone number and email
+    private ProfileViewModel profileViewModel;
+    private NavController navController;
+
     private static int id = 0;
     private User user;
 
@@ -34,7 +40,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
 
     private AlertDialog dialog;
 
-    private NavController navController;
+
 
 
     public EditInformationFragment() {
@@ -51,24 +57,25 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
 
-        assert getArguments() != null;
-        user = (User) getArguments().getSerializable("User");
+        user = profileViewModel.getCurrentUser().getValue();
 
         TextView nameDisplay = view.findViewById(R.id.nameDisplay);
-        nameDisplay.setText(getArguments().getString("Username"));
+
+        nameDisplay.setText(user.getUsername());
 
         emailEdit = view.findViewById(R.id.emailEdit);
-        emailEdit.setText(getArguments().getString("Email"));
+        emailEdit.setText(user.getEmail());
         emailEdit.setOnClickListener(this);
 
         phoneNumberEdit  = view.findViewById(R.id.phoneNumberEdit);
-        phoneNumberEdit.setText(getArguments().getString("Phone Number"));
+        phoneNumberEdit.setText(user.getPhone());
         phoneNumberEdit.setOnClickListener(this);
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(this);
+
         Button cancelButton = view.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(this);
 
@@ -87,7 +94,6 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
                     TextView temp = v.findViewById(id);
                     temp.setText(newInfoField.getText());
                 }
-
             }
         });
         switch(v.getId()) {
@@ -103,7 +109,8 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
                 id = v.getId();
                 break;
             case R.id.confirmButton:
-                user.setInfo(phoneNumberEdit.getText().toString(),emailEdit.getText().toString());
+                user.setPhone(phoneNumberEdit.getText().toString());
+                user.setEmail(emailEdit.getText().toString());
                 break;
             case R.id.cancelButton:
                 Objects.requireNonNull(getActivity()).onBackPressed();

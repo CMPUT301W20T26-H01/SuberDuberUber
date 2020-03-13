@@ -77,7 +77,11 @@
     <fragment
         android:id="@+id/viewProfileFragment"
         android:name="com.example.suberduberuber.Fragments.profileFragment"
-        android:label="profileFragment" />
+        android:label="profileFragment" >
+        <action
+            android:id="@+id/action_viewProfileFragment_to_editInformationFragment"
+            app:destination="@id/editInformationFragment" />
+    </fragment>
     <action
         android:id="@+id/action_to_profile_page"
         app:destination="@id/viewProfileFragment" />
@@ -94,4 +98,8 @@
     <action
         android:id="@+id/action_to_gen_qr_code"
         app:destination="@id/qrCodeFragment" />
+    <fragment
+        android:id="@+id/editInformationFragment"
+        android:name="com.example.suberduberuber.Fragments.EditInformationFragment"
+        android:label="EditInformationFragment" />
 </navigation>
