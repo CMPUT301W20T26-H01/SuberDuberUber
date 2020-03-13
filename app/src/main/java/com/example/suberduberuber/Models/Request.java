@@ -94,18 +94,38 @@ public class Request {
         return status;
     }
 
+    /**
+     * Changes the requesting user of a request
+     * @param user
+     *      New requesting user
+     */
     public void setRequestingUser(User user) {
         this.requestingUser = user;
     }
 
+    /**
+     * Changes the path of a request
+     * @param path
+     *      New desired path for request
+     */
     public void setPath(Path path) {
         this.path = path;
     }
 
+    /**
+     * Changes the time of a request
+     * @param time
+     *      New desired time for request
+     */
     public void setTime(String time) {
         this.time = time;
     }
 
+    /**
+     * Changes the status of a request
+     * @param status
+     *      New desired status for request
+     */
     public void setStatus(String status) {
         changeStatus(status);
     }
