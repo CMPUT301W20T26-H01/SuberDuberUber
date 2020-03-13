@@ -27,15 +27,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
-
-    private FirebaseUser currentUser;
 
     private NavController navController;
-    private AppBarConfiguration appBarConfiguration;
 
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
     private NavigationView navigationView;
 
     @Override
@@ -45,15 +40,12 @@ public class DashboardActivity extends AppCompatActivity {
 
         myAuth = FirebaseAuth.getInstance();
 
-        currentUser = myAuth.getCurrentUser();
-
-
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
         navigationView = findViewById(R.id.nav_view);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
+        new AppBarConfiguration.Builder(navController.getGraph())
                 .setDrawerLayout(drawerLayout)
                 .build();
 
@@ -105,6 +97,9 @@ public class DashboardActivity extends AppCompatActivity {
                 else if (itemId == R.id.genQRCode) {
                     navController.navigate(R.id.action_to_gen_qr_code);
                 }
+                else if(itemId == R.id.logout) {
+                    logout();
+                }
                 else {
                     return false;
                 }
@@ -125,6 +120,13 @@ public class DashboardActivity extends AppCompatActivity {
             return true;
         }
         return true;
+    }
+
+    private void logout() {
+        myAuth.signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity((intent));
+        finish();
     }
 
 
