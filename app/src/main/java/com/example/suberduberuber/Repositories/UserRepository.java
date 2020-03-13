@@ -19,6 +19,7 @@ public class UserRepository {
 
     FirebaseAuth myAuth = FirebaseAuth.getInstance();
     FirebaseFirestore myDb = FirebaseFirestore.getInstance();
+    FirebaseUser currentUser = myAuth.getCurrentUser();
 
     public Task<DocumentReference> saveUser(User user) {
         return myDb.collection("users")
@@ -31,12 +32,12 @@ public class UserRepository {
     }
 
     public Query getCurrentUser() {
-        return myDb.collection("users").whereEqualTo("email", myAuth.getCurrentUser().getEmail());
+        return myDb.collection("users").whereEqualTo("email", currentUser.getEmail());
     }
 
     public Task<Void> updateCurrentUser(User user) {
         return myDb.collection("users")
-                .document(myAuth.getCurrentUser().getEmail())
+                .document(currentUser.getEmail())
                 .set(user);
     }
 }

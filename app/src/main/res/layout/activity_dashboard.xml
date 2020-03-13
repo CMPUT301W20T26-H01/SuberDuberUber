@@ -17,9 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:id="@+id/nav_host_rider"
+            android:id="@+id/nav_host_fragment"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/rider_nav_graph" />
+            app:navGraph="@navigation/nav_graph" />
 
     </LinearLayout>
 
