@@ -24,6 +24,15 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/*
+    This activity currently holds fragments for a rider's ride request creation.
+    It also includes a toolbar with a hamburger menu that contains home (select
+    a destination for a ride request), profile (currently a dummy place for the
+    rider's profile), request (currently a dummy place to store all rider's request),
+    generate wallet (temporary place to generate a user's QR wallet), and sign out
+    (redirects back to log in page and logs out user).
+ */
+
 public class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
