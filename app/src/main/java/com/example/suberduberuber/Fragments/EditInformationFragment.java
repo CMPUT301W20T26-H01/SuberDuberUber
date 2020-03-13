@@ -59,7 +59,8 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
         profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
 
-        user = profileViewModel.getCurrentUser().getValue();
+        assert getArguments() != null;
+        user = (User) getArguments().getSerializable("user");
 
         TextView nameDisplay = view.findViewById(R.id.nameDisplay);
 

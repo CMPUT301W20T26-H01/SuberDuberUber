@@ -66,6 +66,7 @@ public class profileFragment extends Fragment {
 
 
     }
+
     private void displayUserDetails(User user) {
         usernamePro.setText(user.getUsername());
         emailPro.setText(user.getEmail());
@@ -75,7 +76,10 @@ public class profileFragment extends Fragment {
     }
 
     private void editUserDetails(){
-        navController.navigate(R.id.action_viewProfileFragment_to_editInformationFragment);
+        User user = profileViewModel.getCurrentUser().getValue();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", user);
+        navController.navigate(R.id.action_viewProfileFragment_to_editInformationFragment,bundle);
 
     }
 }
