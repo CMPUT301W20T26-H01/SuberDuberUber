@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.suberduberuber.Models.Car;
+import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.Rider;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
@@ -217,7 +219,15 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void saveUserData(String email, String username) {
-        User user = new Rider(username, email);
+        User user;
+        if (isDriver) {
+            Car car = new Car(carMake.getText().toString().trim(), carModel.getText().toString().trim(), carPlate.getText().toString().trim(), carColor.getText().toString().trim(), Integer.parseInt(carYear.getText().toString().trim()));
+            user = new Driver(username, email, car);
+
+        } else {
+            user = new Rider(username, email);
+        }
+
         registerViewModel.createNewUser(user);
         redirectToLogin();
     }
