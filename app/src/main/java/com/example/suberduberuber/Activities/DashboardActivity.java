@@ -2,6 +2,7 @@ package com.example.suberduberuber.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
@@ -17,9 +18,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.suberduberuber.Fragments.SelectDestinationFragment;
 import com.example.suberduberuber.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+/*
+    This activity currently holds fragments for a rider's ride request creation.
+    It also includes a toolbar with a hamburger menu that contains home (select
+    a destination for a ride request), profile (currently a dummy place for the
+    rider's profile), request (currently a dummy place to store all rider's request),
+    generate wallet (temporary place to generate a user's QR wallet), and sign out
+    (redirects back to log in page and logs out user).
+ */
 
 abstract class DashboardActivity extends AppCompatActivity {
 
@@ -57,7 +69,7 @@ abstract class DashboardActivity extends AppCompatActivity {
     // for QR Code Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Fragment fragment = getSupportFragmentManager().findFragmentById(getNavHostId());
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_rider);
         if (fragment != null) {
             fragment.onActivityResult(requestCode, resultCode, intent);
         }
