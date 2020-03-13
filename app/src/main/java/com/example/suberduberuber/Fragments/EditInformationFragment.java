@@ -33,6 +33,9 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
 
     private AlertDialog dialog;
 
+    private NavController navController;
+
+
     public EditInformationFragment() {
         // Required empty public constructor
     }
@@ -47,6 +50,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
 
         assert getArguments() != null;
         user = (User) getArguments().getSerializable("User");
