@@ -11,11 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-public class driverClassTest {
+public class DriverTest {
     Driver d;
     private Driver createDriver() {
-        Driver r = new Driver("testUsername", "test@test.ca");
-        return r;
+        Car c = new Car("ABC123");
+        Driver d = new Driver("testUsername", "test@test.ca", c);
+        return d;
     }
 
     @BeforeEach
@@ -34,8 +35,8 @@ public class driverClassTest {
 
     @Test
     public void testSetGetCar() {
-        assertNull(d.getCar());
-        Car c = new Car("ABC123");
+        assertEquals("ABC123", d.getCar().getLicensePlate());
+        Car c = new Car("123ABC");
         d.setCar(c);
         assertEquals(c, d.getCar());
     }
