@@ -69,7 +69,7 @@ abstract class DashboardActivity extends AppCompatActivity {
     // for QR Code Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_rider);
         if (fragment != null) {
             fragment.onActivityResult(requestCode, resultCode, intent);
         }

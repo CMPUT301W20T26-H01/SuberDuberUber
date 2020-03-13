@@ -57,6 +57,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
     }
 
     public void setRequestDataset(List<Request> requests) {
+
         dataset = requests;
+        notifyDataSetChanged();
     }
 }
