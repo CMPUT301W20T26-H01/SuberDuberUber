@@ -47,7 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void displayUserDetails(User user) {
         usernameView.setText(user.getUsername());
         emailView.setText(user.getEmail());
-        phoneNumberView.setText(user.getPhoneNumber());
+        phoneNumberView.setText(user.getPhone());
         ratingView.setText(String.format("%d", user.getRating()));
     }
 }

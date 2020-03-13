@@ -89,21 +89,14 @@ public class SelectDestinationFragment extends MapFullFragment {
     }
 
     private void createTempRequest() {
-        getRideViewModel.getCurrentUser().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            private static final String TAG = "SELECT_DESTINATION_FRAG";
 
+        getRideViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    User user = documentSnapshot.toObject(User.class);
-                    tempRequest = new Request(-1, user, new Path(), "12:00 AM", "initiated");
-                    tempRequest.getPath().setDestination(new CustomLocation(null, currentPlace.getName(), null));
-                    saveRequest();
-                    navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
-                } else {
-                    Log.d(TAG, "Error getting current user document: ", task.getException());
-                }
+            public void onChanged(User user) {
+                tempRequest = new Request(-1, user, new Path(), "12:00 AM", "initiated");
+                tempRequest.getPath().setDestination(new CustomLocation(null, currentPlace.getName(), null));
+                saveRequest();
+                navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
             }
         });
     }

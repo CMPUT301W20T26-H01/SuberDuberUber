@@ -18,8 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.suberduberuber.R;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,23 +58,5 @@ public class RidePendingFragment extends Fragment {
                 navController.navigate(R.id.action_ridePendingFragment_to_scanqrcodeFragment);
             }
         });
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                layout.setVisibility(View.GONE);
-            }
-            else {
-                layout.setVisibility(View.VISIBLE);
-                qrCodeText.setText(result.getContents());
-            }
-            layout.setVisibility(View.VISIBLE);
-            qrCodeText.setText(result.getContents());
-        }
-        else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 }

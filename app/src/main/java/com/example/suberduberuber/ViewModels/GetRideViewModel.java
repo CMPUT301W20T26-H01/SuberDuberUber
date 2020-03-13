@@ -39,6 +39,7 @@ public class GetRideViewModel extends AndroidViewModel {
     private UserRepository userRepository;
 
     private MutableLiveData<Request> tempRequest = new MutableLiveData<Request>();
+    private MutableLiveData<User> currentUser = new MutableLiveData<User>();
 
     public GetRideViewModel(Application application) {
         super(application);
@@ -54,6 +55,24 @@ public class GetRideViewModel extends AndroidViewModel {
         tempRequest.setValue(request);
     }
 
+    // Get the current user and setup listening for live updates
+    public LiveData<User> getCurrentUser() {
+        userRepository.getCurrentUser().addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(e != null || queryDocumentSnapshots.getDocuments().isEmpty()) {
+                    currentUser.setValue(null);
+                    Log.e(TAG, "Could not get user.", e);
+                }
+                else {
+                    currentUser.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(User.class));
+                }
+            }
+        });
+
+        return currentUser;
+    }
+
     public void commitTempRequest() {
         requestRepository.saveRequest(tempRequest.getValue()).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -61,9 +80,5 @@ public class GetRideViewModel extends AndroidViewModel {
                 Log.e(TAG, e.toString());
             }
         });
-    }
-
-    public DocumentReference getCurrentUser() {
-        return userRepository.getCurrentUser();
     }
 }

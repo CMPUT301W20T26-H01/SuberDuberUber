@@ -14,6 +14,7 @@ import com.example.suberduberuber.Models.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 // A class that exposes all of the data and data manipulation methods relevant to the user profile page.
 public class ProfileViewModel extends AndroidViewModel {
@@ -31,14 +32,15 @@ public class ProfileViewModel extends AndroidViewModel {
 
     // Get the current user and setup listening for live updates
     public LiveData<User> getCurrentUser() {
-        userRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        userRepository.getCurrentUser().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if(e != null) {
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(e != null || queryDocumentSnapshots.getDocuments().isEmpty()) {
                     currentUser.setValue(null);
-                    Log.w(TAG, "Failed listen to current user.", e);
-                } else {
-                    currentUser.setValue(documentSnapshot.toObject(User.class));
+                    Log.e(TAG, "Could not get user.", e);
+                }
+                else {
+                    currentUser.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(User.class));
                 }
             }
         });

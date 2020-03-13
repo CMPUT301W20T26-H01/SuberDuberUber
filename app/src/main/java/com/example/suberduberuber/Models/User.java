@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class User implements Serializable {
 
-    @DocumentId
     private String email;
     private String username;
     private String phone;
@@ -38,7 +37,7 @@ public class User implements Serializable {
         return email;
     }
     public String getUsername() {return username ;}
-    public String getPhoneNumber() {return phone;}
+    public String getPhone() {return phone;}
     public int getRating() {
         return this.rating;
     }

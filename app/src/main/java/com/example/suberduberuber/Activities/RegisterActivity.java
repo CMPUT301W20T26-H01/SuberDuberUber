@@ -229,6 +229,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         registerViewModel.createNewUser(user);
+        redirectToLogin();
     }
 
     private void redirectToLogin() {
