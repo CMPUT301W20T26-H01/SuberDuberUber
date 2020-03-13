@@ -94,9 +94,8 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (id != 0) {
-                    user.setPhone(newInfoField.getText().toString());
                     TextView temp = v.findViewById(id);
-                    temp.setText(user.getPhone());
+                    temp.setText(newInfoField.getText());
                 }
             }
         });
