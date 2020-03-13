@@ -4,14 +4,13 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.Models.User;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,4 +46,9 @@ public class ProfileViewModel extends AndroidViewModel {
 
         return currentUser;
     }
+
+    public void updateCurrentUser(User user){
+        userRepository.updateCurrentUser(user);
+    }
+
 }

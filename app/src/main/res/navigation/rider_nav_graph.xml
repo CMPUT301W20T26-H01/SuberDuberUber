@@ -101,6 +101,10 @@
     <fragment
         android:id="@+id/editInformationFragment"
         android:name="com.example.suberduberuber.Fragments.EditInformationFragment"
-        android:label="EditInformationFragment" />
+        android:label="EditInformationFragment" >
+        <action
+            android:id="@+id/action_editInformationFragment_to_viewProfileFragment"
+            app:destination="@id/viewProfileFragment" />
+    </fragment>
 
 </navigation>

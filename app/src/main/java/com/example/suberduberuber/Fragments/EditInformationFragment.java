@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -58,6 +59,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        navController = Navigation.findNavController(view);
 
         assert getArguments() != null;
         user = (User) getArguments().getSerializable("user");
@@ -98,7 +100,6 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
             }
         });
         switch(v.getId()) {
-
             case R.id.emailEdit:
                 newInfoField.setText(emailEdit.getText());
                 dialog.show();
@@ -112,11 +113,14 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
             case R.id.confirmButton:
                 user.setPhone(phoneNumberEdit.getText().toString());
                 user.setEmail(emailEdit.getText().toString());
+                profileViewModel.updateCurrentUser(user);
+                navController.navigate(R.id.action_editInformationFragment_to_viewProfileFragment);
                 break;
             case R.id.cancelButton:
-                Objects.requireNonNull(getActivity()).onBackPressed();
+                navController.navigate(R.id.action_editInformationFragment_to_viewProfileFragment);
                 break;
         }
-
     }
+
+
 }
