@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/viewRequestsFragment"
-        android:name="com.example.suberduberuber.ViewRequestsFragment"
+        android:name="com.example.suberduberuber.Fragments.ViewRequestsFragment"
         android:label="fragment_view_requests"
         tools:layout="@layout/fragment_view_requests" />
 </navigation>
