@@ -41,4 +41,8 @@ public class RequestRepository {
     public Query getAllRequests() {
         return myDb.collection("requests");
     }
+
+    public void acceptRequest() {
+
+    }
 }

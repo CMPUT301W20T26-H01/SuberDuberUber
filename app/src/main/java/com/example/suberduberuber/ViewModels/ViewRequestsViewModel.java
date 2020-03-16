@@ -29,12 +29,16 @@ public class ViewRequestsViewModel extends AndroidViewModel {
         requestRepository.getAllRequests().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(queryDocumentSnapshots != null) {
+                if (queryDocumentSnapshots != null) {
                     allRequests.setValue(queryDocumentSnapshots.toObjects(Request.class));
                 }
             }
         });
 
         return allRequests;
+    }
+
+    public void acceptRequest(Request request) {
+        requestRepository.acceptRequest();
     }
 }

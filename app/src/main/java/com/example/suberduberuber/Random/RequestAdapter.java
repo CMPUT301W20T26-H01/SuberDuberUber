@@ -1,12 +1,14 @@
 package com.example.suberduberuber.Random;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.suberduberuber.Models.Request;
@@ -43,6 +45,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         holder.price.setText(Double.toString(request.getPath().getEstimatedFare()));
     }
 
+
     @Override
     public int getItemCount() {
         if(dataset != null) {
@@ -53,12 +56,21 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         }
     }
 
-    public static class RequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    public Request getRequestAtPostion(int position) {
+        return dataset.get(position);
+    }
+
+    public static class RequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView origin;
         private TextView destination;
         private TextView riderName;
         private TextView price;
         private RequestCardTouchListener requestCardTouchListener;
+        private ConstraintLayout popup;
+        private Button acceptButton;
+        private Button cancelButton;
+        private View view;
 
         public RequestViewHolder(View v, RequestCardTouchListener listener) {
             super(v);
@@ -68,20 +80,58 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
             this.origin = v.findViewById(R.id.origin);
             this.riderName = v.findViewById(R.id.rider_name);
             this.price = v.findViewById(R.id.suggested_price);
+            this.popup = v.findViewById(R.id.request_card_poppup_details);
+            this.acceptButton = v.findViewById(R.id.accept_button);
+            this.cancelButton = v.findViewById(R.id.cancel_button);
+            this.view = v;
         }
 
         @Override
         public void onClick(View v) {
-            requestCardTouchListener.onRequestClick(getAdapterPosition());
+            requestCardTouchListener.shrinkAllPopups();
+            togglePopupState();
+            setButtonListeners();
+            requestCardTouchListener.onRequestAccept(getAdapterPosition());
+        }
+
+        public void shrink() {
+            popup.setVisibility(View.GONE);
+            view.setBackgroundColor(Color.WHITE);
+        }
+        private void togglePopupState() {
+            if(popup.getVisibility() == View.GONE) {
+                popup.setVisibility(View.VISIBLE);
+                view.setBackgroundColor(Color.GREEN);
+            }
+            else {
+                popup.setVisibility(View.GONE);
+                view.setBackgroundColor(Color.WHITE);
+            }
+        }
+
+        private void setButtonListeners() {
+            this.acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    requestCardTouchListener.onRequestAccept(getAdapterPosition());
+                }
+            });
+
+            this.cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    togglePopupState();
+                }
+            });
         }
     }
     public void setRequestDataset(List<Request> requests) {
-
         dataset = requests;
         notifyDataSetChanged();
     }
 
     public interface RequestCardTouchListener {
-        void onRequestClick(int position);
+        void onRequestAccept(int position);
+        void shrinkAllPopups();
     }
 }
