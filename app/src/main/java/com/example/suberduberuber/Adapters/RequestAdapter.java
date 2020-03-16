@@ -1,4 +1,4 @@
-package com.example.suberduberuber.Random;
+package com.example.suberduberuber.Adapters;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -17,6 +17,10 @@ import com.example.suberduberuber.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is a custom adapter that is used to bind a list of data to the recycler view elements, and \
+ * enables live updates of the data they contain.
+ */
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestViewHolder> {
 
     private RequestCardTouchListener cardTouchListener;

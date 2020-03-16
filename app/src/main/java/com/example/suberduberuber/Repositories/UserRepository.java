@@ -14,7 +14,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-// A class that serves to handle data structure specific logic and interactions with Fire store,  specifically for user related interactions.
+/**
+ * This class serves to encapsulate all he interactions with the User collection in firebase. It keeps
+ * The system modular and keeps all the queries in one place, so that if database changes occur it can be
+ * fixed in one place. It exposes methods to whichever viewmodel needs to interact with this data class.
+ */
 public class UserRepository {
 
     FirebaseAuth myAuth = FirebaseAuth.getInstance();
