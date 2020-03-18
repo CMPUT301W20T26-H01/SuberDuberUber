@@ -24,23 +24,20 @@ public class UserRepository {
     FirebaseAuth myAuth = FirebaseAuth.getInstance();
     FirebaseFirestore myDb = FirebaseFirestore.getInstance();
 
-    public Task<DocumentReference> saveUser(User user) {
-        return myDb.collection("users")
-                .add(user).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        Log.d("SAVING_USER", "Failed saving user");
-                    }
-                });
+    public void saveUser(User user) {
+        myDb.collection("users")
+                .document(myAuth.getCurrentUser().getUid())
+                .set(user);
     }
 
-    public Query getCurrentUser() {
-        return myDb.collection("users").whereEqualTo("email", myAuth.getCurrentUser().getEmail());
+    public DocumentReference getCurrentUser() {
+        return myDb.collection("users")
+                .document(myAuth.getCurrentUser().getUid());
     }
 
     public Task<Void> updateCurrentUser(User user) {
         return myDb.collection("users")
-                .document(myAuth.getCurrentUser().getEmail())
+                .document(myAuth.getCurrentUser().getUid())
                 .set(user);
     }
 }

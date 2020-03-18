@@ -30,11 +30,6 @@ public class RegisterViewModel extends AndroidViewModel {
     }
 
     public void createNewUser(User user) {
-        firestoreRepository.saveUser(user).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, e.toString());
-            }
-        });
+        firestoreRepository.saveUser(user);
     }
 }

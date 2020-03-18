@@ -10,6 +10,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,9 +40,7 @@ public class ViewRequestsFragment extends Fragment implements RequestAdapter.Req
     private RecyclerView requestRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RequestAdapter adapter;
-    private ConstraintLayout popup;
-    private Button acceptButton;
-    private Button cancelButton;
+    private NavController navController;
 
     public ViewRequestsFragment() {
         // Required empty public constructor
@@ -58,9 +58,9 @@ public class ViewRequestsFragment extends Fragment implements RequestAdapter.Req
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        popup = view.findViewById(R.id.request_card_poppup_details);
-
+        navController = Navigation.findNavController(view);
         viewRequestsViewModel = new ViewModelProvider(getActivity()).get(ViewRequestsViewModel.class);
+
         requestRecyclerView = view.findViewById(R.id.request_list);
         configureRecyclerView();
 
@@ -97,5 +97,6 @@ public class ViewRequestsFragment extends Fragment implements RequestAdapter.Req
     @Override
     public void onRequestAccept(int position) {
         viewRequestsViewModel.acceptRequest(adapter.getRequestAtPostion(position));
+        navController.navigate(R.id.action_viewRequestsFragment_to_driverNavigationFragment);
     }
 }

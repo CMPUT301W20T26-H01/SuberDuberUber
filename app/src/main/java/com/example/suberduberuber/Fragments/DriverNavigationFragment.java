@@ -41,7 +41,7 @@ import java.util.Date;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SelectDestinationFragment extends MapFullFragment {
+public class DriverNavigationFragment extends MapFullFragment {
 
     private GetRideViewModel getRideViewModel;
     private AuthViewModel authViewModel;
@@ -51,7 +51,7 @@ public class SelectDestinationFragment extends MapFullFragment {
 
     private AppBarConfiguration appBarConfiguration;
 
-    public SelectDestinationFragment() {
+    public DriverNavigationFragment() {
         // Required empty public constructor
     }
 
@@ -76,38 +76,9 @@ public class SelectDestinationFragment extends MapFullFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        textView.setHint("Search Destination");
-        getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
-        confirmButton.setText("Request Ride Here");
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createTempRequest();
-            }
-        });
-
         drawerLayout = view.findViewById(R.id.drawer_layout);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
-//                .setDrawerLayout(drawerLayout)
-//                .build();
-    }
-
-    private void saveRequest() {
-        getRideViewModel.saveTempRequest(tempRequest);
-    }
-
-    private void createTempRequest() {
-
-        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                tempRequest = new Request((Rider) user, new Path(), new Date(), "initiated");
-                tempRequest.getPath().setDestination(new CustomLocation(null, currentPlace.getName(), currentPlace.getAddress()));
-                saveRequest();
-                navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
-            }
-        });
     }
 }
+

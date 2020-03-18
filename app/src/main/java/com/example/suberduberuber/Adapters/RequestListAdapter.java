@@ -69,7 +69,7 @@ public class RequestListAdapter extends ArrayAdapter<Request> {
             pickup.setText("Unknown Location");
         }
 
-        pickupTime.setText(request.getTime());
+        pickupTime.setText(request.getTime().toString());
         status.setText(request.getStatus());
         if (Objects.equals(request.getStatus(), "initiated")) {
             driver.setText("waiting..");

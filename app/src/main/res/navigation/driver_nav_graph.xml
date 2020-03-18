@@ -9,5 +9,13 @@
         android:id="@+id/viewRequestsFragment"
         android:name="com.example.suberduberuber.Fragments.ViewRequestsFragment"
         android:label="fragment_view_requests"
-        tools:layout="@layout/fragment_view_requests" />
+        tools:layout="@layout/fragment_view_requests" >
+        <action
+            android:id="@+id/action_viewRequestsFragment_to_driverNavigationFragment"
+            app:destination="@id/driverNavigationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/driverNavigationFragment"
+        android:name="com.example.suberduberuber.Fragments.DriverNavigationFragment"
+        android:label="DriverNavigationFragment" />
 </navigation>

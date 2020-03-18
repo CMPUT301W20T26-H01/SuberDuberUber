@@ -95,7 +95,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
             requestCardTouchListener.shrinkAllPopups();
             togglePopupState();
             setButtonListeners();
-            requestCardTouchListener.onRequestAccept(getAdapterPosition());
         }
 
         public void shrink() {
