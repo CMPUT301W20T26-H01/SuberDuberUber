@@ -83,6 +83,7 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class MapFullFragment extends Fragment implements OnMapReadyCallback {
+
     private static final float DEFAULT_ZOOM = 18;
     private MapView mMapView;
     private GoogleMap mMap;

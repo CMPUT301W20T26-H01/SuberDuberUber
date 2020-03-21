@@ -39,7 +39,8 @@
         tools:layout="@layout/fragment_select_destination" >
         <action
             android:id="@+id/action_selectDestinationFragment_to_selectOriginFragment"
-            app:destination="@id/selectOriginFragment" />
+            app:destination="@id/selectOriginFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/qrCodeFragment"
