@@ -21,11 +21,11 @@ import java.util.List;
  * This is a custom adapter that is used to bind a list of data to the recycler view elements, and \
  * enables live updates of the data they contain.
  */
-public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestViewHolder> {
+public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdapter.RequestViewHolder> {
 
     private RequestCardTouchListener cardTouchListener;
 
-    public RequestAdapter(RequestCardTouchListener listener) {
+    public UsersRequestsAdapter(RequestCardTouchListener listener) {
         this.cardTouchListener = listener;
     }
 
