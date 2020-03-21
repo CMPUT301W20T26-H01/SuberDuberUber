@@ -20,12 +20,12 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-public class RequestListAdapter extends ArrayAdapter<Request> {
+public class AvailableRequestListAdapter extends ArrayAdapter<Request> {
 
     private ArrayList<Request> listOfRequests;
     private Context context;
 
-    public RequestListAdapter(Context context, ArrayList<Request> listOfRequests) {
+    public AvailableRequestListAdapter(Context context, ArrayList<Request> listOfRequests) {
         super(context, 0, listOfRequests);
         this.listOfRequests = listOfRequests;
         this.context = context;

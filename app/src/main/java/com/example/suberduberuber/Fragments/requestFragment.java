@@ -13,9 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.suberduberuber.Adapters.RequestListAdapter;
-import com.example.suberduberuber.Models.CustomLocation;
-import com.example.suberduberuber.Models.Path;
+import com.example.suberduberuber.Adapters.AvailableRequestListAdapter;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
@@ -58,7 +56,7 @@ public class requestFragment extends Fragment {
                 getRideViewModel.getCurrentUsersRequests(user).observe(getViewLifecycleOwner(), new Observer<ArrayList<Request>>() {
                     @Override
                     public void onChanged(ArrayList<Request> requests) {
-                        requestListAdapter = new RequestListAdapter(getParentFragment().getContext(), requests);
+                        requestListAdapter = new AvailableRequestListAdapter(getParentFragment().getContext(), requests);
                         listView.setAdapter(requestListAdapter);
                     }
                 });
