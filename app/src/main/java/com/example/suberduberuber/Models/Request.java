@@ -114,7 +114,7 @@ public class Request {
     /**
      * Changes the time of a request
      * @param time
-     *      New desired time for request
+     *      New desired time for request as Date type
      */
     public void setTime(Date time) {
         this.time = time;
@@ -129,6 +129,12 @@ public class Request {
         this.status = status;
     }
 
+    /**
+     * Creates a Ride object
+     * @param driver
+     *      The driver that claimed the ride
+     * @return
+     */
     public Ride createRide(Driver driver) {
         return new Ride(driver, requestingUser, path, time, 0);
     }
