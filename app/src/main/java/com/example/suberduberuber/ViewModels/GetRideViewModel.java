@@ -34,8 +34,13 @@ import java.util.List;
 
 
 /**
- *  A ViewModel to be shared between all the driver ride-requesting-workflow fragments, for communicating
- *  the request between forms as its being built, etc.
+ * This is a ViewModelClass used to expose livedata to the fragments and activities that persists their
+ * Life cycle changes. Viewmodels also serve to data security by giving views access ONLY to the database
+ * opertaions that are relavent to them. Finally, if this viewmodel is shared between fragments it will
+ * serve as a data scope in which data can persist fragment changes, allowing for a form of inter-fragment
+ * communication more simple than intent extra passing. In this case this viewmodel is used for the Ride
+ * requesting flow. It has a local request that is edited by multiple fragments until finally being
+ * commited to the database.
  */
 public class GetRideViewModel extends AndroidViewModel {
 
