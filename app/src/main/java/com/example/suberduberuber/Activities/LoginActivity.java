@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attemptSignin() {
         if(emailIsValid() & passwordIsValid()) {
-            String email = emailField.getText().toString().trim();
+            String email = emailField.getText().toString().trim().toLowerCase();
             String password = passwordField.getText().toString().trim();
             signIn(email, password);
         }

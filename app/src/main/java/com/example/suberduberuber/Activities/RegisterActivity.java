@@ -186,7 +186,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void createAccount() {
 
-        final String email = emailField.getText().toString().trim();
+        final String email = emailField.getText().toString().trim().toLowerCase();
         String password = passwordField.getText().toString().trim();
         final String username = usernameField.getText().toString().trim();
 
