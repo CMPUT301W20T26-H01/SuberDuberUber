@@ -19,6 +19,10 @@ public class Rider extends User {
         this.requests = new ArrayList<Request>();
     }
 
+    public Rider() {
+
+    }
+
     /**
      * Adds a ride into the list of rides
      * @param ride

@@ -2,6 +2,7 @@ package com.example.suberduberuber.Models;
 
 import com.google.firebase.firestore.DocumentId;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -11,25 +12,23 @@ public class Request {
 
     @DocumentId
     private String requestID; // Stored as a string as @DocumentID (Firestore) requires String type
-    private User requestingUser;
+    private Rider requestingUser;
     private Path path;
-    private String time;
+    private Date time;
     private String status;
 
     /**
      * Request object constructor
-     * @param requestId         The int id of the request
      * @param requestingUser    The user submitting the request
      * @param path              The path requested by the user
      * @param time              The chosen time of pickup for the ride request
      * @param status            The current status of the ride request
      */
-    public Request(int requestId, User requestingUser, Path path, String time, String status) {
-        this.requestID = Integer.toString(requestId);
+    public Request(Rider requestingUser, Path path, Date time, String status) {
         this.requestingUser = requestingUser;
         this.path = path;
         this.time = time;
-        changeStatus(status);
+        this.status = status;
     }
 
     /**
@@ -58,8 +57,8 @@ public class Request {
      * Returns an ID number
      * @return      The ID number of the request
      */
-    public int getRequestID() {
-        return Integer.parseInt(this.requestID);
+    public String getRequestID() {
+        return this.requestID;
     }
 
     /**
@@ -82,7 +81,7 @@ public class Request {
      * Returns a time in String format
      * @return      The pickup time of the requested ride
      */
-    public String getTime() {
+    public Date getTime() {
         return this.time;
     }
 
@@ -99,7 +98,7 @@ public class Request {
      * @param user
      *      New requesting user
      */
-    public void setRequestingUser(User user) {
+    public void setRequestingUser(Rider user) {
         this.requestingUser = user;
     }
 
@@ -117,7 +116,7 @@ public class Request {
      * @param time
      *      New desired time for request
      */
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 
@@ -127,6 +126,10 @@ public class Request {
      *      New desired status for request
      */
     public void setStatus(String status) {
-        changeStatus(status);
+        this.status = status;
+    }
+
+    public Ride createRide(Driver driver) {
+        return new Ride(driver, requestingUser, path, time, 0);
     }
 }

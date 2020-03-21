@@ -9,6 +9,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.suberduberuber.Models.Driver;
+import com.example.suberduberuber.Models.Rider;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.UserRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,15 +42,17 @@ public class AuthViewModel extends AndroidViewModel {
 
     // Get the current user and setup listening for live updates
     public LiveData<User> getCurrentUser() {
-        userRepository.getCurrentUser().addSnapshotListener(new EventListener<QuerySnapshot>() {
+        userRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(e != null || queryDocumentSnapshots.getDocuments().isEmpty()) {
-                    currentUser.setValue(null);
-                    Log.e(TAG, "Could not get user.", e);
-                }
-                else {
-                    currentUser.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(User.class));
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot != null) {
+                    User user = documentSnapshot.toObject(User.class);
+
+                    if(user.getDriver()) {
+                        currentUser.setValue(documentSnapshot.toObject(Driver.class));
+                    } else {
+                        currentUser.setValue(documentSnapshot.toObject(Rider.class));
+                    }
                 }
             }
         });

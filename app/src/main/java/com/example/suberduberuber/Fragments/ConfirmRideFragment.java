@@ -55,7 +55,7 @@ public class ConfirmRideFragment extends Fragment {
         TextView destinationTextView = view.findViewById(R.id.destination);
         destinationTextView.setText(tempRequest.getPath().getDestination().getLocationName());
         TextView pickupTimeTextView = view.findViewById(R.id.pickupTime);
-        pickupTimeTextView.setText(tempRequest.getTime());
+        pickupTimeTextView.setText(tempRequest.getTime().toString());
 
         submitButton = view.findViewById(R.id.submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
