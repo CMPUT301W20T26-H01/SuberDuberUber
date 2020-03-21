@@ -1,12 +1,9 @@
 package com.example.suberduberuber.Fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,12 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
-import com.example.suberduberuber.Adapters.RequestAdapter;
+import com.example.suberduberuber.Adapters.UsersRequestsAdapter;
 import com.example.suberduberuber.ViewModels.ViewRequestsViewModel;
 
 import java.util.List;
@@ -34,12 +29,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewRequestsFragment extends Fragment implements RequestAdapter.RequestCardTouchListener {
+public class ViewRequestsFragment extends Fragment implements UsersRequestsAdapter.RequestCardTouchListener {
 
     private ViewRequestsViewModel viewRequestsViewModel;
     private RecyclerView requestRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private RequestAdapter adapter;
+    private UsersRequestsAdapter adapter;
     private NavController navController;
 
     public ViewRequestsFragment() {
@@ -74,7 +69,7 @@ public class ViewRequestsFragment extends Fragment implements RequestAdapter.Req
 
     private void configureRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());
-        adapter = new RequestAdapter(this);
+        adapter = new UsersRequestsAdapter(this);
 
         requestRecyclerView.setLayoutManager(layoutManager);
         requestRecyclerView.setAdapter(adapter);
@@ -87,7 +82,7 @@ public class ViewRequestsFragment extends Fragment implements RequestAdapter.Req
     public void shrinkAllPopups() {
         int numItems = layoutManager.getItemCount();
         for(int i = 0 ; i < numItems; i++) {
-            RequestAdapter.RequestViewHolder viewHolder = (RequestAdapter.RequestViewHolder) requestRecyclerView.findViewHolderForAdapterPosition(i);
+            UsersRequestsAdapter.RequestViewHolder viewHolder = (UsersRequestsAdapter.RequestViewHolder) requestRecyclerView.findViewHolderForAdapterPosition(i);
             if(viewHolder != null) {
                 viewHolder.shrink();
             }
