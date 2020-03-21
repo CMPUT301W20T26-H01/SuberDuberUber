@@ -97,7 +97,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     int AUTOCOMPLETE_REQUEST_CODE = 1;
 
 
-    NavController navController;
+    protected NavController navController;
 
     public boolean locationPermissionGranted = false;
     public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;

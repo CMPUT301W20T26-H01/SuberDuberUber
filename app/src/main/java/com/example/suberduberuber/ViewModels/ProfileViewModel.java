@@ -38,15 +38,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
     // Get the current user and setup listening for live updates
     public LiveData<User> getCurrentUser() {
-        userRepository.getCurrentUser().addSnapshotListener(new EventListener<QuerySnapshot>() {
+        userRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(e != null || queryDocumentSnapshots.getDocuments().isEmpty()) {
-                    currentUser.setValue(null);
-                    Log.e(TAG, "Could not get user.", e);
-                }
-                else {
-                    currentUser.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(User.class));
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    currentUser.setValue(documentSnapshot.toObject(User.class));
                 }
             }
         });
