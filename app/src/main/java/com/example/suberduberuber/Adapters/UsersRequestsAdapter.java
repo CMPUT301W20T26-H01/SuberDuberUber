@@ -1,9 +1,12 @@
 package com.example.suberduberuber.Adapters;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -11,44 +14,64 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * This is a custom adapter that is used to bind a list of data to the recycler view elements, and \
- * enables live updates of the data they contain.
- */
-public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdapter.RequestViewHolder> {
+import javax.annotation.Nullable;
 
-    private RequestCardTouchListener cardTouchListener;
+public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdapter.UsersRequestsViewHolder> {
 
-    public UsersRequestsAdapter(RequestCardTouchListener listener) {
-        this.cardTouchListener = listener;
-    }
+    private UsersRequestTouchListener usersRequestTouchListener;
 
     List<Request> dataset = new ArrayList<Request>();
 
+    public UsersRequestsAdapter(UsersRequestTouchListener listener) {
+        this.usersRequestTouchListener = listener;
+    }
+
     @NonNull
     @Override
-    public RequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_card, parent, false);
-        return new RequestViewHolder(v, cardTouchListener);
+    public UsersRequestsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_request, parent, false);
+        return new UsersRequestsViewHolder(v, usersRequestTouchListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RequestViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UsersRequestsViewHolder holder, int position) {
 
         Request request = dataset.get(position);
 
-        holder.origin.setText(request.getPath().getStartLocation().getLocationName());
-        holder.destination.setText(request.getPath().getDestination().getLocationName());
-        holder.riderName.setText(request.getRequestingUser().getUsername());
-        holder.price.setText(Double.toString(request.getPath().getEstimatedFare()));
-    }
+        // set fields
+        Path path = request.getPath();
+        if (path.getDestination().getLocationName() != null) {
+            holder.destination.setText(path.getDestination().getLocationName());
+        } else if (path.getDestination().getAddress() != null) {
+            holder.destination.setText(path.getDestination().getAddress());
+        } else if (path.getDestination().getCoordinate() != null) {
+            holder.destination.setText((path.getDestination().getCoordinate()));
+        } else {
+            holder.destination.setText("Unknown Location");
+        }
 
+        if (path.getStartLocation().getLocationName() != null) {
+            holder.pickupLocation.setText(path.getStartLocation().getLocationName());
+        } else if (path.getStartLocation().getAddress() != null) {
+            holder.pickupLocation.setText(path.getStartLocation().getAddress());
+        } else if (path.getStartLocation().getCoordinate() != null) {
+            holder.pickupLocation.setText((path.getStartLocation().getCoordinate()));
+        } else {
+            holder.pickupLocation.setText("Unknown Location");
+        }
+
+        holder.time.setText(request.getTime().toString());
+        holder.driver_username.setText("<not implemented>");
+        holder.status.setText(request.getStatus());
+    }
 
     @Override
     public int getItemCount() {
@@ -60,39 +83,43 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
         }
     }
 
-
-    public Request getRequestAtPostion(int position) {
+    public Request getRequestAtPosition(int position) {
         return dataset.get(position);
     }
 
-    public static class RequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private TextView origin;
+    public static class UsersRequestsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView pickupLocation;
         private TextView destination;
-        private TextView riderName;
-        private TextView price;
-        private RequestCardTouchListener requestCardTouchListener;
+        private TextView time;
+        private TextView driver_username;
+        private TextView status;
+        private UsersRequestTouchListener usersRequestTouchListener;
+
         private ConstraintLayout popup;
-        private Button acceptButton;
-        private Button cancelButton;
+        private Button cancelRideButton;
+        private Button backButton;
         private View view;
 
-        public RequestViewHolder(View v, RequestCardTouchListener listener) {
+        public UsersRequestsViewHolder(View v, UsersRequestTouchListener listener) {
             super(v);
             v.setOnClickListener(this);
-            this.requestCardTouchListener = listener;
-            this.destination = v.findViewById(R.id.destination);
-            this.origin = v.findViewById(R.id.origin);
-            this.riderName = v.findViewById(R.id.rider_name);
-            this.price = v.findViewById(R.id.suggested_price);
+            this.usersRequestTouchListener = listener;
+            this.destination = v.findViewById(R.id.destinationField);
+            this.pickupLocation = v.findViewById(R.id.pickupField);
+            this.time = v.findViewById(R.id.pickupTimeField);
+            this.driver_username = v.findViewById(R.id.driverField);
+            this.status = v.findViewById(R.id.statusField);
+
             this.popup = v.findViewById(R.id.request_card_poppup_details);
-            this.acceptButton = v.findViewById(R.id.accept_button);
-            this.cancelButton = v.findViewById(R.id.cancel_button);
+            this.backButton = v.findViewById(R.id.back_button);
+            this.cancelRideButton = v.findViewById(R.id.cancel_button);
             this.view = v;
         }
 
         @Override
         public void onClick(View v) {
-            requestCardTouchListener.shrinkAllPopups();
+            usersRequestTouchListener.shrinkAllPopups();
             togglePopupState();
             setButtonListeners();
         }
@@ -113,14 +140,14 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
         }
 
         private void setButtonListeners() {
-            this.acceptButton.setOnClickListener(new View.OnClickListener() {
+            this.cancelRideButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    requestCardTouchListener.onRequestAccept(getAdapterPosition());
+                    usersRequestTouchListener.onRequestCancel(getAdapterPosition());
                 }
             });
 
-            this.cancelButton.setOnClickListener(new View.OnClickListener() {
+            this.backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     togglePopupState();
@@ -128,13 +155,14 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
             });
         }
     }
+
     public void setRequestDataset(List<Request> requests) {
         dataset = requests;
         notifyDataSetChanged();
     }
 
-    public interface RequestCardTouchListener {
-        void onRequestAccept(int position);
+    public interface UsersRequestTouchListener {
+        void onRequestCancel(int position);
         void shrinkAllPopups();
     }
 }

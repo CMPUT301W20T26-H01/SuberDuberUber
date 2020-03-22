@@ -66,12 +66,7 @@ public class GetRideViewModel extends AndroidViewModel {
     }
 
     public void commitTempRequest() {
-        requestRepository.saveRequest(tempRequest.getValue()).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, e.toString());
-            }
-        });
+        requestRepository.saveRequest(tempRequest.getValue());
     }
 
     public LiveData<ArrayList<Request>> getCurrentUsersRequests(User user) {
@@ -92,5 +87,9 @@ public class GetRideViewModel extends AndroidViewModel {
         });
 
         return usersRequests;
+    }
+
+    public void cancelRequest(Request request) {
+        requestRepository.cancelRequest(request.getRequestID());
     }
 }

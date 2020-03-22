@@ -83,7 +83,7 @@
         app:destination="@id/viewProfileFragment" />
     <fragment
         android:id="@+id/viewRequestFragment"
-        android:name="com.example.suberduberuber.Fragments.requestFragment"
+        android:name="com.example.suberduberuber.Fragments.UsersRequestFragment"
         android:label="requestFragment" />
     <action
         android:id="@+id/action_to_request_page"
