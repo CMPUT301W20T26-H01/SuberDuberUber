@@ -45,13 +45,6 @@ public class RequestRepository {
     public void saveRequest(Request request) {
         myDb.collection("requests")
                 .add(request)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        request.setRequestID(documentReference.getId());
-                        documentReference.set(request);
-                    }
-                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -79,7 +72,7 @@ public class RequestRepository {
         return myDb.collection("rides").add(ride);
     }
 
-    public void cancelRequest(String requestID) {
-        myDb.collection("requests").document(requestID).delete();
+    public void cancelRequest(Request request) {
+        myDb.collection("requests").document(request.getRequestID()).delete();
     }
 }

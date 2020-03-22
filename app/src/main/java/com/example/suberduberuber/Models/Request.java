@@ -94,15 +94,6 @@ public class Request {
     }
 
     /**
-     * Sets the ID of the request
-     * @param requestID
-     *      New ID of the request
-     */
-    public void setRequestID(String requestID) {
-        this.requestID = requestID;
-    }
-
-    /**
      * Changes the requesting user of a request
      * @param user
      *      New requesting user

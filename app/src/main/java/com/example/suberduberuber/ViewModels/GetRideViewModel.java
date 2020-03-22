@@ -90,6 +90,6 @@ public class GetRideViewModel extends AndroidViewModel {
     }
 
     public void cancelRequest(Request request) {
-        requestRepository.cancelRequest(request.getRequestID());
+        requestRepository.cancelRequest(request);
     }
 }
