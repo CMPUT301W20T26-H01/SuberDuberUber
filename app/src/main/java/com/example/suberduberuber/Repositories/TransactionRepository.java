@@ -15,10 +15,10 @@ public class TransactionRepository {
     }
 
     public void processTransaction(String paidUserUID, double newPayingBalance, double newPaidBalance) {
-        myDb.collection("users")
+        myDb.collection("users_test")
                 .document(myAuth.getUid())
                 .update("balance", newPayingBalance);
-        myDb.collection("users")
+        myDb.collection("users_test")
                 .document(paidUserUID)
                 .update("balance", newPaidBalance);
 
