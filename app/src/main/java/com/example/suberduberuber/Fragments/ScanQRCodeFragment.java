@@ -134,7 +134,7 @@ public class ScanQRCodeFragment extends Fragment {
             @Override
             public void onChanged(Driver user) {
                 if (user != null) {
-                    qrCodeId.setText(user.getEmail());
+                    qrCodeId.setText(user.getUsername());
                     driverPaid = user;
                 }
             }
