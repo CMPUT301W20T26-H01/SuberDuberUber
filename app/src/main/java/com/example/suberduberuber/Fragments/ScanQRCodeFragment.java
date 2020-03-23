@@ -116,7 +116,9 @@ public class ScanQRCodeFragment extends Fragment {
         viewModel.getUser(scannedUid).observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                qrCodeId.setText(user.getEmail());
+                if (user != null) {
+                    qrCodeId.setText(user.getEmail());
+                }
             }
         });
     }
