@@ -23,6 +23,7 @@ import com.example.suberduberuber.Models.Transaction;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.TransactionRepository;
+import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.ViewModels.PaymentViewModel;
 import com.example.suberduberuber.ViewModels.ProfileViewModel;
 import com.google.android.gms.tasks.Task;
@@ -33,6 +34,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.Date;
 
 /*
     Fragment for scanning a QR code. Launches a zxing activity to the camera and
@@ -86,8 +89,12 @@ public class ScanQRCodeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (driverPaid != null && currentRider != null) {
+
                     double amount = 5; // TODO: change hard coded value to actual amount
-                    Transaction transaction = new Transaction(currentRider, driverPaid, amount);
+                    double newPayingBalance = currentRider.getRating() - amount;
+                    double newPaidBalance = driverPaid.getRating() + amount;
+                    transactionRepository.processTransaction(scannedUid, newPayingBalance, newPaidBalance);
+                    Transaction transaction = new Transaction(currentRider, driverPaid, amount, new Date());
                     transactionRepository.saveTransaction(transaction);
 
                     navController.navigate(R.id.action_scanQRCode_to_rateDriverFragment);

@@ -2,12 +2,15 @@ package com.example.suberduberuber.Models;
 
 import com.google.firebase.firestore.DocumentId;
 
+import java.util.Date;
+
 public class Transaction {
     @DocumentId
     private String transactionID; // Stored as a string as @DocumentID (Firestore) requires String type
     private Rider userPaying;
     private Driver userPaid;
     private double paymentAmount;
+    private Date time;
 
     /**
      * Transaction object constructor
@@ -18,10 +21,11 @@ public class Transaction {
      * @param paymentAmount
      *      Amount being transferred
      */
-    public Transaction(Rider userPaying, Driver userPaid, double paymentAmount) {
+    public Transaction(Rider userPaying, Driver userPaid, double paymentAmount, Date time) {
         this.userPaying = userPaying;
         this.userPaid = userPaid;
         this.paymentAmount = paymentAmount;
+        this.time = time;
     }
 
     /**
@@ -57,4 +61,11 @@ public class Transaction {
         this.paymentAmount = paymentAmount;
     }
 
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
 }
