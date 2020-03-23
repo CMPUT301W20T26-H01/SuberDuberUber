@@ -25,24 +25,24 @@ public class UserRepository {
     FirebaseFirestore myDb = FirebaseFirestore.getInstance();
 
     public void saveUser(User user) {
-        myDb.collection("users_test")
+        myDb.collection("users")
                 .document(myAuth.getCurrentUser().getUid())
                 .set(user);
     }
 
     public DocumentReference getCurrentUser() {
-        return myDb.collection("users_test")
+        return myDb.collection("users")
                 .document(myAuth.getCurrentUser().getUid());
     }
 
     public Task<Void> updateCurrentUser(User user) {
-        return myDb.collection("users_test")
+        return myDb.collection("users")
                 .document(myAuth.getCurrentUser().getUid())
                 .set(user);
     }
 
     public DocumentReference getUser(String uid) {
-        return myDb.collection("users_test")
+        return myDb.collection("users")
                 .document(uid);
     }
 }

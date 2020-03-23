@@ -28,7 +28,7 @@ public class TransactionRepository {
     }
 
     public void processTransaction(String paidUserUID, double newPayingBalance, double newPaidBalance) {
-        myDb.collection("users_test")
+        myDb.collection("users")
                 .document(myAuth.getUid())
                 .update("balance", newPayingBalance)
                 .addOnFailureListener(new OnFailureListener() {
@@ -37,7 +37,7 @@ public class TransactionRepository {
                         Log.e(TAG, e.toString());
                     }
                 });
-        myDb.collection("users_test")
+        myDb.collection("users")
                 .document(paidUserUID)
                 .update("balance", newPaidBalance)
                 .addOnFailureListener(new OnFailureListener() {
