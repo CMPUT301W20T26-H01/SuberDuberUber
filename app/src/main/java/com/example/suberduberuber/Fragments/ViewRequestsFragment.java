@@ -20,7 +20,7 @@ import android.view.animation.LayoutAnimationController;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
-import com.example.suberduberuber.Adapters.UsersRequestsAdapter;
+import com.example.suberduberuber.Adapters.RequestListAdapter;
 import com.example.suberduberuber.ViewModels.ViewRequestsViewModel;
 
 import java.util.List;
@@ -29,12 +29,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewRequestsFragment extends Fragment implements UsersRequestsAdapter.RequestCardTouchListener {
+public class ViewRequestsFragment extends Fragment implements RequestListAdapter.RequestCardTouchListener {
 
     private ViewRequestsViewModel viewRequestsViewModel;
     private RecyclerView requestRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private UsersRequestsAdapter adapter;
+    private RequestListAdapter adapter;
     private NavController navController;
 
     public ViewRequestsFragment() {
@@ -69,7 +69,7 @@ public class ViewRequestsFragment extends Fragment implements UsersRequestsAdapt
 
     private void configureRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());
-        adapter = new UsersRequestsAdapter(this);
+        adapter = new RequestListAdapter(this);
 
         requestRecyclerView.setLayoutManager(layoutManager);
         requestRecyclerView.setAdapter(adapter);
@@ -82,7 +82,7 @@ public class ViewRequestsFragment extends Fragment implements UsersRequestsAdapt
     public void shrinkAllPopups() {
         int numItems = layoutManager.getItemCount();
         for(int i = 0 ; i < numItems; i++) {
-            UsersRequestsAdapter.RequestViewHolder viewHolder = (UsersRequestsAdapter.RequestViewHolder) requestRecyclerView.findViewHolderForAdapterPosition(i);
+            RequestListAdapter.RequestViewHolder viewHolder = (RequestListAdapter.RequestViewHolder) requestRecyclerView.findViewHolderForAdapterPosition(i);
             if(viewHolder != null) {
                 viewHolder.shrink();
             }
@@ -91,7 +91,7 @@ public class ViewRequestsFragment extends Fragment implements UsersRequestsAdapt
 
     @Override
     public void onRequestAccept(int position) {
-        viewRequestsViewModel.acceptRequest(adapter.getRequestAtPostion(position));
+        viewRequestsViewModel.acceptRequest(adapter.getRequestAtPosition(position));
         navController.navigate(R.id.action_viewRequestsFragment_to_driverNavigationFragment);
     }
 }
