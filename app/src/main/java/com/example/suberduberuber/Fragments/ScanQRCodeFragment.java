@@ -91,8 +91,8 @@ public class ScanQRCodeFragment extends Fragment {
                 if (driverPaid != null && currentRider != null) {
 
                     double amount = 5; // TODO: change hard coded value to actual amount
-                    double newPayingBalance = currentRider.getRating() - amount;
-                    double newPaidBalance = driverPaid.getRating() + amount;
+                    double newPayingBalance = currentRider.getBalance() - amount;
+                    double newPaidBalance = driverPaid.getBalance() + amount;
                     transactionRepository.processTransaction(scannedUid, newPayingBalance, newPaidBalance);
                     Transaction transaction = new Transaction(currentRider, driverPaid, amount, new Date());
                     transactionRepository.saveTransaction(transaction);
