@@ -123,18 +123,38 @@ public class User implements Serializable {
         this.rating = rating;
     }
 
+    /**
+     * Returns the number of ratings of a user
+     * @return
+     *      User's number of ratings
+     */
     public int getNumberOfRatings() {
         return numberOfRatings;
     }
 
+    /**
+     * Sets the new number of ratings of a user
+     * @param numberOfRatings
+     *      New User's number of ratings
+     */
     public void setNumberOfRatings(int numberOfRatings) {
         this.numberOfRatings = numberOfRatings;
     }
 
+    /**
+     * Returns the amount balance of a user
+     * @return
+     *      Amount balance of a user
+     */
     public double getBalance() {
         return balance;
     }
 
+    /**
+     * Sets the new balance of a user
+     * @param balance
+     *      New amount balance of a user
+     */
     public void setBalance(double balance) {
         this.balance = balance;
     }
