@@ -47,7 +47,6 @@ public class ScanQRCodeFragment extends Fragment {
     private TransactionRepository transactionRepository;
 
     private LinearLayout scanQRLayout;
-    private TextView qrCodeText;
     private TextView qrCodeId;
     private Button nextButton;
 
@@ -80,7 +79,6 @@ public class ScanQRCodeFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
 
         scanQRLayout = view.findViewById(R.id.scan_qr_layout);
-        qrCodeText = view.findViewById(R.id.qrCodeString);
         qrCodeId = view.findViewById(R.id.scannedId);
 
         nextButton = view.findViewById(R.id.next_button);
@@ -123,7 +121,6 @@ public class ScanQRCodeFragment extends Fragment {
                 scanQRLayout.setVisibility(View.GONE);
             }
             scanQRLayout.setVisibility(View.VISIBLE);
-            qrCodeText.setText(result.getContents());
             scannedUid = result.getContents();
             findUser();
         }
