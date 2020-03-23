@@ -1,10 +1,14 @@
 package com.example.suberduberuber.Repositories;
 
 import android.graphics.Color;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.Ride;
 import com.example.suberduberuber.Models.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +28,8 @@ import com.google.firebase.firestore.Transaction;
  */
 public class RequestRepository {
 
+    private static final String TAG = "REQUEST_REPOSITORY";
+
     FirebaseFirestore myDb = FirebaseFirestore.getInstance();
 
     public RequestRepository() {
@@ -36,9 +42,15 @@ public class RequestRepository {
      * @param request
      * @return
      */
-    public Task<DocumentReference> saveRequest(Request request) {
-        return myDb.collection("requests")
-                .add(request);
+    public void saveRequest(Request request) {
+        myDb.collection("requests")
+                .add(request)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                });
     }
 
     public Task<QuerySnapshot> getUsersRequests(User currentUser) {
@@ -58,5 +70,9 @@ public class RequestRepository {
 
     public Task<DocumentReference> createRide(Ride ride) {
         return myDb.collection("rides").add(ride);
+    }
+
+    public void cancelRequest(Request request) {
+        myDb.collection("requests").document(request.getRequestID()).delete();
     }
 }
