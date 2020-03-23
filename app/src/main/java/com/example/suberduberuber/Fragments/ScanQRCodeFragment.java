@@ -12,13 +12,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.UserRepository;
+import com.example.suberduberuber.ViewModels.PaymentViewModel;
+import com.example.suberduberuber.ViewModels.ProfileViewModel;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -33,7 +42,11 @@ public class ScanQRCodeFragment extends Fragment {
 
     private LinearLayout scanQRLayout;
     private TextView qrCodeText;
+    private TextView qrCodeId;
     private Button nextButton;
+
+    private PaymentViewModel viewModel;
+    private String scannedUid;
 
     public ScanQRCodeFragment() {
         // Required empty public constructor
@@ -55,8 +68,11 @@ public class ScanQRCodeFragment extends Fragment {
 
         String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
+        viewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
+
         scanQRLayout = view.findViewById(R.id.scan_qr_layout);
         qrCodeText = view.findViewById(R.id.qrCodeString);
+        qrCodeId = view.findViewById(R.id.scannedId);
 
         nextButton = view.findViewById(R.id.next_button);
 
@@ -86,15 +102,23 @@ public class ScanQRCodeFragment extends Fragment {
             if (result.getContents() == null) {
                 scanQRLayout.setVisibility(View.GONE);
             }
-            else {
-                scanQRLayout.setVisibility(View.VISIBLE);
-                qrCodeText.setText(result.getContents());
-            }
             scanQRLayout.setVisibility(View.VISIBLE);
             qrCodeText.setText(result.getContents());
+            scannedUid = result.getContents();
+            findUser();
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    public void findUser() {
+        viewModel.getUser(scannedUid).observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                qrCodeId.setText(user.getEmail());
+            }
+        });
+    }
+
 }
