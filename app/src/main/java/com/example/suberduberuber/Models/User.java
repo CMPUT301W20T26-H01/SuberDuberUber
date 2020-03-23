@@ -12,6 +12,8 @@ public class User implements Serializable {
     private String phone;
     private int rating;
     private boolean driver;
+    private double balance;
+    private int numberOfRatings;
 
     public User() {
         // Firestore needs this to serialize properly
@@ -31,6 +33,8 @@ public class User implements Serializable {
         this.email = emailAddress;
         this.rating = 0;
         this.driver = isDriver;
+        this.balance = 0;
+        this.numberOfRatings = 0;
     }
 
     /**
@@ -117,5 +121,21 @@ public class User implements Serializable {
      */
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getNumberOfRatings() {
+        return numberOfRatings;
+    }
+
+    public void setNumberOfRatings(int numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }
