@@ -6,26 +6,32 @@
     tools:context=".Fragments.SelectDestinationFragment"
     android:orientation="vertical"
     android:layout_margin="20dp"
-    android:id="@+id/dest_layout">
+    android:id="@+id/dest_layout"
+    android:background="@color/quantum_bluegrey900">
 
     <TextView
+        android:textColor="@color/quantum_white_100"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select Destination"
         />
 
     <EditText
+        android:textColor="@color/quantum_white_100"
         android:id="@+id/destination_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
+        android:textColor="@color/quantum_white_100"
+        android:background="@drawable/btn_round"
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next" />
 
     <TextView
+        android:textColor="@color/quantum_white_100"
         android:id="@+id/selectedTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,6 +41,7 @@
         android:text="Pickup Time" />
 
     <TextView
+        android:textColor="@color/quantum_white_100"
         android:id="@+id/pickupTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +52,8 @@
         android:textSize="18sp" />
 
     <Button
+        android:textColor="@color/quantum_white_100"
+        android:background="@drawable/btn_round"
         android:id="@+id/viewMyRequests"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
