@@ -104,7 +104,7 @@ public class SelectDestinationFragment extends MapFullFragment {
             @Override
             public void onChanged(User user) {
                 tempRequest = new Request((Rider) user, new Path(), new Date(), "initiated");
-                tempRequest.getPath().setDestination(new CustomLocation(null, currentPlace.getName(), currentPlace.getAddress()));
+                tempRequest.getPath().setDestination(new CustomLocation(currentPlace));
                 saveRequest();
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
             }

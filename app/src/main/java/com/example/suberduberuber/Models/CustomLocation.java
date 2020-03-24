@@ -1,4 +1,8 @@
 package com.example.suberduberuber.Models;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.Place;
+
 /*
 Copyright [2020] [SuberDuberUber]
 
@@ -22,8 +26,10 @@ GoogleRoutes API
  */
 public class CustomLocation {
     private String coordinate;
+    private LatLng latLng;
     private String locationName;
     private String address;
+    private String placeID;
 
     // Empty public constructor needed by Cloud Firestore for serializability
     public CustomLocation() { }
@@ -41,6 +47,13 @@ public class CustomLocation {
         this.coordinate = coordinate;
         this.locationName = locationName;
         this.address = address;
+    }
+
+    public CustomLocation(Place currentLocation) {
+        this.locationName = currentLocation.getName();
+        this.address = currentLocation.getAddress();
+        this.latLng = currentLocation.getLatLng();
+        this.placeID = currentLocation.getId();
     }
 
     /**
@@ -68,6 +81,22 @@ public class CustomLocation {
      */
     public String getLocationName() {
         return locationName;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public String getPlaceID() {
+        return placeID;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
     }
 
     /**
