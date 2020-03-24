@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 
 import com.example.suberduberuber.R;
 
@@ -25,6 +26,8 @@ public class RateDriverFragment extends Fragment {
 
     private EditText field;
     private Button submitButton;
+
+    private RatingBar rating;
 
     public RateDriverFragment() {
         // Required empty public constructor
@@ -45,9 +48,12 @@ public class RateDriverFragment extends Fragment {
         field = view.findViewById(R.id.destination_field);
         submitButton = view.findViewById(R.id.submit_button);
 
+        rating = view.findViewById(R.id.rating);
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                double rating_num = (double) rating.getRating();
                 navController.navigate(R.id.action_rateDriverFragment_to_selectDestinationFragment);
             }
         });
