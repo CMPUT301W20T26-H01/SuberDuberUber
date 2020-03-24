@@ -6,9 +6,11 @@
     tools:context=".Fragments.ConfirmRideFragment"
     android:orientation="vertical"
     android:layout_margin="20dp"
-    android:id="@+id/scan_qr_layout">
+    android:id="@+id/scan_qr_layout"
+    android:background="@color/quantum_bluegrey900">
 
     <TextView
+        android:textColor="@color/quantum_white_100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -18,6 +20,7 @@
     </TextView>
 
     <TextView
+        android:textColor="@color/quantum_white_100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -38,6 +41,8 @@
     </TextView>
 
     <Button
+        android:background="@drawable/btn_round"
+        android:textColor="@color/quantum_white_100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Confirm Payment"

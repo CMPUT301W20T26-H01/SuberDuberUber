@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.ViewRequestsFragment">
+    tools:context=".Fragments.ViewRequestsFragment"
+    android:background="@color/quantum_bluegrey900">
 
     <view
+        android:background="@color/quantum_bluegrey900"
         android:id="@+id/request_list"
         class="androidx.recyclerview.widget.RecyclerView"
         android:layout_width="match_parent"
