@@ -12,6 +12,12 @@
         android:layout_height="wrap_content"
         android:text="Rate Driver" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Driver's Name"
+        android:id="@+id/driver_name" />
+
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,5 +30,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rating_number"
+        android:text="No Rating" />
 
 </LinearLayout>

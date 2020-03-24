@@ -22,9 +22,19 @@ public class PaymentViewModel extends AndroidViewModel {
     private MutableLiveData<Rider> currentRider = new MutableLiveData<Rider>();
     private MutableLiveData<Driver> userFound = new MutableLiveData<Driver>();
 
+    private MutableLiveData<Driver> currentDriver = new MutableLiveData<Driver>();
+
     public PaymentViewModel(Application application) {
         super(application);
         userRepository = new UserRepository();
+    }
+
+    public LiveData<Driver> getDriver() {
+        return currentDriver;
+    }
+
+    public void setDriver(Driver driver) {
+        currentDriver.setValue(driver);
     }
 
     // Get the current user and setup listening for live updates

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -14,8 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
+import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.PaymentViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,11 +27,14 @@ import com.example.suberduberuber.R;
 public class RateDriverFragment extends Fragment {
 
     private NavController navController;
+    private PaymentViewModel paymentViewModel;
 
-    private EditText field;
     private Button submitButton;
+    private TextView driverName;
+    private TextView ratingNumber;
 
     private RatingBar rating;
+    private Driver currentDriver;
 
     public RateDriverFragment() {
         // Required empty public constructor
@@ -45,16 +52,23 @@ public class RateDriverFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-        field = view.findViewById(R.id.destination_field);
+        paymentViewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
+
         submitButton = view.findViewById(R.id.submit_button);
 
         rating = view.findViewById(R.id.rating);
+        driverName = view.findViewById(R.id.driver_name);
+        ratingNumber = view.findViewById(R.id.rating_number);
+
+        driverName.setText(paymentViewModel.getDriver().getValue().getUsername());
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 double rating_num = (double) rating.getRating();
-                navController.navigate(R.id.action_rateDriverFragment_to_selectDestinationFragment);
+                ratingNumber.setText(String.valueOf(rating_num));
+
+                //navController.navigate(R.id.action_rateDriverFragment_to_selectDestinationFragment);
             }
         });
     }

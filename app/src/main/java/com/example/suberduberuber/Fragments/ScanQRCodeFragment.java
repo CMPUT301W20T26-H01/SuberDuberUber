@@ -25,7 +25,6 @@ import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.TransactionRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.ViewModels.PaymentViewModel;
-import com.example.suberduberuber.ViewModels.ProfileViewModel;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -136,6 +135,7 @@ public class ScanQRCodeFragment extends Fragment {
                 if (user != null) {
                     qrCodeId.setText(user.getUsername());
                     driverPaid = user;
+                    viewModel.setDriver(driverPaid);
                 }
             }
         });
