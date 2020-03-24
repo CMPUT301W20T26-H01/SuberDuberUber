@@ -12,15 +12,30 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Models.Driver;
+import com.example.suberduberuber.Models.Rider;
+import com.example.suberduberuber.Models.Transaction;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.Repositories.TransactionRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
+import com.example.suberduberuber.ViewModels.PaymentViewModel;
+import com.example.suberduberuber.ViewModels.ProfileViewModel;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.Date;
 
 /*
     Fragment for scanning a QR code. Launches a zxing activity to the camera and
@@ -29,11 +44,17 @@ import com.google.zxing.integration.android.IntentResult;
  */
 public class ScanQRCodeFragment extends Fragment {
     private NavController navController;
-    private UserRepository firestoreRepository;
+    private TransactionRepository transactionRepository;
 
     private LinearLayout scanQRLayout;
-    private TextView qrCodeText;
+    private TextView qrCodeId;
     private Button nextButton;
+
+    private PaymentViewModel viewModel;
+    private String scannedUid;
+
+    private Rider currentRider;
+    private Driver driverPaid;
 
     public ScanQRCodeFragment() {
         // Required empty public constructor
@@ -51,22 +72,35 @@ public class ScanQRCodeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
-        firestoreRepository = new UserRepository();
+        transactionRepository = new TransactionRepository();
 
         String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
+        viewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
+
         scanQRLayout = view.findViewById(R.id.scan_qr_layout);
-        qrCodeText = view.findViewById(R.id.qrCodeString);
+        qrCodeId = view.findViewById(R.id.scannedId);
 
         nextButton = view.findViewById(R.id.next_button);
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_scanQRCode_to_rateDriverFragment);
+                if (driverPaid != null && currentRider != null) {
+
+                    double amount = 5; // TODO: change hard coded value to actual amount
+                    double newPayingBalance = currentRider.getBalance() - amount;
+                    double newPaidBalance = driverPaid.getBalance() + amount;
+                    transactionRepository.processTransaction(scannedUid, newPayingBalance, newPaidBalance);
+                    Transaction transaction = new Transaction(currentRider, driverPaid, amount, new Date());
+                    transactionRepository.saveTransaction(transaction);
+
+                    navController.navigate(R.id.action_scanQRCode_to_rateDriverFragment);
+                }
             }
         });
 
+        findCurrentUser();
         scanQRCode();
 
     }
@@ -86,15 +120,34 @@ public class ScanQRCodeFragment extends Fragment {
             if (result.getContents() == null) {
                 scanQRLayout.setVisibility(View.GONE);
             }
-            else {
-                scanQRLayout.setVisibility(View.VISIBLE);
-                qrCodeText.setText(result.getContents());
-            }
             scanQRLayout.setVisibility(View.VISIBLE);
-            qrCodeText.setText(result.getContents());
+            scannedUid = result.getContents();
+            findUser();
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    public void findUser() {
+        viewModel.getDriver(scannedUid).observe(getViewLifecycleOwner(), new Observer<Driver>() {
+            @Override
+            public void onChanged(Driver user) {
+                if (user != null) {
+                    qrCodeId.setText(user.getUsername());
+                    driverPaid = user;
+                }
+            }
+        });
+    }
+
+    public void findCurrentUser() {
+        viewModel.getCurrentRider().observe(getViewLifecycleOwner(), new Observer<Rider>() {
+            @Override
+            public void onChanged(Rider user) {
+                currentRider = user;
+            }
+        });
+    }
+
 }
