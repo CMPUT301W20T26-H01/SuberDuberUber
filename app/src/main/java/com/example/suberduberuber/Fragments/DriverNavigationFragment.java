@@ -31,6 +31,7 @@ import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
+import com.example.suberduberuber.ViewModels.NavigationViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -43,7 +44,7 @@ import java.util.Date;
  */
 public class DriverNavigationFragment extends MapFullFragment {
 
-    private GetRideViewModel getRideViewModel;
+    private NavigationViewModel navigationViewModel;
     private AuthViewModel authViewModel;
     private Request tempRequest;
 
@@ -77,8 +78,32 @@ public class DriverNavigationFragment extends MapFullFragment {
         super.onViewCreated(view, savedInstanceState);
 
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        navigationViewModel = new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
+
+        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                if(user != null) {
+                    navigationViewModel.getCurrentRide(user).observe(getViewLifecycleOwner(), new Observer<Ride>() {
+                        @Override
+                        public void onChanged(Ride ride) {
+                            if(ride !=null) {
+                                displayRide(ride);
+                            }
+                        }
+                    });
+                }
+            }
+        });
 
         drawerLayout = view.findViewById(R.id.drawer_layout);
+    }
+
+
+    private void displayRide(Ride ride) {
+        Path path = ride.getPath();
+
+        displayPath(path);
     }
 }
 

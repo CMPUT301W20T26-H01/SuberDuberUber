@@ -52,16 +52,20 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
@@ -84,7 +88,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class MapFullFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final float DEFAULT_ZOOM = 18;
+    private static final float DEFAULT_ZOOM = 5;
     private MapView mMapView;
     private GoogleMap mMap;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -248,6 +252,15 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         map.setMyLocationEnabled(true);
         getDeviceLocation();
 
+        LatLng destination = new LatLng(53.5225, 113.6242);
+        LatLng origin = new LatLng(53.5232, 113.5263);
+
+        LatLngBounds bounds = new LatLngBounds(destination, origin);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 3));
+
+        mMap.addMarker(new MarkerOptions().position(origin));
+        mMap.addMarker(new MarkerOptions().position(destination));
     }
     @Override
     public void onPause() {
@@ -287,6 +300,10 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     public void onStop() {
         super.onStop();
         mMapView.onStop();
+    }
+
+    protected void displayPath(Path path) {
+
     }
 
     // ALL METHODS BELOW ARE FROM GITHUB
