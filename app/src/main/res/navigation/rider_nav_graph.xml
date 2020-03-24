@@ -86,12 +86,12 @@
         android:id="@+id/action_to_profile_page"
         app:destination="@id/viewProfileFragment" />
     <fragment
-        android:id="@+id/viewRequestFragment"
-        android:name="com.example.suberduberuber.Fragments.requestFragment"
-        android:label="requestFragment" />
+        android:id="@+id/usersRequestsFragment"
+        android:name="com.example.suberduberuber.Fragments.UsersRequestFragment"
+        android:label="fragment_users_requests" />
     <action
         android:id="@+id/action_to_request_page"
-        app:destination="@id/viewRequestFragment" />
+        app:destination="@id/usersRequestsFragment" />
     <action
         android:id="@+id/action_to_dest_home_page"
         app:destination="@id/selectDestinationFragment" />

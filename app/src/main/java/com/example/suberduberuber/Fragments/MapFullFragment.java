@@ -1,20 +1,33 @@
 package com.example.suberduberuber.Fragments;
-/*
- * Copyright (C) 2012 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
+
+/*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+
+Fragment class built to display a GoogleMaps view and incorporate GooglePlaces Autocomplete feature
+Class includes additional checking for location permissions
+Implemented to be used with NavGraph
+Extended by Other Fragments for SelectDestination and SelectOrigin
+Sources include:
+    GoogleMaps SKD Android Documentation - https://developers.google.com/maps/documentation/android-sdk/intro
+    GooglePlaces SDK Android Documentation - https://developers.google.com/places/android-sdk/intro
+    GoogleMaps YouTube Playlist by User CodingWithMitch - https://www.youtube.com/watch?v=RQxY7rrZATU&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT3gi
+    Permission Services Code from GitHub User mitchtabian - https://gist.github.com/mitchtabian/2b9a3dffbfdc565b81f8d26b25d059bf
+ */
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -84,7 +97,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     int AUTOCOMPLETE_REQUEST_CODE = 1;
 
 
-    NavController navController;
+    protected NavController navController;
 
     public boolean locationPermissionGranted = false;
     public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
@@ -93,7 +106,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     public static final String ERROR_TAG = "Login Activity";
 
     public MapFullFragment() {
-        // Empty Constructor
+        // Required Empty Constructor
     }
 
     @Override
@@ -102,7 +115,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_map_full, container, false);
         mMapView = (MapView) view.findViewById(R.id.full_map);
 
-        // Initialize the SDK and Create a new Places client instance
+        // Initialize GooglePlaces
         Places.initialize(getActivity().getApplicationContext(), getString(R.string.google_map_api_key));
         placesClient = Places.createClient(getContext());
 
@@ -113,10 +126,8 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Set the fields to specify which types of place data to
-                // return after the user has made a selection.
+                // Set Fields to be returned by PlacesAutocomplete
                 List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS);
-                // Start the autocomplete intent.
                 Intent intent = new Autocomplete.IntentBuilder(
                         AutocompleteActivityMode.OVERLAY, fields)
                         .build(getContext());
@@ -129,6 +140,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // Get Autocomplete Results
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 currentPlace = Autocomplete.getPlaceFromIntent(data);
@@ -139,15 +151,13 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
                     confirmButton.setVisibility(View.VISIBLE);
                 }
                 Log.i(TAG, "Place: " + currentPlace.getName() + ", " + currentPlace.getId());
-
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i(TAG, status.getStatusMessage());
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
             }
         }
+        // Check For Location Permission
         else {
             super.onActivityResult(requestCode, resultCode, data);
             Log.d(ERROR_TAG, "onActivityResult: called.");
@@ -190,11 +200,10 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void getDeviceLocation() {
-        // Use fields to define the data types to return.
+        // Set Fields For Places
         List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS);
-        // Use the builder to create a FindCurrentPlaceRequest.
         FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
-        // Call findCurrentPlace and handle the response (first check that the user has granted permission).
+        // Gets Most Likely Current Location
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
             placeResponse.addOnCompleteListener(task -> {
@@ -224,7 +233,9 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
             });
-        } else {
+        }
+        // Location Permission Missing
+        else {
             getLocationPermission();
         }
     }
@@ -232,9 +243,10 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setMyLocationEnabled(true);
         getDeviceLocation();
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
     }
     @Override
     public void onPause() {
@@ -314,11 +326,6 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -336,12 +343,10 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity());
 
         if(available == ConnectionResult.SUCCESS){
-            //everything is fine and the user can make map requests
             Log.d(ERROR_TAG, "isServicesOK: Google Play Services is working");
             return true;
         }
         else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-            //an error occured but we can resolve it
             Log.d(ERROR_TAG, "isServicesOK: an error occured but we can fix it");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), available, ERROR_DIALOG_REQUEST);
             dialog.show();
@@ -358,7 +363,6 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         locationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationPermissionGranted = true;

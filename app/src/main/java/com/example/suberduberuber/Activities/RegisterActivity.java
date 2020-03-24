@@ -31,6 +31,10 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import java.util.regex.Pattern;
 
+/**
+ * This class allow a user to register as either a rider or a driver. If the user is a driver, it
+ * will ask relavant information about their car.
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
@@ -127,11 +131,20 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void attemptRegistration() {
-        if(emailIsValid() & passwordIsValid() & usernameIsValid()) {
-            createAccount();
-        }
-        else {
-            return;
+        if (isDriver) {
+            if(emailIsValid() & passwordIsValid() & usernameIsValid() & carIsValid()) {
+                createAccount();
+            }
+            else {
+                return;
+            }
+
+        } else {
+            if (emailIsValid() & passwordIsValid() & usernameIsValid()) {
+                createAccount();
+            } else {
+                return;
+            }
         }
     }
 
@@ -184,9 +197,66 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
+    private boolean carIsValid() {
+        String make = carMake.getText().toString().trim();
+        String model = carModel.getText().toString().trim();
+        String year = carYear.getText().toString().trim();
+        String color = carColor.getText().toString().trim();
+        String plate = carPlate.getText().toString().trim();
+
+        boolean makeValid = true;
+        boolean modelValid = true;
+        boolean yearValid = true;
+        boolean colorValid = true;
+        boolean plateValid = true;
+
+        if (make.isEmpty()) {
+            carMake.setError("Car make is required");
+            makeValid = false;
+        }
+
+        if (model.isEmpty()) {
+            carModel.setError("Car model is required");
+            modelValid = false;
+        }
+
+        if (year.isEmpty()) {
+            carYear.setError("Car year is required");
+            yearValid = false;
+        }
+
+        if (color.isEmpty()) {
+            carColor.setError("Car color is required");
+            colorValid = false;
+        }
+
+        if (plate.isEmpty()) {
+            carPlate.setError("License plate is required");
+            plateValid = false;
+        }
+
+        if (year.length() != 4) {
+            carYear.setError("Year must be 4 digits");
+            yearValid = false;
+        }
+
+        if (makeValid & modelValid & yearValid & colorValid & plateValid) {
+
+            carMake.setError(null);
+            carModel.setError(null);
+            carYear.setError(null);
+            carColor.setError(null);
+            carPlate.setError(null);
+
+            return true;
+        }
+
+        return false;
+    }
+
     private void createAccount() {
 
-        final String email = emailField.getText().toString().trim();
+        final String email = emailField.getText().toString().trim().toLowerCase();
         String password = passwordField.getText().toString().trim();
         final String username = usernameField.getText().toString().trim();
 

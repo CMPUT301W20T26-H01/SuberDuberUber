@@ -15,8 +15,14 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
-// A class that exposes all of the data and data manipulation methods relevant to the user profile page.
-public class ProfileViewModel extends AndroidViewModel {
+/**
+ * This is a ViewModelClass used to expose livedata to the fragments and activities that persists their
+ * Life cycle changes. Viewmodels also serve to data security by giving views access ONLY to the database
+ * opertaions that are relavent to them. Finally, if this viewmodel is shared between fragments it will
+ * serve as a data scope in which data can persist fragment changes, allowing for a form of inter-fragment
+ * communication more simple than intent extra passing. In this case this viewmodel is used for profile
+ * related data acessing / editing.
+ */public class ProfileViewModel extends AndroidViewModel {
 
     private static String TAG = "PROFILE_VIEW_MODEL";
 
@@ -31,15 +37,11 @@ public class ProfileViewModel extends AndroidViewModel {
 
     // Get the current user and setup listening for live updates
     public LiveData<User> getCurrentUser() {
-        userRepository.getCurrentUser().addSnapshotListener(new EventListener<QuerySnapshot>() {
+        userRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(e != null || queryDocumentSnapshots.getDocuments().isEmpty()) {
-                    currentUser.setValue(null);
-                    Log.e(TAG, "Could not get user.", e);
-                }
-                else {
-                    currentUser.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(User.class));
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    currentUser.setValue(documentSnapshot.toObject(User.class));
                 }
             }
         });

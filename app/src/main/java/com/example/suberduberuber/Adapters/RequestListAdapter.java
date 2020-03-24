@@ -1,83 +1,141 @@
 package com.example.suberduberuber.Adapters;
 
-import android.content.ClipData;
-import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import javax.annotation.Nullable;
+/**
+ * This is a custom adapter that is used to bind a list of data to the recycler view elements, and \
+ * enables live updates of the data they contain.
+ */
+public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.RequestViewHolder> {
 
-public class RequestListAdapter extends ArrayAdapter<Request> {
+    private RequestCardTouchListener cardTouchListener;
 
-    private ArrayList<Request> listOfRequests;
-    private Context context;
+    public RequestListAdapter(RequestCardTouchListener listener) {
+        this.cardTouchListener = listener;
+    }
 
-    public RequestListAdapter(Context context, ArrayList<Request> listOfRequests) {
-        super(context, 0, listOfRequests);
-        this.listOfRequests = listOfRequests;
-        this.context = context;
+    List<Request> dataset = new ArrayList<Request>();
+
+    @NonNull
+    @Override
+    public RequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_card, parent, false);
+        return new RequestViewHolder(v, cardTouchListener);
     }
 
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
+    public void onBindViewHolder(@NonNull RequestViewHolder holder, int position) {
 
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.adapter_request, parent, false);
+        Request request = dataset.get(position);
+
+        holder.origin.setText(request.getPath().getStartLocation().getLocationName());
+        holder.destination.setText(request.getPath().getDestination().getLocationName());
+        holder.riderName.setText(request.getRequestingUser().getUsername());
+        holder.price.setText(Double.toString(request.getPath().getEstimatedFare()));
+    }
+
+
+    @Override
+    public int getItemCount() {
+        if(dataset != null) {
+            return dataset.size();
+        }
+        else {
+            return 0;
+        }
+    }
+
+
+    public Request getRequestAtPosition(int position) {
+        return dataset.get(position);
+    }
+
+    public static class RequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private TextView origin;
+        private TextView destination;
+        private TextView riderName;
+        private TextView price;
+        private RequestCardTouchListener requestCardTouchListener;
+        private ConstraintLayout popup;
+        private Button acceptButton;
+        private Button cancelButton;
+        private View view;
+
+        public RequestViewHolder(View v, RequestCardTouchListener listener) {
+            super(v);
+            v.setOnClickListener(this);
+            this.requestCardTouchListener = listener;
+            this.destination = v.findViewById(R.id.destination);
+            this.origin = v.findViewById(R.id.origin);
+            this.riderName = v.findViewById(R.id.rider_name);
+            this.price = v.findViewById(R.id.suggested_price);
+            this.popup = v.findViewById(R.id.request_card_poppup_details);
+            this.acceptButton = v.findViewById(R.id.cancel_button);
+            this.cancelButton = v.findViewById(R.id.back_button);
+            this.view = v;
         }
 
-        Request request = listOfRequests.get(position);
-
-        TextView destination = view.findViewById(R.id.destinationField);
-        TextView pickup = view.findViewById(R.id.pickupField);
-        TextView pickupTime = view.findViewById(R.id.pickupTimeField);
-        TextView driver = view.findViewById(R.id.driverField);
-        TextView status = view.findViewById(R.id.statusField);
-
-        // set fields
-        Path path = request.getPath();
-        if (path.getDestination().getLocationName() != null) {
-            destination.setText(path.getDestination().getLocationName());
-        } else if (path.getDestination().getAddress() != null) {
-            destination.setText(path.getDestination().getAddress());
-        } else if (path.getDestination().getCoordinate() != null) {
-            destination.setText((path.getDestination().getCoordinate()));
-        } else {
-            destination.setText("Unknown Location");
+        @Override
+        public void onClick(View v) {
+            requestCardTouchListener.shrinkAllPopups();
+            togglePopupState();
+            setButtonListeners();
         }
 
-        if (path.getStartLocation().getLocationName() != null) {
-            pickup.setText(path.getStartLocation().getLocationName());
-        } else if (path.getStartLocation().getAddress() != null) {
-            pickup.setText(path.getStartLocation().getAddress());
-        } else if (path.getStartLocation().getCoordinate() != null) {
-            pickup.setText((path.getStartLocation().getCoordinate()));
-        } else {
-            pickup.setText("Unknown Location");
+        public void shrink() {
+            popup.setVisibility(View.GONE);
+            view.setBackgroundColor(Color.WHITE);
+        }
+        private void togglePopupState() {
+            if(popup.getVisibility() == View.GONE) {
+                popup.setVisibility(View.VISIBLE);
+                view.setBackgroundColor(Color.GREEN);
+            }
+            else {
+                popup.setVisibility(View.GONE);
+                view.setBackgroundColor(Color.WHITE);
+            }
         }
 
-        pickupTime.setText(request.getTime());
-        status.setText(request.getStatus());
-        if (Objects.equals(request.getStatus(), "initiated")) {
-            driver.setText("waiting..");
-        } else {
-            // get driver username
-            driver.setText("not implemented");
-        }
+        private void setButtonListeners() {
+            this.acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    requestCardTouchListener.onRequestAccept(getAdapterPosition());
+                }
+            });
 
-        return view;
+            this.cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    togglePopupState();
+                }
+            });
+        }
+    }
+
+    public void setRequestDataset(List<Request> requests) {
+        dataset = requests;
+        notifyDataSetChanged();
+    }
+
+    public interface RequestCardTouchListener {
+        void onRequestAccept(int position);
+        void shrinkAllPopups();
     }
 }
