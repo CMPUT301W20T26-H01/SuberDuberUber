@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragments.SelectDestinationFragment">
+    tools:context=".Fragments.SelectDestinationFragment"
+    android:layout_margin="20dp"
+    android:background="@color/quantum_bluegrey900">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,6 +22,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
         <TextView
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/selectedPickupLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,6 +32,7 @@
             android:text="Your Selected Pickup Location:" />
 
         <TextView
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/pickupLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,6 +43,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/selectedDestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,6 +53,7 @@
             android:text="Your Selected Destination:" />
 
         <TextView
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,6 +64,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/selectedTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,6 +74,7 @@
             android:text="Pickup Time" />
 
         <TextView
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/pickupTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,6 +84,8 @@
             android:text="12:00 AM"
             android:textSize="18sp" />
         <Button
+            android:textColor="@color/quantum_white_100"
+            android:background="@drawable/btn_round"
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

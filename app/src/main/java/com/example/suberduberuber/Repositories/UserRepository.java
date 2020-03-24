@@ -40,4 +40,9 @@ public class UserRepository {
                 .document(myAuth.getCurrentUser().getUid())
                 .set(user);
     }
+
+    public DocumentReference getUser(String uid) {
+        return myDb.collection("users")
+                .document(uid);
+    }
 }
