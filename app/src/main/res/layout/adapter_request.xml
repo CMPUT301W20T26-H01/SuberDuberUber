@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/quantum_bluegrey900">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -15,11 +16,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/quantum_bluegrey900"
             android:id="@+id/constant_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/pickupLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -31,6 +34,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/destination" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/driverField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,6 +52,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/pickupTimeField" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/pickupTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,6 +63,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/pickupLocation" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/destination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,6 +75,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,6 +89,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/pickupTime" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/statusField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,6 +103,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/pickupTimeField" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/destinationField"
                 android:layout_width="0dp"
                 android:layout_height="23dp"
@@ -111,6 +120,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/pickupTimeField"
                 android:layout_width="0dp"
                 android:layout_height="19dp"
@@ -125,6 +135,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/pickupLocation" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/pickupField"
                 android:layout_width="0dp"
                 android:layout_height="23dp"
@@ -141,6 +152,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/destinationField" />
 
             <TextView
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/driver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -157,6 +169,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/quantum_grey900"
             android:id="@+id/request_card_poppup_details"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -165,6 +178,7 @@
             android:visibility="gone">
 
             <Button
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -177,6 +191,7 @@
                 app:layout_constraintVertical_bias="1.0"></Button>
 
             <Button
+                android:textColor="@color/quantum_white_100"
                 android:id="@+id/cancel_button"
                 android:layout_width="284dp"
                 android:layout_height="46dp"

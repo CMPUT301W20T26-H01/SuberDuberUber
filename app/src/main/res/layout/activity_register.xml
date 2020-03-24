@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/quantum_bluegrey900">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,6 +13,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:textColor="@color/quantum_white_100"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register"
@@ -27,18 +29,21 @@
             android:text="@string/isDriver" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/username_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="UserName" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/email_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/password_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,6 +51,7 @@
             android:inputType="textPassword" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/password_field_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,12 +60,14 @@
             android:layout_marginBottom="20dp"/>
 
         <TextView
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/car_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/car_info" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/year_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,34 +76,40 @@
             android:inputType="number" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/make_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Make" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/model_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Model" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/color_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Color" />
 
         <EditText
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/plate_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="License Plate" />
 
         <Button
+            android:textColor="@color/quantum_white_100"
             android:id="@+id/register_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register" />
+            android:text="Register"
+            android:background="@drawable/btn_round"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
