@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +113,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
                 id = v.getId();
                 break;
             case R.id.confirmButton:
-                user.setPhone(phoneNumberEdit.getText().toString());
+                user.setPhone(PhoneNumberUtils.formatNumber(phoneNumberEdit.getText().toString()));
                 user.setEmail(emailEdit.getText().toString());
                 profileViewModel.updateCurrentUser(user);
                 navController.navigate(R.id.action_editInformationFragment_to_viewProfileFragment);
