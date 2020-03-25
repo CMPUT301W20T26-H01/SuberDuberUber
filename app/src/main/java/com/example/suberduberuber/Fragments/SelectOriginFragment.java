@@ -57,9 +57,9 @@ public class SelectOriginFragment extends MapFullFragment {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tempRequest.getPath().setStartLocation(new CustomLocation(null, currentPlace.getName(), currentPlace.getAddress()));
+                tempRequest.getPath().setStartLocation(new CustomLocation(currentPlace));
                 saveRequest();
-                navController.navigate(R.id.action_selectOriginFragment_to_confirmRideFragment2);
+                navController.navigate(R.id.action_selectOriginFragment_to_confrimRouteFragment2);
             }
         });
 
