@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import com.example.suberduberuber.Models.CustomLocation;
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.Ride;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.RequestRepository;
@@ -49,7 +50,7 @@ public class GetRideViewModel extends AndroidViewModel {
     private RequestRepository requestRepository;
 
     private MutableLiveData<Request> tempRequest = new MutableLiveData<Request>();
-    private MutableLiveData<User> currentUser = new MutableLiveData<User>();
+    private MutableLiveData<Ride> currentRide = new MutableLiveData<Ride>();
     private MutableLiveData<ArrayList<Request>> usersRequests = new MutableLiveData<>();
 
     public GetRideViewModel(Application application) {
@@ -91,5 +92,10 @@ public class GetRideViewModel extends AndroidViewModel {
 
     public void cancelRequest(Request request) {
         requestRepository.cancelRequest(request);
+    }
+
+    public Ride getUsersCurrentRide(User user) {
+        // get riders current ride
+        return new Ride();
     }
 }

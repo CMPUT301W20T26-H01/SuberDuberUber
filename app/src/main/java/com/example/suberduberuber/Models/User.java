@@ -14,6 +14,7 @@ public class User implements Serializable {
     private boolean driver;
     private double balance;
     private int numberOfRatings;
+    private Ride currentRide;
 
     public User() {
         // Firestore needs this to serialize properly
@@ -21,11 +22,12 @@ public class User implements Serializable {
 
     /**
      * This generates an user with an unique username, phone number and email address
-     * @param username
+     *@param username
      *      User's identifier
-     * @param emailAddress
+     *@param emailAddress
      *      User's unique email address
-     *
+     * @param isDriver
+     *      If the user is a driver or not
      */
     public User(String username, String emailAddress, boolean isDriver) {
         this.username = username;
@@ -35,6 +37,7 @@ public class User implements Serializable {
         this.driver = isDriver;
         this.balance = 0;
         this.numberOfRatings = 0;
+        this.currentRide = null;
     }
 
     /**
@@ -157,5 +160,21 @@ public class User implements Serializable {
      */
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    /**
+     * Returns the ride the user is currently participating in
+     * @return
+     *      The current ride the user is participating in
+     */
+    public Ride getCurrentRide() { return this.currentRide; }
+
+    /**
+     * Sets the ride the rider is currently participating in
+     * @param ride
+     *      The current ride object of the user
+     */
+    public void setCurrentRide(Ride ride) {
+        this.currentRide = ride;
     }
 }

@@ -16,13 +16,14 @@
 
         <TextView
             android:id="@+id/autocomplete"
-            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:hint="Search Location"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:textAlignment="center"
+            android:textColor="@android:color/secondary_text_dark"
             android:textSize="24sp" />
 
         <com.google.android.gms.maps.MapView

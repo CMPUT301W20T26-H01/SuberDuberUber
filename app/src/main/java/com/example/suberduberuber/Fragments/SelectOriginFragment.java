@@ -62,13 +62,6 @@ public class SelectOriginFragment extends MapFullFragment {
                 navController.navigate(R.id.action_selectOriginFragment_to_confrimRouteFragment2);
             }
         });
-
-        getRideViewModel.getTempRequest().observe(getViewLifecycleOwner(), new Observer<Request>() {
-            @Override
-            public void onChanged(Request request) {
-                //field.setHint("testing onChanged method of observer model");
-            }
-        });
     }
 
     private void saveRequest() {
