@@ -299,12 +299,12 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         registerViewModel.createNewUser(user);
-        redirectToLogin();
+        redirectToMain();
     }
 
-    private void redirectToLogin() {
+    private void redirectToMain() {
 
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
