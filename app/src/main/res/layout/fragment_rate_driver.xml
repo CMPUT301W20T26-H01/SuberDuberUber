@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/rating"
-        android:numStars="5" />
+        android:numStars="5"
+        android:theme="@style/RatingBar"/>
 
     <Button
         android:background="@drawable/btn_round"
