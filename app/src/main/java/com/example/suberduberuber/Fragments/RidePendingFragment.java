@@ -80,19 +80,18 @@ public class RidePendingFragment extends Fragment {
 
     public void cancelRideRequest() {
         getRideViewModel.cancelRequest(getRideViewModel.getTempRequest().getValue());
+        navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
     }
 
     public void updateRequestInfo(Request request) {
         if (Objects.equals(request.getStatus(), "claimed")) {
-            // get current user
+            // get current user's ride
             authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
                 @Override
                 public void onChanged(User user) {
-                    if (user.getCurrentRide() != null) {
-                        String driver = user.getCurrentRide().getDriver().getUsername();
-                        Toast.makeText(getParentFragment().getContext(), driver + " Accepted Ride!", Toast.LENGTH_LONG).show();
-                        rideRequestStatus.setText("Waiting for pickup");
-                    }
+                    String driver = "some username";
+                    Toast.makeText(getParentFragment().getContext(), driver + " Accepted Ride!", Toast.LENGTH_LONG).show();
+                    rideRequestStatus.setText("Waiting for pickup");
                 }
             });
         }
