@@ -6,9 +6,11 @@
     tools:context=".Fragments.ConfirmRideFragment"
     android:orientation="vertical"
     android:layout_margin="20dp"
-    android:id="@+id/scan_qr_layout">
+    android:id="@+id/scan_qr_layout"
+    android:background="@color/quantum_bluegrey900">
 
     <TextView
+        android:textColor="@color/quantum_white_100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -18,19 +20,32 @@
     </TextView>
 
     <TextView
+        android:textColor="@color/quantum_white_100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/qrCodeString"
-        android:text="No QR Code Scanned"
+        android:id="@+id/amount"
+        android:text="$5.00 to"
+        android:textSize="15dp"
+        android:layout_marginTop="20dp">
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/scannedId"
+        android:text="No ID Scanned"
         android:textSize="15dp"
         android:layout_marginTop="6dp">
     </TextView>
 
     <Button
+        android:background="@drawable/btn_round"
+        android:textColor="@color/quantum_white_100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text="Confirm Payment"
         android:textSize="15dp"
         android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"

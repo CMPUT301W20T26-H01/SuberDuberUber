@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.example.suberduberuber.Models.CustomLocation;
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.Ride;
+import com.example.suberduberuber.Models.Rider;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
@@ -33,6 +35,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,8 +103,8 @@ public class SelectDestinationFragment extends MapFullFragment {
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                tempRequest = new Request(-1, user, new Path(), "12:00 AM", "initiated");
-                tempRequest.getPath().setDestination(new CustomLocation(null, currentPlace.getName(), currentPlace.getAddress()));
+                tempRequest = new Request((Rider) user, new Path(), new Date(), "initiated");
+                tempRequest.getPath().setDestination(new CustomLocation(currentPlace));
                 saveRequest();
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
             }

@@ -5,15 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.SelectDestinationFragment"
     android:orientation="vertical"
-    android:layout_margin="20dp">
+    android:layout_margin="20dp"
+    android:background="@color/quantum_bluegrey900">
 
     <TextView
+        android:textColor="@color/quantum_white_100"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Waiting for ride to pick you up"
         />
 
     <Button
+        android:background="@drawable/btn_round"
+        android:textColor="@color/quantum_white_100"
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

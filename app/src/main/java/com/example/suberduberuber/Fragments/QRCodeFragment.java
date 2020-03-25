@@ -38,7 +38,7 @@ public class QRCodeFragment extends Fragment {
     private Button genQRCodeButton;
     private ImageView qrImageView;
     private Bitmap bitmap;
-    public final static int qrWidth = 1000;
+    public final static int qrWidth = 500;
 
 
     public QRCodeFragment() {
@@ -59,23 +59,18 @@ public class QRCodeFragment extends Fragment {
 
         firestoreRepository = new UserRepository();
 
-        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        genQRCodeButton = view.findViewById(R.id.qrGen_button);
         qrImageView = view.findViewById(R.id.qrCodeImage);
-        genQRCodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String id = userEmail;
-                try {
-                    bitmap = generateQRCode(id);
-                    qrImageView.setImageBitmap(bitmap);
-                }
-                catch (WriterException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+        // generating QR Code
+        try {
+            bitmap = generateQRCode(userID);
+            qrImageView.setImageBitmap(bitmap);
+        }
+        catch (WriterException e) {
+            e.printStackTrace();
+        }
     }
 
     public Bitmap generateQRCode(String id) throws WriterException {
@@ -99,7 +94,7 @@ public class QRCodeFragment extends Fragment {
             }
         }
         Bitmap bp = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
-        bp.setPixels(pixels, 0, 1000, 0, 0, bitMatrixWidth, bitMatrixHeight);
+        bp.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bp;
     }
 }
