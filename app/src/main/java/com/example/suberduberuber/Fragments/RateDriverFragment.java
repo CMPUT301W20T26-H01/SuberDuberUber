@@ -56,6 +56,7 @@ public class RateDriverFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
         paymentViewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
+        ratingViewModel = new ViewModelProvider(requireActivity()).get(RatingViewModel.class);
 
         submitButton = view.findViewById(R.id.submit_button);
 
@@ -72,7 +73,7 @@ public class RateDriverFragment extends Fragment {
                 ratingNumber.setText(String.valueOf(rating_num));
 
                 ratingViewModel.updateDriverRating(paymentViewModel.getCurrentDriverUID(), paymentViewModel.getDriver().getValue(), rating_num);
-                //navController.navigate(R.id.action_rateDriverFragment_to_selectDestinationFragment);
+                navController.navigate(R.id.action_rateDriverFragment_to_selectDestinationFragment);
             }
         });
     }
