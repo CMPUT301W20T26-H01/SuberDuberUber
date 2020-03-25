@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.suberduberuber.Models.CustomLocation;
 import com.example.suberduberuber.Models.Path;
@@ -84,7 +85,12 @@ public class SelectDestinationFragment extends MapFullFragment {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createTempRequest();
+                if (currentPlace != null) {
+                    createTempRequest();
+                }
+                else {
+                    Toast.makeText(getContext(), "No Location Chosen", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
