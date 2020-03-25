@@ -22,12 +22,26 @@ locations as well as the route between them and estimated fare. This will be upd
 GoogleRoutes API.
  */
 
+import android.content.res.Resources;
+import android.util.Log;
+
+import com.example.suberduberuber.R;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.PendingResult;
+import com.google.maps.model.DirectionsResult;
+
+import java.util.List;
+
 public class Path {
 
+
+    private static final String TAG = "Auto Complete Log";
     private static final double COST_FACTOR = 0.05;
     private CustomLocation startLocation;
     private CustomLocation destination;
     private double estimatedFare;
+    private GeoApiContext mGeoApiContext;
 
     // Empty public constructor needed by Cloud Firestore for serializability
     public Path() { }
@@ -103,4 +117,5 @@ public class Path {
     public CustomLocation getStartLocation() {
         return startLocation;
     }
+
 }
