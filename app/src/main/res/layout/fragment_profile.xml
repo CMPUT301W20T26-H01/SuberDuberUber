@@ -1,13 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/quantum_bluegrey900">
 
     <TextView
-        android:id="@+id/profile_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/usernameProfile"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PROFILE"
-        android:textSize="60dp" />
+        android:layout_weight="0.75"
+        android:text="Username"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"
+        android:textSize="60dp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/emailProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Email"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"/>
+
+
+    <TextView
+        android:id="@+id/phoneNumberProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="phone number"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"/>
+
+
+    <TextView
+        android:id="@+id/ratingProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="rating"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/quantum_white_100"/>
+
+
+    <TextView
+        android:id="@+id/prevRidesProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="previos rides"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"/>
+
+
+    <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@drawable/btn_round"
+        android:textColor="@color/quantum_white_100"
+        android:id="@+id/editInfoProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Your Information"
+        android:textAlignment="center" />
 
 </LinearLayout>
