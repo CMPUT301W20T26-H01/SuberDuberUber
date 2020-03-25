@@ -18,8 +18,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.suberduberuber.Models.Driver;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.PaymentViewModel;
+import com.example.suberduberuber.ViewModels.RatingViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +30,7 @@ public class RateDriverFragment extends Fragment {
 
     private NavController navController;
     private PaymentViewModel paymentViewModel;
+    private RatingViewModel ratingViewModel;
 
     private Button submitButton;
     private TextView driverName;
@@ -68,6 +71,7 @@ public class RateDriverFragment extends Fragment {
                 double rating_num = (double) rating.getRating();
                 ratingNumber.setText(String.valueOf(rating_num));
 
+                ratingViewModel.updateDriverRating(paymentViewModel.getCurrentDriverUID(), paymentViewModel.getDriver().getValue(), rating_num);
                 //navController.navigate(R.id.action_rateDriverFragment_to_selectDestinationFragment);
             }
         });

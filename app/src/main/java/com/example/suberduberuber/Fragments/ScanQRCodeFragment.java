@@ -94,6 +94,9 @@ public class ScanQRCodeFragment extends Fragment {
                     Transaction transaction = new Transaction(currentRider, driverPaid, amount, new Date());
                     transactionRepository.saveTransaction(transaction);
 
+                    viewModel.setDriver(driverPaid);
+                    viewModel.setCurrentDriverUID(scannedUid);
+
                     navController.navigate(R.id.action_scanQRCode_to_rateDriverFragment);
                 }
             }
@@ -135,7 +138,6 @@ public class ScanQRCodeFragment extends Fragment {
                 if (user != null) {
                     qrCodeId.setText(user.getUsername());
                     driverPaid = user;
-                    viewModel.setDriver(driverPaid);
                 }
             }
         });
