@@ -34,6 +34,43 @@
         android:textColor="@color/quantum_white_100">
 
     </TextView>
+    <TextView
+        android:id="@+id/yearEdit"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:textColor="@color/quantum_white_100"
+        android:inputType="number">
+
+    </TextView>
+    <TextView
+        android:id="@+id/makeEdit"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:textColor="@color/quantum_white_100">
+
+    </TextView>
+    <TextView
+        android:id="@+id/modelEdit"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:textColor="@color/quantum_white_100">
+
+    </TextView>
+    <TextView
+        android:id="@+id/colorEdit"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:textColor="@color/quantum_white_100">
+
+    </TextView>
+    <TextView
+        android:id="@+id/plateEdit"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:textColor="@color/quantum_white_100">
+
+    </TextView>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -76,4 +113,5 @@
 
         </Button>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>

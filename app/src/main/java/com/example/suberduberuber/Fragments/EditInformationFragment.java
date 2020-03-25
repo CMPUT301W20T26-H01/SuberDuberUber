@@ -22,6 +22,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Models.Car;
+import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.ProfileViewModel;
@@ -36,10 +38,18 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
 
     private static int id = 0;
     private User user;
+    private Driver driver;
+    private Car car;
+    private boolean isDriver;
 
     private EditText newInfoField;
     private TextView emailEdit;
     private TextView phoneNumberEdit;
+    private TextView yearEdit;
+    private TextView makeEdit;
+    private TextView modelEdit;
+    private TextView colorEdit;
+    private TextView plateEdit;
 
     private AlertDialog dialog;
 
@@ -64,7 +74,9 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
         navController = Navigation.findNavController(view);
 
         assert getArguments() != null;
+
         user = (User) getArguments().getSerializable("user");
+        isDriver = user.getDriver();
 
         TextView nameDisplay = view.findViewById(R.id.nameDisplay);
 
@@ -77,6 +89,28 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
         phoneNumberEdit  = view.findViewById(R.id.phoneNumberEdit);
         phoneNumberEdit.setText(user.getPhone());
         phoneNumberEdit.setOnClickListener(this);
+
+        yearEdit = view.findViewById(R.id.yearEdit);
+        makeEdit = view.findViewById(R.id.makeEdit);
+        modelEdit = view.findViewById(R.id.modelEdit);
+        colorEdit = view.findViewById(R.id.colorEdit);
+        plateEdit = view.findViewById(R.id.plateEdit);
+
+        if(isDriver){
+            driver = (Driver) user;
+            car = driver.getCar();
+            displayDriver(car);
+            yearEdit.setOnClickListener(this);
+            makeEdit.setOnClickListener(this);
+            modelEdit.setOnClickListener(this);
+            colorEdit.setOnClickListener(this);
+            plateEdit.setOnClickListener(this);
+
+        } else{ yearEdit.setVisibility(View.GONE);
+            makeEdit.setVisibility(View.GONE);
+            modelEdit.setVisibility(View.GONE);
+            colorEdit.setVisibility(View.GONE);
+            plateEdit.setVisibility(View.GONE);}
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(this);
@@ -112,9 +146,40 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
                 dialog.show();
                 id = v.getId();
                 break;
+            case R.id.yearEdit:
+                newInfoField.setText(yearEdit.getText());
+                dialog.show();
+                id = v.getId();
+                break;
+            case R.id.makeEdit:
+                newInfoField.setText(makeEdit.getText());
+                dialog.show();
+                id = v.getId();
+                break;
+            case R.id.modelEdit:
+                newInfoField.setText(modelEdit.getText());
+                dialog.show();
+                id = v.getId();
+                break;
+            case R.id.colorEdit:
+                newInfoField.setText(colorEdit.getText());
+                dialog.show();
+                id = v.getId();
+                break;
+            case R.id.plateEdit:
+                newInfoField.setText(plateEdit.getText());
+                dialog.show();
+                id = v.getId();
+                break;
             case R.id.confirmButton:
                 user.setPhone(PhoneNumberUtils.formatNumber(phoneNumberEdit.getText().toString()));
                 user.setEmail(emailEdit.getText().toString());
+                if(isDriver){
+                    car.setYear(Integer.parseInt(yearEdit.getText().toString()));
+                    car.setMake(makeEdit.getText().toString());
+                    car.setModel(modelEdit.getText().toString());
+                    car.setColor(colorEdit.getText().toString());
+                }
                 profileViewModel.updateCurrentUser(user);
                 navController.navigate(R.id.action_editInformationFragment_to_viewProfileFragment);
                 break;
@@ -122,6 +187,21 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
                 navController.navigate(R.id.action_editInformationFragment_to_viewProfileFragment);
                 break;
         }
+    }
+
+    private void displayDriver(Car car){
+        yearEdit.setVisibility(View.VISIBLE);
+        makeEdit.setVisibility(View.VISIBLE);
+        modelEdit.setVisibility(View.VISIBLE);
+        colorEdit.setVisibility(View.VISIBLE);
+        plateEdit.setVisibility(View.VISIBLE);
+
+        yearEdit.setText(car.getYear());
+        makeEdit.setText(car.getMake());
+        modelEdit.setText(car.getModel());
+        colorEdit.setText(car.getColor());
+        plateEdit.setText(car.getLicensePlate());
+
     }
 
 

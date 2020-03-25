@@ -20,4 +20,6 @@ public class DriverDashboardActivity extends DashboardActivity {
     int getContentViewId() {
         return R.layout.activity_driver_dashboard;
     }
+
+
 }

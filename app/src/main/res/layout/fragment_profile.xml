@@ -52,7 +52,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="previos rides"
+        android:text="previous rides"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"/>
+    <TextView
+        android:id="@+id/carYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Year"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"/>
+
+    <TextView
+        android:id="@+id/carMake"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Make"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"/>
+
+    <TextView
+        android:id="@+id/carModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Model"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"/>
+
+    <TextView
+        android:id="@+id/carColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Color"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"/>
+
+    <TextView
+        android:id="@+id/carPlate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="License Plate"
         android:textAlignment="center"
         android:textColor="@color/quantum_white_100"/>
 
