@@ -251,16 +251,6 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setMyLocationEnabled(true);
         getDeviceLocation();
-
-        LatLng destination = new LatLng(53.5225, 113.6242);
-        LatLng origin = new LatLng(53.5232, 113.5263);
-
-        LatLngBounds bounds = new LatLngBounds(destination, origin);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 3));
-
-        mMap.addMarker(new MarkerOptions().position(origin));
-        mMap.addMarker(new MarkerOptions().position(destination));
     }
     @Override
     public void onPause() {
