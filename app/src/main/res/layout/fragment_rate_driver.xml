@@ -29,12 +29,6 @@
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rating_number"
-        android:text="No Rating" />
+        android:text="Confirm Rating" />
 
 </LinearLayout>

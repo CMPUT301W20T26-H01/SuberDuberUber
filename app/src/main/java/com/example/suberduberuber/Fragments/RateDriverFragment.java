@@ -34,10 +34,8 @@ public class RateDriverFragment extends Fragment {
 
     private Button submitButton;
     private TextView driverName;
-    private TextView ratingNumber;
 
     private RatingBar rating;
-    private Driver currentDriver;
 
     public RateDriverFragment() {
         // Required empty public constructor
@@ -62,7 +60,6 @@ public class RateDriverFragment extends Fragment {
 
         rating = view.findViewById(R.id.rating);
         driverName = view.findViewById(R.id.driver_name);
-        ratingNumber = view.findViewById(R.id.rating_number);
 
         driverName.setText(paymentViewModel.getDriver().getValue().getUsername());
 
@@ -70,7 +67,6 @@ public class RateDriverFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 double rating_num = (double) rating.getRating();
-                ratingNumber.setText(String.valueOf(rating_num));
 
                 ratingViewModel.updateDriverRating(paymentViewModel.getCurrentDriverUID(), paymentViewModel.getDriver().getValue(), rating_num);
                 navController.navigate(R.id.action_rateDriverFragment_to_selectDestinationFragment);
