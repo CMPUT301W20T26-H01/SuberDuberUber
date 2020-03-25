@@ -10,10 +10,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.suberduberuber.Models.Request;
-import com.example.suberduberuber.Models.Ride;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.RequestRepository;
-import com.example.suberduberuber.Repositories.RideRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
@@ -38,17 +36,15 @@ public class GetRideViewModel extends AndroidViewModel {
     private static final String TAG = "GET_RIDE_VIEWMODEL";
 
     private RequestRepository requestRepository;
-    private RideRepository rideRepository;
 
     private MutableLiveData<Request> tempRequest = new MutableLiveData<Request>();
     private MutableLiveData<User> currentUser = new MutableLiveData<User>();
     private MutableLiveData<ArrayList<Request>> usersRequests = new MutableLiveData<>();
-    private MutableLiveData<Ride> currentRide = new MutableLiveData<Ride>();
+    private MutableLiveData<Request> acceptedRequest = new MutableLiveData<Request>();
 
     public GetRideViewModel(Application application) {
         super(application);
         requestRepository = new RequestRepository();
-        rideRepository = new RideRepository();
     }
 
     public LiveData<Request> getTempRequest() {
@@ -59,16 +55,16 @@ public class GetRideViewModel extends AndroidViewModel {
         tempRequest.setValue(request);
     }
 
-    public LiveData<Ride> getUsersCurrentRide(User user) {
-        rideRepository.getRiderCurrentRide(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
+    public LiveData<Request> getUsersCurrentRide(User user) {
+        requestRepository.getRidersCurrentRequest(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if(queryDocumentSnapshots != null && queryDocumentSnapshots.getDocuments().size() > 0) {
-                    currentRide.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(Ride.class));
+                    acceptedRequest.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(Request.class));
                 }
             }
         });
-        return currentRide;
+        return acceptedRequest;
     }
 
     public void commitTempRequest() {

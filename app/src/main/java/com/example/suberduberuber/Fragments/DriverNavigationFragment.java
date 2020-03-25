@@ -6,14 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -21,19 +18,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.example.suberduberuber.Models.CustomLocation;
-import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
-import com.example.suberduberuber.Models.Ride;
-import com.example.suberduberuber.Models.Rider;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
-import com.example.suberduberuber.ViewModels.GetRideViewModel;
 import com.example.suberduberuber.ViewModels.NavigationViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,10 +32,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
@@ -56,7 +41,6 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -85,7 +69,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_confirm_route, container, false);
+        return inflater.inflate(R.layout.fragment_driver_navigation, container, false);
     }
 
     @Override
@@ -101,16 +85,17 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                navigationViewModel.getCurrentRide(user).observe(getViewLifecycleOwner(), new Observer<Ride>() {
+                navigationViewModel.getCurrentRequest(user).observe(getViewLifecycleOwner(), new Observer<Request>() {
                     @Override
-                    public void onChanged(Ride ride) {
-                        setLatLngBounds(ride);
-                        initGoogleMap(savedInstanceState);
-                        calculateDirections(ride);
+                    public void onChanged(Request request) {
+                        setLatLngBounds(request);
+                        calculateDirections(request);
                     }
                 });
             }
         });
+
+        initGoogleMap(savedInstanceState);
     }
 
     @Override
@@ -118,10 +103,10 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void setLatLngBounds(Ride ride) {
+    public void setLatLngBounds(Request request) {
         LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
-        latLngBoundsBuilder.include(ride.getPath().getDestination().getLatLng());
-        latLngBoundsBuilder.include(ride.getPath().getStartLocation().getLatLng());
+        latLngBoundsBuilder.include(request.getPath().getDestination().getLatLng());
+        latLngBoundsBuilder.include(request.getPath().getStartLocation().getLatLng());
         latLngBounds = latLngBoundsBuilder.build();
     }
 
@@ -141,20 +126,20 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         }
     }
 
-    private void calculateDirections(Ride ride) {
+    private void calculateDirections(Request request) {
         Log.d(TAG, "calculateDirections: calculating directions.");
 
         com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
-                ride.getPath().getDestination().getLatLng().latitude,
-                ride.getPath().getDestination().getLatLng().longitude
+                request.getPath().getDestination().getLatLng().latitude,
+                request.getPath().getDestination().getLatLng().longitude
         );
         DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
 
         directions.alternatives(false);
         directions.origin(
                 new com.google.maps.model.LatLng(
-                        ride.getPath().getStartLocation().getLatLng().latitude,
-                        ride.getPath().getStartLocation().getLatLng().longitude
+                        request.getPath().getStartLocation().getLatLng().latitude,
+                        request.getPath().getStartLocation().getLatLng().longitude
                 )
         );
         Log.d(TAG, "calculateDirections: destination: " + destination.toString());
@@ -165,7 +150,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                 Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
                 Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
                 Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
-                addPolylinesToMap(result, ride);
+                addPolylinesToMap(result, request);
             }
 
             @Override
@@ -176,7 +161,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result, Ride ride){
+    private void addPolylinesToMap(final DirectionsResult result, Request request){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -197,8 +182,8 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                     }
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.lightBlue));
-                    mMap.addMarker(new MarkerOptions().position(ride.getPath().getStartLocation().getLatLng()).title(ride.getPath().getStartLocation().getLocationName()));
-                    mMap.addMarker(new MarkerOptions().position(ride.getPath().getDestination().getLatLng()).title(ride.getPath().getDestination().getLocationName()));
+                    mMap.addMarker(new MarkerOptions().position(request.getPath().getStartLocation().getLatLng()).title(request.getPath().getStartLocation().getLocationName()));
+                    mMap.addMarker(new MarkerOptions().position(request.getPath().getDestination().getLatLng()).title(request.getPath().getDestination().getLocationName()));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
                 }
             }

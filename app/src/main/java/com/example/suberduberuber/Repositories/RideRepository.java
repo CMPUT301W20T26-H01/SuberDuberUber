@@ -18,16 +18,4 @@ public class RideRepository {
          myDb = FirebaseFirestore.getInstance();
          myAuth = FirebaseAuth.getInstance();
     }
-
-    public Query getRiderCurrentRide(User user) {
-        return myDb.collection("rides")
-                .whereEqualTo("rider.email", user.getEmail())
-                .limit(1);
-    }
-
-    public Query getDriverCurrentRide(User user) {
-        return myDb.collection("rides")
-                .whereEqualTo("driver.email", user.getEmail())
-                .limit(1);
-    }
 }

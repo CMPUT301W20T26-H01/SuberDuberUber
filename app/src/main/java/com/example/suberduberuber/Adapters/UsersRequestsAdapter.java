@@ -70,7 +70,6 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
 
         holder.time.setText(request.getTime().toString());
         holder.driver_username.setText("<not implemented>");
-        holder.status.setText(request.getStatus());
     }
 
     @Override
