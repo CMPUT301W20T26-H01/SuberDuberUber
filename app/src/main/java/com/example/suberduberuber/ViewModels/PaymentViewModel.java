@@ -9,15 +9,18 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.Rider;
-import com.example.suberduberuber.Models.User;
+import com.example.suberduberuber.Models.Transaction;
+import com.example.suberduberuber.Repositories.TransactionRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Date;
+
 public class PaymentViewModel extends AndroidViewModel {
     private UserRepository userRepository;
+    private TransactionRepository transactionRepository;
 
     private MutableLiveData<Rider> currentRider = new MutableLiveData<Rider>();
     private MutableLiveData<Driver> userFound = new MutableLiveData<Driver>();
@@ -28,14 +31,16 @@ public class PaymentViewModel extends AndroidViewModel {
     public PaymentViewModel(Application application) {
         super(application);
         userRepository = new UserRepository();
-    }
-
-    public LiveData<Driver> getDriver() {
-        return currentDriver;
+        transactionRepository = new TransactionRepository();
+        getCurrentRider();
     }
 
     public void setDriver(Driver driver) {
         currentDriver.setValue(driver);
+    }
+
+    public Driver getCurrentDriver() {
+        return currentDriver.getValue();
     }
 
     public String getCurrentDriverUID() {
@@ -47,7 +52,7 @@ public class PaymentViewModel extends AndroidViewModel {
     }
 
     // Get the current user and setup listening for live updates
-    public LiveData<Rider> getCurrentRider() {
+    public void getCurrentRider() {
         userRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -56,12 +61,10 @@ public class PaymentViewModel extends AndroidViewModel {
                 }
             }
         });
-
-        return currentRider;
     }
 
     // Get a user and setup listening for live updates
-    public LiveData<Driver> getDriver(String uid) {
+    public LiveData<Driver> getDriverByUID(String uid) {
         userRepository.getUser(uid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -72,6 +75,19 @@ public class PaymentViewModel extends AndroidViewModel {
         });
 
         return userFound;
+    }
+
+    public void completeTransaction(double amount) {
+        Rider rider = this.currentRider.getValue();
+        Driver driver = this.currentDriver.getValue();
+
+        double newPayingBalance = rider.getBalance() - amount;
+        double newPaidBalance = driver.getBalance() + amount;
+
+        transactionRepository.processTransaction(this.currentDriverUID, newPayingBalance, newPaidBalance);
+        Transaction transaction = new Transaction(rider, driver, amount, new Date());
+        transactionRepository.saveTransaction(transaction);
+
     }
 
 }

@@ -13,12 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.suberduberuber.Models.Driver;
-import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.PaymentViewModel;
 import com.example.suberduberuber.ViewModels.RatingViewModel;
@@ -61,14 +58,14 @@ public class RateDriverFragment extends Fragment {
         rating = view.findViewById(R.id.rating);
         driverName = view.findViewById(R.id.driver_name);
 
-        driverName.setText(paymentViewModel.getDriver().getValue().getUsername());
+        driverName.setText(paymentViewModel.getCurrentDriver().getUsername());
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 double rating_num = (double) rating.getRating();
 
-                ratingViewModel.updateDriverRating(paymentViewModel.getCurrentDriverUID(), paymentViewModel.getDriver().getValue(), rating_num);
+                ratingViewModel.updateDriverRating(paymentViewModel.getCurrentDriverUID(), paymentViewModel.getCurrentDriver(), rating_num);
                 navController.navigate(R.id.action_rateDriverFragment_to_selectDestinationFragment);
             }
         });

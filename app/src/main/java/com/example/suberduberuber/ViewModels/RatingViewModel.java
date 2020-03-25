@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.suberduberuber.Models.Driver;
-import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.RatingRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
 
