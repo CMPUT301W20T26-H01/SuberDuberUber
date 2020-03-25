@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordField;
 
     private Button signinButton;
+    private Button registerButton;
 
 
     public boolean locationPermissionGranted = false;
@@ -74,11 +75,19 @@ public class LoginActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.password_field);
 
         signinButton = findViewById(R.id.signin_button);
+        registerButton = findViewById(R.id.register_button);
 
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attemptSignin();
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                redirectToRegisterPage();
             }
         });
 

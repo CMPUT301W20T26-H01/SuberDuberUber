@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     android:orientation="vertical"
     tools:context=".Fragments.MapFullFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="@color/quantum_bluegrey900"
         android:gravity="bottom|center"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <com.google.android.gms.maps.MapView
@@ -19,30 +21,37 @@
             android:id="@+id/full_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="0.8" />
 
-        <Button
-            android:id="@+id/confirmButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="Request Ride Here"
-            tools:visibility="gone" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:background="@color/quantum_bluegrey900"
+            android:gravity="bottom|center">
+
+            <Button
                 android:id="@+id/autocomplete"
-                android:layout_margin="8dp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:background="@drawable/btn_round"
+                android:layout_width="165dp"
                 android:layout_height="wrap_content"
-                android:hint="Where you headed?"
-                android:background="@drawable/map_search_bar"
-                android:padding="10dp"
-                android:textAlignment="textStart"
-                android:textSize="24sp" />
+                android:layout_marginRight="7dp"
+                android:text="Search Location"
+                android:textColor="@color/quantum_white_100"
+                android:textAlignment="center"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/confirmButton"
+                android:background="@drawable/btn_round"
+                android:layout_width="165dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:textColor="@color/quantum_white_100"
+                android:textAlignment="center"
+                android:text="Confirm Pickup Location"
+                android:textSize="12sp"/>
         </LinearLayout>
 
     </LinearLayout>
