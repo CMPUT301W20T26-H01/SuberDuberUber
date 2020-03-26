@@ -20,7 +20,7 @@ import android.view.animation.LayoutAnimationController;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
-import com.example.suberduberuber.Adapters.RequestListAdapter;
+import com.example.suberduberuber.Adapters.AvailableRequestListAdapter;
 import com.example.suberduberuber.ViewModels.ViewRequestsViewModel;
 
 import java.util.List;
@@ -29,12 +29,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewRequestsFragment extends Fragment implements RequestListAdapter.RequestCardTouchListener {
+public class ViewRequestsFragment extends Fragment implements AvailableRequestListAdapter.RequestCardTouchListener {
 
     private ViewRequestsViewModel viewRequestsViewModel;
     private RecyclerView requestRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private RequestListAdapter adapter;
+    private AvailableRequestListAdapter adapter;
     private NavController navController;
 
     public ViewRequestsFragment() {
@@ -69,7 +69,7 @@ public class ViewRequestsFragment extends Fragment implements RequestListAdapter
 
     private void configureRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());
-        adapter = new RequestListAdapter(this);
+        adapter = new AvailableRequestListAdapter(this);
 
         requestRecyclerView.setLayoutManager(layoutManager);
         requestRecyclerView.setAdapter(adapter);
@@ -82,7 +82,7 @@ public class ViewRequestsFragment extends Fragment implements RequestListAdapter
     public void shrinkAllPopups() {
         int numItems = layoutManager.getItemCount();
         for(int i = 0 ; i < numItems; i++) {
-            RequestListAdapter.RequestViewHolder viewHolder = (RequestListAdapter.RequestViewHolder) requestRecyclerView.findViewHolderForAdapterPosition(i);
+            AvailableRequestListAdapter.RequestViewHolder viewHolder = (AvailableRequestListAdapter.RequestViewHolder) requestRecyclerView.findViewHolderForAdapterPosition(i);
             if(viewHolder != null) {
                 viewHolder.shrink();
             }

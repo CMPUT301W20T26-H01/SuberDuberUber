@@ -57,6 +57,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.DroppedPinPlace;
 import com.example.suberduberuber.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -64,10 +65,12 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -103,7 +106,8 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class MapFullFragment extends Fragment implements OnMapReadyCallback {
-    private static final float DEFAULT_ZOOM = 18;
+
+    private static final float DEFAULT_ZOOM = 5;
     private MapView mMapView;
     private GoogleMap mMap;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -285,7 +289,6 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
         getDeviceLocation();
-
     }
     @Override
     public void onPause() {
@@ -325,6 +328,10 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     public void onStop() {
         super.onStop();
         mMapView.onStop();
+    }
+
+    protected void displayPath(Path path) {
+
     }
 
     // ALL METHODS BELOW ARE FROM GITHUB
