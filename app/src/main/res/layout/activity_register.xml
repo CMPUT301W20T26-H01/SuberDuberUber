@@ -43,6 +43,14 @@
             android:hint="Email" />
 
         <EditText
+            android:id="@+id/phone_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:textColor="@color/quantum_white_100" />
+
+        <EditText
             android:textColor="@color/quantum_white_100"
             android:id="@+id/password_field"
             android:layout_width="match_parent"

@@ -27,9 +27,9 @@ public class User implements Serializable {
      *      User's unique email address
      *
      */
-    public User(String username, String emailAddress, boolean isDriver) {
+    public User(String username, String emailAddress, String phoneNum, boolean isDriver) {
         this.username = username;
-        this.phone = "";
+        this.phone = phoneNum;
         this.email = emailAddress;
         this.rating = 0;
         this.driver = isDriver;
