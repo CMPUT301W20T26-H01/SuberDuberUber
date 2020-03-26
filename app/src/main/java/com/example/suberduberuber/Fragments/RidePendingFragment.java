@@ -35,6 +35,9 @@ public class RidePendingFragment extends Fragment {
     private GetRideViewModel getRideViewModel;
     private AuthViewModel authViewModel;
 
+    private User currentUser;
+    private Request currentRequest;
+
     private MapView ride_request_live_route;
     private Button cancelButton;
     private TextView rideRequestStatus;
@@ -60,41 +63,53 @@ public class RidePendingFragment extends Fragment {
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
-        getRideViewModel.getTempRequest().observe(getViewLifecycleOwner(), new Observer<Request>() {
+        currentUser = authViewModel.getCurrentUser().getValue();
+        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
-            public void onChanged(Request request) {
-                updateRequestInfo(request);
+            public void onChanged(User user) {
+                currentUser = user;
+                updateRequestInfo();
             }
         });
 
-        cancelButton = view.findViewById(R.id.cancel_ride_request_button);
+        currentRequest = getRideViewModel.getUsersCurrentRide(currentUser).getValue();
+        updateRequestInfo();
 
+        cancelButton = view.findViewById(R.id.cancel_ride_request_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelRideRequest();
+                getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
+                    @Override
+                    public void onChanged(Request request) {
+                        currentRequest = request;
+                        if (currentRequest != null) {
+                            updateRequestInfo();
+                            cancelRideRequest(currentRequest);
+                            navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
+                        }
+                    }
+                });
             }
         });
 
 
     }
 
-    public void cancelRideRequest() {
-        getRideViewModel.cancelRequest(getRideViewModel.getTempRequest().getValue());
-        navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
+    public void cancelRideRequest(Request request) {
+        getRideViewModel.cancelRequest(request);
     }
 
-    public void updateRequestInfo(Request request) {
-        if (Objects.equals(request.getStatus(), "claimed")) {
-            // get current user's ride
-            authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
-                @Override
-                public void onChanged(User user) {
-                    String driver = "some username";
-                    Toast.makeText(getParentFragment().getContext(), driver + " Accepted Ride!", Toast.LENGTH_LONG).show();
-                    rideRequestStatus.setText("Waiting for pickup");
+    public void updateRequestInfo() {
+        getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
+            @Override
+            public void onChanged(Request request) {
+                currentRequest = request;
+                if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+                    Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
+                    rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
                 }
-            });
-        }
+            }
+        });
     }
 }

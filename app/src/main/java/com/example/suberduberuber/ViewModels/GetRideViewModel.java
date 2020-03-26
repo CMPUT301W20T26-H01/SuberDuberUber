@@ -10,7 +10,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.suberduberuber.Models.Request;
-import com.example.suberduberuber.Models.Ride;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.RequestRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,9 +38,8 @@ public class GetRideViewModel extends AndroidViewModel {
     private RequestRepository requestRepository;
 
     private MutableLiveData<Request> tempRequest = new MutableLiveData<Request>();
-    private MutableLiveData<Ride> currentRide = new MutableLiveData<Ride>();
     private MutableLiveData<ArrayList<Request>> usersRequests = new MutableLiveData<>();
-    private MutableLiveData<Request> acceptedRequest = new MutableLiveData<Request>();
+    private MutableLiveData<Request> currentRequest = new MutableLiveData<Request>();
 
     public GetRideViewModel(Application application) {
         super(application);
@@ -61,11 +59,12 @@ public class GetRideViewModel extends AndroidViewModel {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if(queryDocumentSnapshots != null && queryDocumentSnapshots.getDocuments().size() > 0) {
-                    acceptedRequest.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(Request.class));
+                    currentRequest.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(Request.class));
                 }
             }
         });
-        return acceptedRequest;
+
+        return currentRequest;
     }
 
     public void commitTempRequest() {
@@ -94,10 +93,5 @@ public class GetRideViewModel extends AndroidViewModel {
 
     public void cancelRequest(Request request) {
         requestRepository.cancelRequest(request);
-    }
-
-    public Ride getUsersCurrentRide(User user) {
-        // get riders current ride
-        return new Ride();
     }
 }

@@ -25,12 +25,15 @@ import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 
+import static androidx.navigation.Navigation.findNavController;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SelectOriginFragment extends MapFullFragment {
 
     private GetRideViewModel getRideViewModel;
+    private NavController navController;
     private Request tempRequest;
 
     public SelectOriginFragment() {
@@ -52,6 +55,7 @@ public class SelectOriginFragment extends MapFullFragment {
         //textView.setHint("Search Pickup Location");
 
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+        navController = findNavController(view);
         tempRequest = getRideViewModel.getTempRequest().getValue();
 
         confirmButton.setText("Confirm Pickup Location");

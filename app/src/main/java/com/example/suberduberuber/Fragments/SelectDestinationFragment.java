@@ -8,6 +8,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import android.view.LayoutInflater;
@@ -26,6 +28,8 @@ import com.example.suberduberuber.ViewModels.GetRideViewModel;
 
 import java.util.Date;
 
+import static androidx.navigation.Navigation.findNavController;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -34,6 +38,7 @@ public class SelectDestinationFragment extends MapFullFragment {
     private GetRideViewModel getRideViewModel;
     private AuthViewModel authViewModel;
     private Request tempRequest;
+    private NavController navController;
 
     private DrawerLayout drawerLayout;
 
@@ -67,6 +72,7 @@ public class SelectDestinationFragment extends MapFullFragment {
         textView.setHint("Search Destination");
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        navController = findNavController(view);
 
         confirmButton.setText("Request Ride Here");
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +98,6 @@ public class SelectDestinationFragment extends MapFullFragment {
     }
 
     private void createTempRequest() {
-
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
