@@ -17,5 +17,13 @@
     <fragment
         android:id="@+id/driverNavigationFragment"
         android:name="com.example.suberduberuber.Fragments.DriverNavigationFragment"
-        android:label="DriverNavigationFragment" />
+        android:label="DriverNavigationFragment" >
+        <action
+            android:id="@+id/action_driverNavigationFragment_to_QRCodeFragment"
+            app:destination="@id/QRCodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/QRCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
+        android:label="QRCodeFragment" />
 </navigation>
