@@ -15,11 +15,20 @@
         android:text="Rate Driver"
         />
 
-    <EditText
+    <TextView
         android:textColor="@color/quantum_white_100"
-        android:id="@+id/rating_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Driver's Name"
+        android:id="@+id/driver_name" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/rating"
+        android:numStars="5"
+        android:theme="@style/RatingBar"/>
 
     <Button
         android:background="@drawable/btn_round"
@@ -27,7 +36,6 @@
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"
-        />
+        android:text="Confirm Rating" />
 
 </LinearLayout>
