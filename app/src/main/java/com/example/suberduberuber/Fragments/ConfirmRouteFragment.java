@@ -225,7 +225,7 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
                     setRouteValues(route);
 
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
-                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.lightBlue));
+                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                     mMap.addMarker(new MarkerOptions().position(tempRequest.getPath().getStartLocation().getLatLng())
                             .title("Start")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));

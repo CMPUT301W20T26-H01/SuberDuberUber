@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.suberduberuber.Models.User;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int ERROR_DIALOG_REQUEST = 9001;
     public static final String ERROR_TAG = "Login Activity";
 
+    private ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
         authViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
 
+        spinner = findViewById(R.id.spinner);
+
         myAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null) {
+                    spinner.setVisibility(View.GONE);
                     redirectUser();
                 } else {
+                    spinner.setVisibility(View.GONE);
                     startLogin();
                 }
             }
