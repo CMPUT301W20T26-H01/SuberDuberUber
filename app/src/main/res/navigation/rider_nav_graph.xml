@@ -99,7 +99,7 @@
         android:id="@+id/action_to_request_page"
         app:destination="@id/usersRequestsFragment" />
     <action
-        android:id="@+id/action_to_dest_home_page"
+        android:id="@+id/action_to_home"
         app:destination="@id/selectDestinationFragment" />
     <action
         android:id="@+id/action_to_gen_qr_code"

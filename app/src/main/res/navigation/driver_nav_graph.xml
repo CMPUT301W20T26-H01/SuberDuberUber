@@ -18,4 +18,10 @@
         android:id="@+id/driverNavigationFragment"
         android:name="com.example.suberduberuber.Fragments.DriverNavigationFragment"
         android:label="DriverNavigationFragment" />
+    <action
+        android:id="@+id/action_to_home"
+        app:destination="@id/viewRequestsFragment" />
+    <action
+        android:id="@+id/action_to_gen_qr_code"
+        app:destination="@id/qrCodeFragment" />
 </navigation>

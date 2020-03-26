@@ -2,7 +2,6 @@ package com.example.suberduberuber.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
@@ -18,11 +17,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.suberduberuber.Fragments.SelectDestinationFragment;
 import com.example.suberduberuber.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 /*
     This activity currently holds fragments for a rider's ride request creation.
@@ -53,7 +50,7 @@ abstract class DashboardActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.nav_view);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(getDrawerLayoutId());
         new AppBarConfiguration.Builder(navController.getGraph())
                 .setDrawerLayout(drawerLayout)
                 .build();
@@ -65,6 +62,8 @@ abstract class DashboardActivity extends AppCompatActivity {
 
     abstract int getNavHostId();
     abstract int getContentViewId();
+    abstract int getDrawerLayoutId();
+    abstract int getMenuLayoutId();
 
     // for QR Code Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -77,7 +76,7 @@ abstract class DashboardActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
-        getMenuInflater().inflate(R.menu.drawer_menu, navigationView.getMenu());
+        getMenuInflater().inflate(getMenuLayoutId(), navigationView.getMenu());
         return true;
     }
 
@@ -90,7 +89,7 @@ abstract class DashboardActivity extends AppCompatActivity {
     }
 
     private void configureNavigationDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(getDrawerLayoutId());
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -98,7 +97,7 @@ abstract class DashboardActivity extends AppCompatActivity {
                 int itemId = menuItem.getItemId();
 
                 if (itemId == R.id.menu_home) {
-                    navController.navigate(R.id.action_to_dest_home_page);
+                    navController.navigate(R.id.action_to_home);
                 }
                 else if (itemId == R.id.profile) {
                     navController.navigate(R.id.action_to_profile_page);
@@ -127,7 +126,7 @@ abstract class DashboardActivity extends AppCompatActivity {
         int itemId = item.getItemId();
 
         switch (itemId) {
-            case android.R.id.home:
+            case android.R.id.home: // hamburger menu icon
                 drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
