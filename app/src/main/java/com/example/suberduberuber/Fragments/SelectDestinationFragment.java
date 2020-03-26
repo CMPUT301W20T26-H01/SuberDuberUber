@@ -1,41 +1,28 @@
 package com.example.suberduberuber.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.suberduberuber.Models.CustomLocation;
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
-import com.example.suberduberuber.Models.Ride;
 import com.example.suberduberuber.Models.Rider;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Date;
 
@@ -109,7 +96,7 @@ public class SelectDestinationFragment extends MapFullFragment {
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                tempRequest = new Request((Rider) user, new Path(), new Date(), "initiated");
+                tempRequest = new Request((Rider) user, new Path(), new Date());
                 tempRequest.getPath().setDestination(new CustomLocation(currentPlace));
                 saveRequest();
                 navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);

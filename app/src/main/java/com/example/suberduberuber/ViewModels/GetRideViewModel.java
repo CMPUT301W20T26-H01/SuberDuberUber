@@ -2,35 +2,24 @@ package com.example.suberduberuber.ViewModels;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
-import com.example.suberduberuber.Models.CustomLocation;
-import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
-import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.RequestRepository;
-import com.example.suberduberuber.Repositories.UserRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -51,6 +40,7 @@ public class GetRideViewModel extends AndroidViewModel {
     private MutableLiveData<Request> tempRequest = new MutableLiveData<Request>();
     private MutableLiveData<User> currentUser = new MutableLiveData<User>();
     private MutableLiveData<ArrayList<Request>> usersRequests = new MutableLiveData<>();
+    private MutableLiveData<Request> acceptedRequest = new MutableLiveData<Request>();
 
     public GetRideViewModel(Application application) {
         super(application);
@@ -63,6 +53,18 @@ public class GetRideViewModel extends AndroidViewModel {
 
     public void saveTempRequest(Request request) {
         tempRequest.setValue(request);
+    }
+
+    public LiveData<Request> getUsersCurrentRide(User user) {
+        requestRepository.getRidersCurrentRequest(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(queryDocumentSnapshots != null && queryDocumentSnapshots.getDocuments().size() > 0) {
+                    acceptedRequest.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(Request.class));
+                }
+            }
+        });
+        return acceptedRequest;
     }
 
     public void commitTempRequest() {
