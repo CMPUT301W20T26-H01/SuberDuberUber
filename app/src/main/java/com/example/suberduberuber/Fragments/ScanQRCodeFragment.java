@@ -18,24 +18,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.Models.Driver;
-import com.example.suberduberuber.Models.Rider;
-import com.example.suberduberuber.Models.Transaction;
-import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
-import com.example.suberduberuber.Repositories.TransactionRepository;
-import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.ViewModels.PaymentViewModel;
-import com.example.suberduberuber.ViewModels.ProfileViewModel;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
-import java.util.Date;
 
 /*
     Fragment for scanning a QR code. Launches a zxing activity to the camera and
@@ -44,17 +30,13 @@ import java.util.Date;
  */
 public class ScanQRCodeFragment extends Fragment {
     private NavController navController;
-    private TransactionRepository transactionRepository;
+    private PaymentViewModel paymentViewModel;
 
     private LinearLayout scanQRLayout;
     private TextView qrCodeId;
     private Button nextButton;
 
-    private PaymentViewModel viewModel;
     private String scannedUid;
-
-    private Rider currentRider;
-    private Driver driverPaid;
 
     public ScanQRCodeFragment() {
         // Required empty public constructor
@@ -72,11 +54,7 @@ public class ScanQRCodeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
-        transactionRepository = new TransactionRepository();
-
-        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
-        viewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
+        paymentViewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
 
         scanQRLayout = view.findViewById(R.id.scan_qr_layout);
         qrCodeId = view.findViewById(R.id.scannedId);
@@ -86,21 +64,17 @@ public class ScanQRCodeFragment extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (driverPaid != null && currentRider != null) {
+                if (paymentViewModel.getCurrentDriver() != null) {
 
                     double amount = 5; // TODO: change hard coded value to actual amount
-                    double newPayingBalance = currentRider.getBalance() - amount;
-                    double newPaidBalance = driverPaid.getBalance() + amount;
-                    transactionRepository.processTransaction(scannedUid, newPayingBalance, newPaidBalance);
-                    Transaction transaction = new Transaction(currentRider, driverPaid, amount, new Date());
-                    transactionRepository.saveTransaction(transaction);
+
+                    paymentViewModel.completeTransaction(amount);
 
                     navController.navigate(R.id.action_scanQRCode_to_rateDriverFragment);
                 }
             }
         });
 
-        findCurrentUser();
         scanQRCode();
 
     }
@@ -130,22 +104,14 @@ public class ScanQRCodeFragment extends Fragment {
     }
 
     public void findUser() {
-        viewModel.getDriver(scannedUid).observe(getViewLifecycleOwner(), new Observer<Driver>() {
+        paymentViewModel.getDriverByUID(scannedUid).observe(getViewLifecycleOwner(), new Observer<Driver>() {
             @Override
             public void onChanged(Driver user) {
                 if (user != null) {
                     qrCodeId.setText(user.getUsername());
-                    driverPaid = user;
+                    paymentViewModel.setDriver(user); // sets the user being paid
+                    paymentViewModel.setCurrentDriverUID(scannedUid); // sets the user being paid UID
                 }
-            }
-        });
-    }
-
-    public void findCurrentUser() {
-        viewModel.getCurrentRider().observe(getViewLifecycleOwner(), new Observer<Rider>() {
-            @Override
-            public void onChanged(Rider user) {
-                currentRider = user;
             }
         });
     }
