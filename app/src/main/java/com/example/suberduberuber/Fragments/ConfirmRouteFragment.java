@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -46,7 +47,7 @@ import java.util.List;
 
 public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final int DEFAULT_ZOOM = 150;
+    private static final int DEFAULT_ZOOM = 175;
     private MapView mMapView;
     private GoogleMap mMap;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -90,7 +91,7 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
         TextView pickupTimeTextView = view.findViewById(R.id.pickupTime);
         pickupTimeTextView.setText(tempRequest.getTime().toString());
 
-        setLatLngBounds(tempRequest);
+        //setLatLngBounds(tempRequest);
 
         submitButton = view.findViewById(R.id.submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -184,21 +185,24 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
-
-                    // This loops through all the LatLng coordinates of ONE polyline.
+                    LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
                     for(com.google.maps.model.LatLng latLng: decodedPath){
+                        latLngBoundsBuilder.include(new LatLng(latLng.lat, latLng.lng));
                         newDecodedPath.add(new LatLng(
                                 latLng.lat,
                                 latLng.lng
                         ));
                     }
+                    latLngBounds = latLngBoundsBuilder.build();
+
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.lightBlue));
                     mMap.addMarker(new MarkerOptions().position(tempRequest.getPath().getStartLocation().getLatLng())
                             .title("Start")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+                            .showInfoWindow();
                     mMap.addMarker(new MarkerOptions().position(tempRequest.getPath().getDestination().getLatLng())
-                            .title("Destination")).showInfoWindow();
+                            .title("Destination"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
                 }
             }
@@ -220,7 +224,6 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setMyLocationEnabled(true);
 
     }
     @Override
