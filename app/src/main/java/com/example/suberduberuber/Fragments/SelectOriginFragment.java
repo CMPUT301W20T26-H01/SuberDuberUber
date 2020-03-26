@@ -58,7 +58,6 @@ public class SelectOriginFragment extends MapFullFragment {
         navController = findNavController(view);
         tempRequest = getRideViewModel.getTempRequest().getValue();
 
-        confirmButton.setText("Confirm Pickup Location");
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

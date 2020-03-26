@@ -44,6 +44,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -110,8 +111,8 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final String TAG = "Auto Complete Log";
 
-    Button confirmButton;
-    Button textView;
+    ImageButton confirmButton;
+    EditText textView;
     Place currentPlace = null;
     Place initPlace = null;
     PlacesClient placesClient;

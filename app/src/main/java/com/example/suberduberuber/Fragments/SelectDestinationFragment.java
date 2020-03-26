@@ -69,12 +69,11 @@ public class SelectDestinationFragment extends MapFullFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        textView.setHint("Search Destination");
+        textView.setHint("Where to?");
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
         navController = findNavController(view);
 
-        confirmButton.setText("Request Ride Here");
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

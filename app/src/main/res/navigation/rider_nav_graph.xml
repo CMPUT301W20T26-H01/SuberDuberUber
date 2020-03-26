@@ -104,6 +104,9 @@
         android:id="@+id/action_to_dest_home_page"
         app:destination="@id/selectDestinationFragment" />
     <action
+        android:id="@+id/action_to_ridePending_page"
+        app:destination="@+id/ridePendingFragment" />
+    <action
         android:id="@+id/action_to_gen_qr_code"
         app:destination="@id/qrCodeFragment" />
     <fragment

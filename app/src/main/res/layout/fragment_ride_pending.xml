@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:layout_margin="20dp"
     android:background="@color/quantum_bluegrey900"
-    tools:context=".Fragments.SelectDestinationFragment">
+    tools:context=".Fragments.SelectDestinationFragment"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/rideRequestStatus"
