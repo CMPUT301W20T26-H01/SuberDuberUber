@@ -1,5 +1,7 @@
 package com.example.suberduberuber.Models;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.DocumentId;
 
 import java.util.Date;
@@ -10,25 +12,34 @@ import java.util.Objects;
  */
 public class Request {
 
+    private static final String TAG = "REQUEST_CLASS";
+
+    enum Status {
+        PENDING_ACCEPTANCE,
+        IN_PROGRESS,
+        COMPLETED
+    }
+
     @DocumentId
     private String requestID; // Stored as a string as @DocumentID (Firestore) requires String type
     private Rider requestingUser;
+    private Driver driver;
     private Path path;
     private Date time;
-    private String status;
+    private Status status;
+    private double price;
 
     /**
      * Request object constructor
      * @param requestingUser    The user submitting the request
      * @param path              The path requested by the user
      * @param time              The chosen time of pickup for the ride request
-     * @param status            The current status of the ride request
      */
-    public Request(Rider requestingUser, Path path, Date time, String status) {
+    public Request(Rider requestingUser, Path path, Date time) {
         this.requestingUser = requestingUser;
         this.path = path;
         this.time = time;
-        this.status = status;
+        this.status = Status.PENDING_ACCEPTANCE;
     }
 
     /**
@@ -36,22 +47,21 @@ public class Request {
       */
     public Request() { }
 
-    /**
-     * Change the status of the request
-     * @param newStatus                     The new status of the request, either "initiated", "in-progress", or "completed"
-     * @throws IllegalArgumentException     If newStatus is not one of the three accepted options
-     */
-    public void changeStatus(String newStatus) throws IllegalArgumentException {
-        if (Objects.equals(newStatus, "initiated")) {
-            this.status = "initiated";
-        } else if (Objects.equals(newStatus, "in-progress")) {
-            this.status = "in-progress";
-        } else if (Objects.equals(newStatus, "completed")) {
-            this.status = "completed";
-        } else {
-            throw new IllegalArgumentException();
+    public void accept(Driver driver) {
+        if(status != Status.PENDING_ACCEPTANCE) {
+            Log.d(TAG, "Cannot accept request that is not pending acceptance");
         }
+        status = Status.IN_PROGRESS;
+        this.driver = driver;
     }
+
+    public void complete() {
+        if(status != Status.IN_PROGRESS) {
+            Log.d(TAG, "Cannot complete request that is not in progress");
+        }
+        status = Status.COMPLETED;
+    }
+
 
     /**
      * Returns an ID number
@@ -85,11 +95,15 @@ public class Request {
         return this.time;
     }
 
+    public Driver getDriver() {
+        return this.driver;
+    }
+
     /**
      * Returns a String (either initiated, in-progress, or completed)
      * @return      The status of the ride request
      */
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -118,24 +132,5 @@ public class Request {
      */
     public void setTime(Date time) {
         this.time = time;
-    }
-
-    /**
-     * Changes the status of a request
-     * @param status
-     *      New desired status for request
-     */
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    /**
-     * Creates a Ride object
-     * @param driver
-     *      The driver that claimed the ride
-     * @return
-     */
-    public Ride createRide(Driver driver) {
-        return new Ride(driver, requestingUser, path, time, 0);
     }
 }
