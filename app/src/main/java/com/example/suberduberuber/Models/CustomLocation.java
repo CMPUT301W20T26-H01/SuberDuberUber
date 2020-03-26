@@ -31,6 +31,7 @@ public class CustomLocation {
     private String locationName;
     private String address;
     private String placeID;
+    public   boolean hasUniqueName = false;
 
     // Empty public constructor needed by Cloud Firestore for serializability
     public CustomLocation() { }
@@ -52,6 +53,9 @@ public class CustomLocation {
 
     public CustomLocation(Place currentLocation) {
         this.locationName = currentLocation.getName();
+        if (this.locationName != "Selected Location") {
+            this.hasUniqueName = true;
+        }
         this.address = currentLocation.getAddress();
         this.latitude = currentLocation.getLatLng().latitude;
         this.longitude = currentLocation.getLatLng().longitude;
@@ -113,14 +117,15 @@ public class CustomLocation {
         return latLng;
     }
 
-    /**
-     * Get Distance Between Function to get Distance Between two Locations
-     * @param location
-     * Location Object to get Distance To
-     * @return
-     * Returns a double which stores Distance to Given Location from This Location
-     */
-    public double getDistanceBetween(CustomLocation location) {
-        return 0; // TODO: Implement way to determine distance based on coordinates
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCoordinate(String coordinate) {
+        this.coordinate = coordinate;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 }
