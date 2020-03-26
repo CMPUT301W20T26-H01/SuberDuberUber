@@ -9,7 +9,13 @@
         android:id="@+id/confirmRideFragment2"
         android:name="com.example.suberduberuber.Fragments.ConfirmRideFragment"
         android:label="fragment_confirm_ride"
-        tools:layout="@layout/fragment_confirm_ride" />
+        tools:layout="@layout/fragment_confirm_ride" >
+        <action
+            android:id="@+id/action_confirmRideFragment2_to_ridePendingFragment"
+            app:destination="@id/ridePendingFragment"
+            app:enterAnim="@android:anim/slide_out_right" />
+    </fragment>
+
     <fragment
         android:id="@+id/rateDriverFragment"
         android:name="com.example.suberduberuber.Fragments.RateDriverFragment"
@@ -17,7 +23,8 @@
         tools:layout="@layout/fragment_rate_driver" >
         <action
             android:id="@+id/action_rateDriverFragment_to_selectDestinationFragment"
-            app:destination="@id/selectDestinationFragment" />
+            app:destination="@id/selectDestinationFragment"
+            app:enterAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/ridePendingFragment"
@@ -38,7 +45,8 @@
         tools:layout="@layout/fragment_select_destination" >
         <action
             android:id="@+id/action_selectDestinationFragment_to_selectOriginFragment"
-            app:destination="@id/selectOriginFragment" />
+            app:destination="@id/selectOriginFragment"
+            app:enterAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/qrCodeFragment"
@@ -61,7 +69,8 @@
         android:label="fragment_select_origin"
         tools:layout="@layout/fragment_select_origin" >
         <action
-            android:id="@+id/action_selectOriginFragment_to_confrimRouteFragment2"
+            android:id="@+id/action_selectOriginFragment_to_confirmRideFragment2"
+            app:enterAnim="@android:anim/slide_out_right"
             app:destination="@id/confrimRouteFragment" />
     </fragment>
     <fragment

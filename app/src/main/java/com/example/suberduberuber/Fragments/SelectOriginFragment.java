@@ -61,12 +61,12 @@ public class SelectOriginFragment extends MapFullFragment {
                 if (currentPlace == null && initPlace != null) {
                     tempRequest.getPath().setStartLocation(new CustomLocation(initPlace));
                     saveRequest();
-                    navController.navigate(R.id.action_selectOriginFragment_to_confrimRouteFragment2);
+                    navController.navigate(R.id.action_selectOriginFragment_to_confirmRideFragment2);
                 }
                 else if (currentPlace != null) {
                     tempRequest.getPath().setStartLocation(new CustomLocation(currentPlace));
                     saveRequest();
-                    navController.navigate(R.id.action_selectOriginFragment_to_confrimRouteFragment2);
+                    navController.navigate(R.id.action_selectOriginFragment_to_confirmRideFragment2);
                 }
                 else {
                     Toast.makeText(getContext(), "No Location Chosen", Toast.LENGTH_SHORT).show();

@@ -59,4 +59,8 @@ public class AuthViewModel extends AndroidViewModel {
 
         return currentUser;
     }
+
+    public void setUserDeviceToken(String token) {
+        userRepository.updateDeviceToken(token);
+    }
 }
