@@ -15,10 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-<<<<<<< HEAD
-=======
-import android.widget.LinearLayout;
->>>>>>> f9c781d758f0f1056f5307eb85a85ebe3feb5053
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,9 +38,6 @@ public class RidePendingFragment extends Fragment {
     private MapView ride_request_live_route;
     private Button cancelButton;
     private TextView rideRequestStatus;
-
-    private GetRideViewModel getRideViewModel;
-    private AuthViewModel authViewModel;
 
     private Button submitButton;
 
