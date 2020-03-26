@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
@@ -60,6 +62,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     private AuthViewModel authViewModel;
 
     protected NavController navController;
+    private ImageButton doneRideButton;
 
     public DriverNavigationFragment() {
         // Required empty public constructor
@@ -79,6 +82,8 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
         navController = Navigation.findNavController(view);
 
+        doneRideButton = view.findViewById(R.id.done_button);
+
         navigationViewModel= new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
@@ -95,7 +100,18 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
             }
         });
 
+        doneRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                redirectToRecievePaymentFragment();
+            }
+        });
+
         initGoogleMap(savedInstanceState);
+    }
+
+    private void redirectToRecievePaymentFragment() {
+        navController.navigate(R.id.action_driverNavigationFragment_to_QRCodeFragment);
     }
 
     @Override
@@ -181,7 +197,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                         ));
                     }
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
-                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.lightBlue));
+                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                     mMap.addMarker(new MarkerOptions().position(request.getPath().getStartLocation().getLatLng()).title(request.getPath().getStartLocation().getLocationName()));
                     mMap.addMarker(new MarkerOptions().position(request.getPath().getDestination().getLatLng()).title(request.getPath().getDestination().getLocationName()));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));

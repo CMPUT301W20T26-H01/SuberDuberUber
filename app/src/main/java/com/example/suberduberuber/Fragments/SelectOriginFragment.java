@@ -54,7 +54,6 @@ public class SelectOriginFragment extends MapFullFragment {
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         tempRequest = getRideViewModel.getTempRequest().getValue();
 
-        confirmButton.setText("Confirm Pickup Location");
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

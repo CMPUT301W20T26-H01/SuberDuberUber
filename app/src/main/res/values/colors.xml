@@ -1,9 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--?xml version="1.0" encoding="UTF-8"?-->
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="white">#FAFAFA</color> <!-- default background white for android apps-->
-    <color name="black">#000000</color>
-    <color name="lightBlue">#00BAFF</color>
+    <color name="colorPrimary">#2EB9FF</color>
+    <color name="colorPrimaryLight">#97DCFF</color>
+    <color name="colorPrimaryDark">#808e95</color>
+    <color name="colorSecondary">#546e7a</color>
+    <color name="colorSecondaryLight">#819ca9</color>
+    <color name="colorSecondaryDark">#29434e</color>
+    <color name="colorPrimaryText">#494949</color>
+    <color name="colorSecondaryText">#ffffff</color>
+    <color name="colorAccent">#1E97F8</color>
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
 </resources>
