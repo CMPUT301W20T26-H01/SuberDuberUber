@@ -52,9 +52,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.DroppedPinPlace;
 import com.example.suberduberuber.R;
@@ -149,6 +146,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         }
         currentMarker = mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title(currentPlace.getName()).snippet(currentPlace.getAddress()));
         currentMarker.showInfoWindow();
+        textView.setText(currentPlace.getName());
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
     }
 
@@ -210,20 +208,24 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void getDeviceLocation() {
+
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             SimpleLocation location = new SimpleLocation(getContext());
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
             LatLng deviceLatLng = new LatLng(latitude, longitude);
-            try {
-                currentPlace = new DroppedPinPlace(deviceLatLng, getContext(), "Current Location").getDroppedPinPlace();
-                updateMarker();
+            if (this.getClass() == SelectOriginFragment.class) {
+                try {
+                    currentPlace = new DroppedPinPlace(deviceLatLng, getContext(), "Current Location").getDroppedPinPlace();
+                    updateMarker();
+                } catch (IOError | IOException exception) {
+                    Log.i(TAG, exception.getLocalizedMessage());
+                }
             }
-            catch (IOError | IOException exception) {
-                Log.i(TAG, exception.getLocalizedMessage());
+            else {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(deviceLatLng, DEFAULT_ZOOM));
             }
-        }
-        else {
+        } else {
             getLocationPermission();
         }
     }

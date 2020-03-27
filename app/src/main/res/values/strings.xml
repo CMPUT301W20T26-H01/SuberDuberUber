@@ -7,6 +7,9 @@
     <string name="welcome">Welcome!</string>
     <string name="login">Login</string>
     <string name="not_reg">Not registered yet?</string>
+    <string name="add_funds">Add Funds</string>
+    <string name="send_funds">Send Funds</string>
+    <string name="amount">Amount</string>
 
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>

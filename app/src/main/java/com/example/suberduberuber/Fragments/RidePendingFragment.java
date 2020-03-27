@@ -127,17 +127,11 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
-                    @Override
-                    public void onChanged(Request request) {
-                        currentRequest = request;
-                        if (currentRequest != null) {
-                            updateRequestInfo();
-                            cancelRideRequest(currentRequest);
-                            navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
-                        }
-                    }
-                });
+                if (currentRequest != null) {
+                    updateRequestInfo();
+                    cancelRideRequest(currentRequest);
+                    navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
+                }
             }
         });
 

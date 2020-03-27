@@ -184,8 +184,8 @@ abstract class DashboardActivity extends AppCompatActivity {
                 else if (itemId == R.id.requests) {
                     navController.navigate(R.id.action_to_request_page);
                 }
-                else if (itemId == R.id.genQRCode) {
-                    navController.navigate(R.id.action_to_gen_qr_code);
+                else if (itemId == R.id.wallet) {
+                    navController.navigate(R.id.action_to_wallet);
                 }
                 else if(itemId == R.id.logout) {
                     logout();

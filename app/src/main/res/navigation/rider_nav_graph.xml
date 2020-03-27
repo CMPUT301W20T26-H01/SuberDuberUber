@@ -84,6 +84,12 @@
             android:id="@+id/action_viewProfileFragment_to_editInformationFragment"
             app:destination="@id/editInformationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
+        android:label="fragment_qr_code"
+        tools:layout="@layout/fragment_qrcode_page">
+    </fragment>
     <action
         android:id="@+id/action_to_profile_page"
         app:destination="@id/viewProfileFragment" />
@@ -101,7 +107,7 @@
         android:id="@+id/action_to_ridePending_page"
         app:destination="@+id/ridePendingFragment" />
     <action
-        android:id="@+id/action_to_gen_qr_code"
+        android:id="@+id/action_to_wallet"
         app:destination="@id/qrCodeFragment" />
     <fragment
         android:id="@+id/confrimRouteFragment"
