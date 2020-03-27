@@ -51,6 +51,6 @@
     android:id="@+id/action_to_profile_page"
     app:destination="@id/viewProfileFragment" />
     <action
-        android:id="@+id/action_to_gen_qr_code"
+        android:id="@+id/action_to_wallet"
         app:destination="@id/qrCodeFragment" />
 </navigation>
