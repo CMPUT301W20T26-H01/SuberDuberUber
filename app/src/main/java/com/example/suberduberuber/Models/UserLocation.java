@@ -3,13 +3,16 @@ package com.example.suberduberuber.Models;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ServerTimestamp;
 
+import java.util.Date;
+
 public class UserLocation {
 
-    private GeoPoint geoPoint;
-    private @ServerTimestamp String timeStamp;
+    private GeoPoint geoPoint = null;
+    private @ServerTimestamp
+    Date timeStamp;
     private User user;
 
-    public UserLocation(GeoPoint geoPoint, String timeStamp, User user) {
+    public UserLocation(GeoPoint geoPoint, Date timeStamp, User user) {
         this.geoPoint = geoPoint;
         this.timeStamp = timeStamp;
         this.user = user;
@@ -27,11 +30,11 @@ public class UserLocation {
         this.geoPoint = geoPoint;
     }
 
-    public String getTimeStamp() {
+    public Date getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
     }
 

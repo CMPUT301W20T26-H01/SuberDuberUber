@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,8 +25,10 @@ import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
+import com.example.suberduberuber.Models.UserLocation;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
+import com.example.suberduberuber.ViewModels.DriverLocationViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,6 +39,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
@@ -58,6 +62,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private NavController navController;
     private GetRideViewModel getRideViewModel;
     private AuthViewModel authViewModel;
+    private DriverLocationViewModel driverLocationViewModel;
 
     private User currentUser;
     private Request currentRequest;
@@ -74,6 +79,8 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private static final String TAG = "Auto Complete Log";
     private GeoApiContext mGeoApiContext = null;
     private LatLngBounds latLngBounds;
+
+    private GeoPoint driverLocation;
 
 
     public RidePendingFragment() {
@@ -92,10 +99,12 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         super.onViewCreated(view, savedInstanceState);
 
         mMapView = (MapView) view.findViewById(R.id.ride_request_live_route);
+        rideRequestStatus = view.findViewById(R.id.rideRequestStatus);
 
         navController = findNavController(view);
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        driverLocationViewModel = new ViewModelProvider(requireActivity()).get(DriverLocationViewModel.class);
 
         currentUser = authViewModel.getCurrentUser().getValue();
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
@@ -128,7 +137,13 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 });
             }
         });
+
         initGoogleMap(savedInstanceState);
+    }
+
+    private void updateDriverPin() {
+        mMap.addMarker(new MarkerOptions().position(new com.google.android.gms.maps.model.LatLng(driverLocation.getLatitude(), driverLocation.getLongitude()))
+                .title("Driver Is Here")).showInfoWindow();
     }
 
     public void cancelRideRequest(Request request) {
@@ -137,13 +152,24 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
     public void updateRequestInfo() {
         getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
-            @Override
-            public void onChanged(Request request) {
+                @Override
+                public void onChanged(Request request) {
                 currentRequest = request;
                 calculateDirections();
-                if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
-                    Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
-                    rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
+                if (currentRequest != null) {
+                    if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+                        Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
+                        rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
+                        driverLocationViewModel.getDriverLocation(currentRequest).observe(getViewLifecycleOwner(), new Observer<GeoPoint>() {
+                            @Override
+                            public void onChanged(GeoPoint geoPoint) {
+                                driverLocation = geoPoint;
+                                if (geoPoint != null) {
+                                    updateDriverPin();
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
