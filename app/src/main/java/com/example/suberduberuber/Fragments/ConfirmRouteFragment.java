@@ -18,7 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
@@ -49,7 +52,7 @@ import java.util.List;
 
 public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final int DEFAULT_ZOOM = 400;
+    private static final int DEFAULT_ZOOM = 150;
     private MapView mMapView;
     private GoogleMap mMap;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -62,6 +65,8 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
     TextView pickupTextView;
     TextView pickupTimeTextView;
     TextView destinationTextView;
+    EditText bidAmount;
+    ImageButton submitBid;
 
 
     private GetRideViewModel getRideViewModel;
@@ -99,6 +104,27 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
 
         pickupTimeTextView = view.findViewById(R.id.pickupTime);
         pickupTimeTextView.setText(tempRequest.getTime().toString());
+
+        bidAmount = view.findViewById(R.id.bid_amount);
+        submitBid = view.findViewById(R.id.confirm_bid_button);
+        submitBid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    double bid = Double.valueOf(bidAmount.getText().toString());
+                    if (bid >= tempRequest.getPath().getEstimatedFare()) {
+                        tempRequest.setPrice(bid);
+                        Toast.makeText(getContext(), "Bid Updated", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Bid is less than recommended amount", Toast.LENGTH_LONG).show();
+                    }
+                }
+                catch (Exception exception) {
+                    Toast.makeText(getContext(), "Invalid Bid", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         submitButton = view.findViewById(R.id.submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -194,6 +220,14 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
         distance = route.legs[0].distance.inMeters;
         duration = route.legs[0].duration.inSeconds;
         tempRequest.getPath().generateEstimatedFare(distance, duration);
+        try {
+            tempRequest.setPrice(tempRequest.getPath().getEstimatedFare());
+            bidAmount.setText(String.valueOf(tempRequest.getPrice()));
+        }
+        catch (Exception exception) {
+            Toast.makeText(getContext(), "Estimated Bid Error", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private List<LatLng> setBoundsAndGetRoute(List<com.google.maps.model.LatLng> decodedPath) {
