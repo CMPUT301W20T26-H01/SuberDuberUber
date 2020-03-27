@@ -13,6 +13,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This class serves to encapsulate all he interactions with the Request collection in firebase. It keeps
  * The system modular and keeps all the queries in one place, so that if database changes occur it can be
@@ -70,13 +73,15 @@ public class RequestRepository {
 
     public Query getRidersCurrentRequest(User user) {
         return myDb.collection("requests")
-                .whereEqualTo("rider.email", user.getEmail())
+                .whereEqualTo("requestingUser.email", user.getEmail())
+                .whereIn("status", Arrays.asList("PENDING_ACCEPTANCE", "IN_PROGRESS"))
                 .limit(1);
     }
 
     public Query getDriverCurrentRequest(User user) {
         return myDb.collection("requests")
                 .whereEqualTo("driver.email", user.getEmail())
+                .whereEqualTo("status", "IN_PROGRESS")
                 .limit(1);
     }
 }

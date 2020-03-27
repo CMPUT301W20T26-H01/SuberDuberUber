@@ -69,7 +69,12 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
         }
 
         holder.time.setText(request.getTime().toString());
-        holder.driver_username.setText("<not implemented>");
+        if (Objects.equals(request.getStatus(), "PENDING_ACCEPTANCE")) {
+            holder.driver_username.setText("None");
+        } else {
+            holder.driver_username.setText(request.getDriver().getUsername());
+        }
+        holder.status.setText(request.getStatus());
     }
 
     @Override

@@ -8,6 +8,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import android.view.LayoutInflater;
@@ -26,6 +28,8 @@ import com.example.suberduberuber.ViewModels.GetRideViewModel;
 
 import java.util.Date;
 
+import static androidx.navigation.Navigation.findNavController;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -34,10 +38,7 @@ public class SelectDestinationFragment extends MapFullFragment {
     private GetRideViewModel getRideViewModel;
     private AuthViewModel authViewModel;
     private Request tempRequest;
-
-    private DrawerLayout drawerLayout;
-
-    private AppBarConfiguration appBarConfiguration;
+    private NavController navController;
 
     public SelectDestinationFragment() {
         // Required empty public constructor
@@ -67,6 +68,7 @@ public class SelectDestinationFragment extends MapFullFragment {
         textView.setHint("Where to?");
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        navController = findNavController(view);
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,10 +82,6 @@ public class SelectDestinationFragment extends MapFullFragment {
             }
         });
 
-        drawerLayout = view.findViewById(R.id.drawer_layout);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
-//                .setDrawerLayout(drawerLayout)
-//                .build();
     }
 
     private void saveRequest() {
@@ -91,7 +89,6 @@ public class SelectDestinationFragment extends MapFullFragment {
     }
 
     private void createTempRequest() {
-
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {

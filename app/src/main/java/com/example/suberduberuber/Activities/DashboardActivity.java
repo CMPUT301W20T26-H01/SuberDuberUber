@@ -1,6 +1,7 @@
 package com.example.suberduberuber.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +9,9 @@ import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -18,11 +22,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.suberduberuber.Fragments.SelectDestinationFragment;
+import com.example.suberduberuber.Models.Rider;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.Repositories.RequestRepository;
+import com.example.suberduberuber.Repositories.UserRepository;
+import com.example.suberduberuber.ViewModels.AuthViewModel;
+import com.example.suberduberuber.ViewModels.GetRideViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /*
     This activity currently holds fragments for a rider's ride request creation.
@@ -36,6 +50,8 @@ import com.google.firebase.auth.FirebaseUser;
 abstract class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
+    private UserRepository userRepository;
+    private RequestRepository requestRepository;
 
     protected NavController navController;
 
@@ -49,11 +65,14 @@ abstract class DashboardActivity extends AppCompatActivity {
 
         myAuth = FirebaseAuth.getInstance();
 
+        userRepository = new UserRepository();
+        requestRepository = new RequestRepository();
+
         navController = Navigation.findNavController(this, getNavHostId());
 
         navigationView = findViewById(R.id.nav_view);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(getDrawerLayoutId());
         new AppBarConfiguration.Builder(navController.getGraph())
                 .setDrawerLayout(drawerLayout)
                 .build();
@@ -61,10 +80,17 @@ abstract class DashboardActivity extends AppCompatActivity {
         configureToolbar();
         NavigationUI.setupWithNavController(navigationView, navController);
         configureNavigationDrawer();
+
+        // only rider's page does this
+        if (getNavHostId() == R.id.nav_host_rider) {
+            goToDestHomeOrRidePending();
+        }
     }
 
     abstract int getNavHostId();
     abstract int getContentViewId();
+    abstract int getDrawerLayoutId();
+    abstract int getMenuLayoutId();
 
     // for QR Code Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -77,7 +103,7 @@ abstract class DashboardActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
-        getMenuInflater().inflate(R.menu.drawer_menu, navigationView.getMenu());
+        getMenuInflater().inflate(getMenuLayoutId(), navigationView.getMenu());
         return true;
     }
 
@@ -90,15 +116,18 @@ abstract class DashboardActivity extends AppCompatActivity {
     }
 
     private void configureNavigationDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(getDrawerLayoutId());
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
 
-                if (itemId == R.id.menu_home) {
-                    navController.navigate(R.id.action_to_dest_home_page);
+                if (itemId == R.id.menu_home_rider) {
+                    goToDestHomeOrRidePending();
+                }
+                else if (itemId == R.id.menu_home_driver) {
+                    navController.navigate(R.id.action_to_driver_req_home);
                 }
                 else if (itemId == R.id.profile) {
                     navController.navigate(R.id.action_to_profile_page);
@@ -106,8 +135,8 @@ abstract class DashboardActivity extends AppCompatActivity {
                 else if (itemId == R.id.requests) {
                     navController.navigate(R.id.action_to_request_page);
                 }
-                else if (itemId == R.id.genQRCode) {
-                    navController.navigate(R.id.action_to_gen_qr_code);
+                else if (itemId == R.id.wallet) {
+                    navController.navigate(R.id.action_to_wallet);
                 }
                 else if(itemId == R.id.logout) {
                     logout();
@@ -127,7 +156,7 @@ abstract class DashboardActivity extends AppCompatActivity {
         int itemId = item.getItemId();
 
         switch (itemId) {
-            case android.R.id.home:
+            case android.R.id.home: // hamburger menu icon
                 drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
@@ -141,6 +170,24 @@ abstract class DashboardActivity extends AppCompatActivity {
         finish();
     }
 
+    private void goToDestHomeOrRidePending() {
+        userRepository.getCurrentUser().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                User user = task.getResult().toObject(User.class);
+                requestRepository.getRidersCurrentRequest(user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult().getDocuments().size() > 0) {
+                            navController.navigate(R.id.action_to_ridePending_page);
+                        } else {
+                            navController.navigate(R.id.action_to_dest_home);
+                        }
+                    }
+                });
+            }
+        });
+    }
 
 }
 
