@@ -48,6 +48,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static androidx.navigation.Navigation.findNavController;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -91,7 +93,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
         mMapView = (MapView) view.findViewById(R.id.ride_request_live_route);
 
-        navController = Navigation.findNavController(view);
+        navController = findNavController(view);
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
@@ -104,8 +106,10 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
             }
         });
 
-        currentRequest = getRideViewModel.getUsersCurrentRide(currentUser).getValue();
-        updateRequestInfo();
+        if (currentUser != null) {
+            currentRequest = getRideViewModel.getUsersCurrentRide(currentUser).getValue();
+            updateRequestInfo();
+        }
 
         cancelButton = view.findViewById(R.id.cancel_ride_request_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {

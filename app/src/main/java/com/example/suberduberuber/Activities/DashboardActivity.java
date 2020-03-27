@@ -79,6 +79,8 @@ abstract class DashboardActivity extends AppCompatActivity {
         configureToolbar();
         NavigationUI.setupWithNavController(navigationView, navController);
         configureNavigationDrawer();
+
+        goToDestHomeOrRidePending();
     }
 
     abstract int getNavHostId();
@@ -116,24 +118,7 @@ abstract class DashboardActivity extends AppCompatActivity {
                 int itemId = menuItem.getItemId();
 
                 if (itemId == R.id.menu_home) {
-                    userRepository.getCurrentUser().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            User user = task.getResult().toObject(User.class);
-                            if(user.getDriver()) {
-                                navController.navigate(R.id.action_to_dest_home_page);
-                            } else {
-                                requestRepository.getRidersCurrentRequest(user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.getResult().getDocuments().size() > 0) {
-                                            navController.navigate(R.id.action_to_ridePending_page);
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
+                    goToDestHomeOrRidePending();
                 }
                 else if (itemId == R.id.profile) {
                     navController.navigate(R.id.action_to_profile_page);
@@ -176,6 +161,28 @@ abstract class DashboardActivity extends AppCompatActivity {
         finish();
     }
 
+    private void goToDestHomeOrRidePending() {
+        userRepository.getCurrentUser().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                User user = task.getResult().toObject(User.class);
+                if(user.getDriver()) {
+                    navController.navigate(R.id.action_to_dest_home_page);
+                } else {
+                    requestRepository.getRidersCurrentRequest(user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.getResult().getDocuments().size() > 0) {
+                                navController.navigate(R.id.action_to_ridePending_page);
+                            } else {
+                                navController.navigate(R.id.action_to_dest_home_page);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 
 }
 

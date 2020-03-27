@@ -52,7 +52,7 @@ public class SelectOriginFragment extends MapFullFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //textView.setHint("Search Pickup Location");
+        textView.setHint("Pickup here?");
 
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         navController = findNavController(view);
