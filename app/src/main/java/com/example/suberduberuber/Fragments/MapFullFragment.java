@@ -28,16 +28,13 @@ Sources include:
     GoogleMaps YouTube Playlist by User CodingWithMitch - https://www.youtube.com/watch?v=RQxY7rrZATU&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT3gi
     Permission Services Code from GitHub User mitchtabian - https://gist.github.com/mitchtabian/2b9a3dffbfdc565b81f8d26b25d059bf
  */
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,49 +51,36 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.DroppedPinPlace;
 import com.example.suberduberuber.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AddressComponents;
-import com.google.android.libraries.places.api.model.OpeningHours;
-import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.model.PlusCode;
-import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.maps.GeoApiContext;
 
+import java.io.IOError;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import im.delight.android.location.SimpleLocation;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.app.Activity.RESULT_CANCELED;
@@ -105,7 +89,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class MapFullFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final float DEFAULT_ZOOM = 5;
+    private static final float DEFAULT_ZOOM = 15;
     private MapView mMapView;
     private GoogleMap mMap;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -115,6 +99,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     EditText textView;
     Place currentPlace = null;
     Place initPlace = null;
+    Marker currentMarker = null;
     PlacesClient placesClient;
     LatLng mDefaultLocation = new LatLng(53.2734, -7.77832031);
     int AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -133,15 +118,14 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_map_full, container, false);
-        mMapView = (MapView) view.findViewById(R.id.full_map);
 
-        // Initialize GooglePlaces
+        mMapView = (MapView) view.findViewById(R.id.full_map);
+        confirmButton = view.findViewById(R.id.confirmButton);
+        textView = view.findViewById(R.id.autocomplete);
+
         Places.initialize(getActivity().getApplicationContext(), getString(R.string.google_map_api_key));
         placesClient = Places.createClient(getContext());
 
-        confirmButton = view.findViewById(R.id.confirmButton);
-
-        textView = view.findViewById(R.id.autocomplete);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +143,15 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    private  void updateMarker() {
+        if (currentMarker != null) {
+            currentMarker.remove();
+        }
+        currentMarker = mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title(currentPlace.getName()).snippet(currentPlace.getAddress()));
+        currentMarker.showInfoWindow();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // Get Autocomplete Results
@@ -167,10 +160,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
                 currentPlace = Autocomplete.getPlaceFromIntent(data);
                 //textView.setText(currentPlace.getName());
                 if (currentPlace.getLatLng() != null) {
-                    Marker currentMarker  =mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title("Selected Location").snippet(currentPlace.getAddress()));
-                    currentMarker.showInfoWindow();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
-                    //confirmButton.setVisibility(View.VISIBLE);
+                    updateMarker();
                 }
                 Log.i(TAG, "Place: " + currentPlace.getName() + ", " + currentPlace.getId());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -220,42 +210,19 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void getDeviceLocation() {
-        // Set Fields For Places
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS);
-        FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
-        // Gets Most Likely Current Location
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
-            placeResponse.addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
-                    FindCurrentPlaceResponse response = task.getResult();
-                    double probability = -1;
-                    for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                        Log.i(TAG, String.format("Place '%s' has likelihood: %f",
-                                placeLikelihood.getPlace().getName(),
-                                placeLikelihood.getLikelihood()));
-                        if (placeLikelihood.getLikelihood() > probability) {
-                            probability = placeLikelihood.getLikelihood();
-                            initPlace = placeLikelihood.getPlace();
-                        }
-                    }
-                    if (initPlace != null) {
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                initPlace.getLatLng(), DEFAULT_ZOOM));
-                        Marker initMarker = mMap.addMarker(new MarkerOptions().position(initPlace.getLatLng()).title("Current Location").snippet(initPlace.getAddress()));
-                        initMarker.showInfoWindow();
-                    }
-                } else {
-                    Exception exception = task.getException();
-                    if (exception instanceof ApiException) {
-                        ApiException apiException = (ApiException) exception;
-                        Log.e(TAG, "Place not found: " + apiException.getStatusCode());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                    }
-                }
-            });
+            SimpleLocation location = new SimpleLocation(getContext());
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            LatLng deviceLatLng = new LatLng(latitude, longitude);
+            try {
+                currentPlace = new DroppedPinPlace(deviceLatLng, getContext(), "Current Location").getDroppedPinPlace();
+                updateMarker();
+            }
+            catch (IOError | IOException exception) {
+                Log.i(TAG, exception.getLocalizedMessage());
+            }
         }
-        // Location Permission Missing
         else {
             getLocationPermission();
         }
@@ -268,15 +235,17 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                DroppedPinPlace droppedPinPlace = new DroppedPinPlace(latLng);
-                if (droppedPinPlace.getDroppedPinPlace() != null) {
-                    currentPlace = droppedPinPlace.getDroppedPinPlace();
-                    Marker currentMarker  = mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title("Selected Location").snippet(currentPlace.getAddress()));
-                    currentMarker.showInfoWindow();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
+                try {
+                    DroppedPinPlace droppedPinPlace = new DroppedPinPlace(latLng, getContext(), null);
+                    if (droppedPinPlace.getDroppedPinPlace() != null) {
+                        currentPlace = droppedPinPlace.getDroppedPinPlace();
+                        updateMarker();
+                    } else {
+                        Toast.makeText(getContext(), "Invalid Pin Location", Toast.LENGTH_LONG).show();
+                    }
                 }
-                else {
-                    Toast.makeText(getContext(), "Invalid Pin Location", Toast.LENGTH_LONG).show();
+                catch (IOError | java.io.IOException exception) {
+                    Log.i(TAG, exception.getLocalizedMessage());
                 }
             }
         });

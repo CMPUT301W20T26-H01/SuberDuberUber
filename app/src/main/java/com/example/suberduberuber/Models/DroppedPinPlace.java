@@ -1,5 +1,8 @@
 package com.example.suberduberuber.Models;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Parcel;
 
@@ -14,27 +17,51 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlusCode;
 
 import java.util.List;
+import java.util.Locale;
 
 public class DroppedPinPlace {
-    Place droppedPinPlace = null;
+    private String city;
+    private String province;
+    private String country;
+    private String postalCode;
+    private Place droppedPinPlace = null;
+    private String address = "Dropped Pin Location";
+    private String name = "Selected Location";
+    private LatLng latLng = null;
 
     public DroppedPinPlace() { }
 
-    public DroppedPinPlace(LatLng latLng) {
-        createPlace(latLng);
+    public DroppedPinPlace(LatLng latLng, Context context, String newName) throws java.io.IOException {
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(context, Locale.CANADA);
+        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+        address = addresses.get(0).getAddressLine(0);
+        if (!address.contains(addresses.get(0).getFeatureName())) {
+            name = addresses.get(0).getFeatureName();
+        }
+        if (newName != null) {
+            name = newName;
+        }
+        createPlace(latLng, address, name);
     }
 
     public Place getDroppedPinPlace() {
         return droppedPinPlace;
     }
 
-    private void createPlace(LatLng latLng) {
+    private void createPlace(LatLng newLatLng, @Nullable String newAddress, @Nullable String newName) {
+        this.latLng = newLatLng;
+        if (newAddress != null) {
+            this.address = newAddress;
+        }
+        if (newName != null) {
+            name = newName;
+        }
         this.droppedPinPlace = new Place() {
             @Nullable
             @Override
-            public String getAddress() {
-                return "Dropped Pin Location";
-            }
+            public String getAddress() { return address; }
 
             @Nullable
             @Override
@@ -63,7 +90,7 @@ public class DroppedPinPlace {
             @Nullable
             @Override
             public String getName() {
-                return "Dropped Pin";
+                return name;
             }
 
             @Nullable
