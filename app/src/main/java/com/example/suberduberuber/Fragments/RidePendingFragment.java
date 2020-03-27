@@ -110,14 +110,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
         driverLocationViewModel = new ViewModelProvider(requireActivity()).get(DriverLocationViewModel.class);
 
-        currentUser = authViewModel.getCurrentUser().getValue();
-        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                currentUser = user;
-                updateRequestInfo();
-            }
-        });
+        currentUser = ((UserClient)(getActivity().getApplicationContext())).getUser();
 
         if (currentUser != null) {
             currentRequest = getRideViewModel.getUsersCurrentRide(currentUser).getValue();
@@ -135,8 +128,6 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 }
             }
         });
-
-
 
         initGoogleMap(savedInstanceState);
     }
