@@ -152,7 +152,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 currentRequest = request;
                 calculateDirections();
                 if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
-                    Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), request.getDriver().getUsername() + " accepted your ride!", Toast.LENGTH_SHORT).show();
                     completeButton.setVisibility(View.VISIBLE);
                     rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
                 }

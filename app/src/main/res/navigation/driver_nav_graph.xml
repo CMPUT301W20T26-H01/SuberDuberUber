@@ -57,4 +57,7 @@
     <action
         android:id="@+id/action_to_gen_qr_code"
         app:destination="@id/qrCodeFragment" />
+    <action
+        android:id="@+id/action_to_driver_navigation_page"
+        app:destination="@+id/driverNavigationFragment" />
 </navigation>
