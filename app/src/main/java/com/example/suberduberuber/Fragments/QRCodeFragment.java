@@ -35,7 +35,6 @@ public class QRCodeFragment extends Fragment {
     private NavController navController;
     private UserRepository firestoreRepository;
 
-    private Button genQRCodeButton;
     private ImageView qrImageView;
     private Bitmap bitmap;
     public final static int qrWidth = 500;
@@ -90,7 +89,7 @@ public class QRCodeFragment extends Fragment {
 
             for (int x = 0; x < bitMatrixWidth; x++) {
                 pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.black): getResources().getColor(R.color.white);
+                        getResources().getColor(R.color.colorSecondaryDark): getResources().getColor(R.color.colorPrimaryLight);
             }
         }
         Bitmap bp = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);

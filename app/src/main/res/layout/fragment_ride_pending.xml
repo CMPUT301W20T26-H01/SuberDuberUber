@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.SelectDestinationFragment"
-    android:orientation="vertical"
     android:layout_margin="20dp"
-    android:background="@color/quantum_bluegrey900">
+    android:background="@color/quantum_bluegrey900"
+    tools:context=".Fragments.SelectDestinationFragment"
+    android:orientation="vertical">
 
     <TextView
-        android:textColor="@color/quantum_white_100"
-        android:layout_width="match_parent"
+        android:id="@+id/rideRequestStatus"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Waiting for ride to pick you up"
-        />
+        android:text="Waiting for a driver"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/ride_request_live_route"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/cancel_ride_request_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rideRequestStatus" />
 
     <Button
-        android:background="@drawable/btn_round"
-        android:textColor="@color/quantum_white_100"
-        android:id="@+id/submit_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/cancel_ride_request_button"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Time Travel?" />
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/btn_round"
+        android:text="Cancel Ride"
+        android:textColor="@color/quantum_white_100"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

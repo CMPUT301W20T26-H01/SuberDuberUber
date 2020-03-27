@@ -1,12 +1,17 @@
 package com.example.suberduberuber.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,9 +22,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.suberduberuber.Models.Rider;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.Repositories.RequestRepository;
+import com.example.suberduberuber.Repositories.UserRepository;
+import com.example.suberduberuber.ViewModels.AuthViewModel;
+import com.example.suberduberuber.ViewModels.GetRideViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /*
     This activity currently holds fragments for a rider's ride request creation.
@@ -33,6 +50,8 @@ import com.google.firebase.auth.FirebaseAuth;
 abstract class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
+    private UserRepository userRepository;
+    private RequestRepository requestRepository;
 
     protected NavController navController;
 
@@ -46,6 +65,9 @@ abstract class DashboardActivity extends AppCompatActivity {
 
         myAuth = FirebaseAuth.getInstance();
 
+        userRepository = new UserRepository();
+        requestRepository = new RequestRepository();
+
         navController = Navigation.findNavController(this, getNavHostId());
 
         navigationView = findViewById(R.id.nav_view);
@@ -58,6 +80,8 @@ abstract class DashboardActivity extends AppCompatActivity {
         configureToolbar();
         NavigationUI.setupWithNavController(navigationView, navController);
         configureNavigationDrawer();
+
+        goToDestHomeOrRidePending();
     }
 
     abstract int getNavHostId();
@@ -97,7 +121,7 @@ abstract class DashboardActivity extends AppCompatActivity {
                 int itemId = menuItem.getItemId();
 
                 if (itemId == R.id.menu_home) {
-                    navController.navigate(R.id.action_to_home);
+                    goToDestHomeOrRidePending();
                 }
                 else if (itemId == R.id.profile) {
                     navController.navigate(R.id.action_to_profile_page);
@@ -140,6 +164,28 @@ abstract class DashboardActivity extends AppCompatActivity {
         finish();
     }
 
+    private void goToDestHomeOrRidePending() {
+        userRepository.getCurrentUser().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                User user = task.getResult().toObject(User.class);
+                if(user.getDriver()) {
+                    navController.navigate(R.id.action_to_dest_home_page);
+                } else {
+                    requestRepository.getRidersCurrentRequest(user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.getResult().getDocuments().size() > 0) {
+                                navController.navigate(R.id.action_to_ridePending_page);
+                            } else {
+                                navController.navigate(R.id.action_to_dest_home_page);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 
 }
 

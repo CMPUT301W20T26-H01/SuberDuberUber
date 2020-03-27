@@ -33,8 +33,10 @@
         tools:layout="@layout/fragment_ride_pending" >
         <action
             android:id="@+id/action_ridePendingFragment_to_scanqrcodeFragment"
-            app:destination="@id/scanQRCodeFragment"
-            app:enterAnim="@android:anim/slide_out_right" />
+            app:destination="@id/scanQRCodeFragment" />
+        <action
+            android:id="@+id/action_ridePendingFragment_to_selectDestinationFragment"
+            app:destination="@id/selectDestinationFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectDestinationFragment"
@@ -101,6 +103,9 @@
     <action
         android:id="@+id/action_to_home"
         app:destination="@id/selectDestinationFragment" />
+    <action
+        android:id="@+id/action_to_ridePending_page"
+        app:destination="@+id/ridePendingFragment" />
     <action
         android:id="@+id/action_to_gen_qr_code"
         app:destination="@id/qrCodeFragment" />

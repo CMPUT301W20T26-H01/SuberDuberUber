@@ -44,6 +44,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,9 +54,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.DroppedPinPlace;
@@ -113,16 +111,13 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final String TAG = "Auto Complete Log";
 
-    Button confirmButton;
-    Button textView;
+    ImageButton confirmButton;
+    EditText textView;
     Place currentPlace = null;
     Place initPlace = null;
     PlacesClient placesClient;
     LatLng mDefaultLocation = new LatLng(53.2734, -7.77832031);
     int AUTOCOMPLETE_REQUEST_CODE = 1;
-
-
-    protected NavController navController;
 
     public boolean locationPermissionGranted = false;
     public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
@@ -202,7 +197,6 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
     }
 
     private void initGoogleMap(Bundle savedInstanceState) {

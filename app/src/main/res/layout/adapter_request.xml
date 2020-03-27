@@ -169,20 +169,20 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:background="@color/quantum_grey900"
             android:id="@+id/request_card_poppup_details"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="bottom"
             android:layout_marginTop="132dp"
+            android:background="@color/quantum_grey900"
             android:visibility="gone">
 
             <Button
-                android:textColor="@color/quantum_white_100"
                 android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Back"
+                android:textColor="@color/quantum_white_100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.009"
@@ -191,12 +191,12 @@
                 app:layout_constraintVertical_bias="1.0"></Button>
 
             <Button
-                android:textColor="@color/quantum_white_100"
                 android:id="@+id/cancel_button"
                 android:layout_width="284dp"
                 android:layout_height="46dp"
                 android:layout_marginStart="10dp"
-                android:text="Cancel Ride?"
+                android:text="Delete Request"
+                android:textColor="@color/quantum_white_100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/back_button"
                 tools:layout_editor_absoluteY="1dp" />
