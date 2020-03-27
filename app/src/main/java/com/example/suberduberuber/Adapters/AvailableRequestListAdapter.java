@@ -106,7 +106,6 @@ public class AvailableRequestListAdapter extends RecyclerView.Adapter<AvailableR
         private void togglePopupState() {
             if(popup.getVisibility() == View.GONE) {
                 popup.setVisibility(View.VISIBLE);
-                view.setBackgroundColor(Color.GREEN);
             }
             else {
                 popup.setVisibility(View.GONE);

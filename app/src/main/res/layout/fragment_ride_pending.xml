@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.SelectDestinationFragment"
     android:orientation="vertical"
-    android:layout_margin="20dp"
-    android:background="@color/quantum_bluegrey900">
+    android:layout_margin="20dp">
 
     <TextView
         android:textColor="@color/quantum_white_100"

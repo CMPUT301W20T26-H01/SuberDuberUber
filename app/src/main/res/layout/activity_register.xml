@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/quantum_bluegrey900">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +12,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register"
@@ -29,14 +28,15 @@
             android:text="@string/isDriver" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/username_field"
             android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:hint="UserName" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/email_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:textColor="@color/quantum_white_100" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/password_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             android:inputType="textPassword" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/password_field_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,14 +68,14 @@
             android:layout_marginBottom="20dp"/>
 
         <TextView
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/car_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/car_info" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/year_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,40 +84,41 @@
             android:inputType="number" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/make_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Make" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/model_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Model" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/color_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Color" />
 
         <EditText
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             android:id="@+id/plate_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="License Plate" />
 
         <Button
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorSecondaryText"
+            android:layout_marginTop="5dp"
             android:id="@+id/register_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register"
-            android:background="@drawable/btn_round"/>
+            android:background="@color/colorSecondary"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
