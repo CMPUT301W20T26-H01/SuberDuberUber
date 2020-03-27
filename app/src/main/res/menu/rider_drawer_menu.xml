@@ -10,6 +10,9 @@
         <item android:id="@+id/requests"
             android:title="View Requests"
             android:icon="@drawable/ic_action_requests" />
+        <item android:id="@+id/wallet"
+            android:title="Wallet"
+            android:icon="@drawable/ic_action_qrcode" />
         <item android:id="@+id/logout"
             android:title="Log Out"
             android:icon="@drawable/ic_stop_black_24dp" />

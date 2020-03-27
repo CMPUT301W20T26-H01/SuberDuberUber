@@ -112,7 +112,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     }
 
     private void redirectToRecievePaymentFragment() {
-        navController.navigate(R.id.action_driverNavigationFragment_to_QRCodeFragment);
+        navController.navigate(R.id.action_driverNavigationFragment_to_QRDriverCodeFragment);
     }
 
     @Override
