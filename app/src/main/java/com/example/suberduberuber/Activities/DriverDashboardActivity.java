@@ -20,4 +20,14 @@ public class DriverDashboardActivity extends DashboardActivity {
     int getContentViewId() {
         return R.layout.activity_driver_dashboard;
     }
+
+    @Override
+    int getDrawerLayoutId() {
+        return R.id.driver_drawer_layout;
+    }
+
+    @Override
+    int getMenuLayoutId() {
+        return R.menu.driver_drawer_menu;
+    }
 }
