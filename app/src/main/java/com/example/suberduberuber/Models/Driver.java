@@ -17,8 +17,8 @@ public class Driver extends User {
      * @param emailAddress
      *      User's unique email address
      */
-    public Driver(String username, String emailAddress, Car car) {
-        super(username, emailAddress, true);
+    public Driver(String username, String emailAddress, String phoneNum, Car car) {
+        super(username, emailAddress, phoneNum, true);
         this.car = car;
         this.acceptedRequests = new ArrayList<Request>();
         this.isAvailable = true;
