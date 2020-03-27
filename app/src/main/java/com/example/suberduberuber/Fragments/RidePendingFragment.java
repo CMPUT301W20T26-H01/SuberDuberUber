@@ -145,7 +145,9 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         }
         driverMaker = mMap.addMarker(new MarkerOptions().position(driveLatLng)
                 .title("Driver Is Here")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_icon)).anchor(0.5f, 0.5f));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_icon))
+                .anchor(0.5f, 0.5f)
+                .zIndex(2.0f));
         if (decodedPath != null) {
             setBounds();
         }
@@ -274,7 +276,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                             .title("Start")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
                     mMap.addMarker(new MarkerOptions().position(currentRequest.getPath().getDestination().getLatLng())
-                            .title("Destination")).showInfoWindow();
+                            .title("Destination"));
                 }
             }
         });
