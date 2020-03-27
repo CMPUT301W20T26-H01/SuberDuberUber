@@ -1,6 +1,7 @@
 package com.example.suberduberuber.ViewModels;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class DriverLocationViewModel extends AndroidViewModel {
 
@@ -35,13 +37,18 @@ public class DriverLocationViewModel extends AndroidViewModel {
     }
 
     public LiveData<GeoPoint> getDriverLocation(Request request) {
-        if (request != null && request.getDriver() != null) {
+        if (request != null && Objects.equals(request.getStatus(), "IN_PROGRESS")) {
             Driver driver = request.getDriver();
             userLocationRepository.getLocation(driver).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                     if (queryDocumentSnapshots != null && queryDocumentSnapshots.getDocuments().size() > 0) {
-                        currentLocation.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(UserLocation.class).getGeoPoint());
+                        try {
+                            currentLocation.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(UserLocation.class).getGeoPoint());
+                        }
+                        catch (NullPointerException exception) {
+                            Log.i(TAG, "Null Pointer Exception");
+                        }
                     }
                 }
             });

@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.suberduberuber.Clients.UserClient;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Models.UserLocation;
@@ -82,7 +83,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private LatLngBounds latLngBounds;
     private List<com.google.maps.model.LatLng> decodedPath;
     private Marker driverMaker;
-
+    private Boolean directionsCalculated = false;
     private GeoPoint driverLocation;
 
 
@@ -135,21 +136,32 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
             }
         });
 
+
+
         initGoogleMap(savedInstanceState);
     }
 
     private void updateDriverPin() {
-        com.google.android.gms.maps.model.LatLng driveLatLng = new com.google.android.gms.maps.model.LatLng(driverLocation.getLatitude(), driverLocation.getLongitude());
-        if (driverMaker != null) {
-            driverMaker.remove();
+
+        try {
+            if (driverMaker != null) {
+                driverMaker.remove();
+
+            }
+            if (driverLocation != null) {
+                com.google.android.gms.maps.model.LatLng driveLatLng = new com.google.android.gms.maps.model.LatLng(driverLocation.getLatitude(), driverLocation.getLongitude());
+                driverMaker = mMap.addMarker(new MarkerOptions().position(driveLatLng)
+                        .title("Driver Is Here")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_icon))
+                        .anchor(0.5f, 0.5f)
+                        .zIndex(2.0f));
+            }
+            if (decodedPath != null) {
+                setBounds();
+            }
         }
-        driverMaker = mMap.addMarker(new MarkerOptions().position(driveLatLng)
-                .title("Driver Is Here")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_icon))
-                .anchor(0.5f, 0.5f)
-                .zIndex(2.0f));
-        if (decodedPath != null) {
-            setBounds();
+        catch (NullPointerException exception) {
+            Log.i(TAG, "Null Pointer Exception");
         }
     }
 
@@ -162,24 +174,37 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 @Override
                 public void onChanged(Request request) {
                 currentRequest = request;
-                calculateDirections();
+                if (!directionsCalculated && currentRequest != null) {
+                    calculateDirections();
+                    directionsCalculated = true;
+                }
                 if (currentRequest != null) {
                     if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
                         Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
+                        updateDriverLocation();
                         rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
-                        driverLocationViewModel.getDriverLocation(currentRequest).observe(getViewLifecycleOwner(), new Observer<GeoPoint>() {
-                            @Override
-                            public void onChanged(GeoPoint geoPoint) {
-                                driverLocation = geoPoint;
-                                if (geoPoint != null) {
-                                    updateDriverPin();
-                                }
-                            }
-                        });
                     }
                 }
             }
         });
+
+    }
+
+    private void updateDriverLocation() {
+        if (currentRequest != null) {
+            driverLocationViewModel.getDriverLocation(currentRequest).observe(getViewLifecycleOwner(), new Observer<GeoPoint>() {
+                @Override
+                public void onChanged(GeoPoint geoPoint) {
+                    try {
+                        driverLocation = geoPoint;
+                        if (geoPoint != null) {
+                            updateDriverPin();
+                        }
+                    } catch (NullPointerException exception) {
+                    }
+                }
+            });
+        }
     }
 
 
