@@ -1,21 +1,31 @@
 package com.example.suberduberuber.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Models.QRCode;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.UserRepository;
+import com.example.suberduberuber.ViewModels.QRCodeViewModel;
+import com.example.suberduberuber.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.zxing.BarcodeFormat;
@@ -31,13 +41,23 @@ import com.google.zxing.common.BitMatrix;
     to a user id.
  */
 
-public class QRCodeFragment extends Fragment {
+public class QRCodeFragment extends Fragment implements View.OnClickListener {
     private NavController navController;
-    private UserRepository firestoreRepository;
 
     private ImageView qrImageView;
     private Bitmap bitmap;
-    public final static int qrWidth = 500;
+
+    private TextView balanceTV;
+    private Button addFundsBtn;
+    private Button sendFundsBtn;
+    private EditText amountET;
+
+    private AlertDialog dialog;
+    private AlertDialog confirmDialog;
+    private int id;
+
+    private QRCodeViewModel qrCodeViewModel;
+    private double balance;
 
 
     public QRCodeFragment() {
@@ -54,46 +74,79 @@ public class QRCodeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        qrCodeViewModel = ViewModelProviders.of(this).get(QRCodeViewModel.class);
         navController = Navigation.findNavController(view);
-
-        firestoreRepository = new UserRepository();
 
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         qrImageView = view.findViewById(R.id.qrCodeImage);
 
+        balanceTV = view.findViewById(R.id.balanceTextView);
+        addFundsBtn = view.findViewById(R.id.addFundsButton);
+        addFundsBtn.setOnClickListener(this);
+        sendFundsBtn = view.findViewById(R.id.sendPaymentButton);
+        sendFundsBtn.setOnClickListener(this);
+
+        qrCodeViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                displayBalance(user);
+            }
+        });
+
         // generating QR Code
         try {
-            bitmap = generateQRCode(userID);
+            QRCode qrCode = new QRCode(this.getContext(), userID);
+            bitmap = qrCode.genQRCode();
             qrImageView.setImageBitmap(bitmap);
         }
         catch (WriterException e) {
             e.printStackTrace();
         }
+
     }
 
-    public Bitmap generateQRCode(String id) throws WriterException {
-        BitMatrix bitMatrix;
-        try {
-            bitMatrix = new MultiFormatWriter().encode(id, BarcodeFormat.DATA_MATRIX.QR_CODE, qrWidth, qrWidth, null);
-        }
-        catch (IllegalArgumentException e){
-            return null;
-        }
-        int bitMatrixWidth = bitMatrix.getWidth();
-        int bitMatrixHeight = bitMatrix.getHeight();
-        int [] pixels = new int[bitMatrixWidth * bitMatrixHeight];
+    private void displayBalance(User user) {
+        balance = user.getBalance();
+        balanceTV.setText("Balance: ".concat(Double.toString(balance)));
+    }
 
-        for (int y = 0; y < bitMatrixHeight; y++) {
-            int offset = y * bitMatrixWidth;
-
-            for (int x = 0; x < bitMatrixWidth; x++) {
-                pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.colorSecondaryDark): getResources().getColor(R.color.colorPrimaryLight);
+    @Override
+    public void onClick(View v) {
+        dialog = new AlertDialog.Builder(getActivity()).create();
+        amountET = new EditText(getActivity());
+        amountET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        dialog.setView(amountET);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (id == R.id.addFundsButton) {
+                    double amount = Double.parseDouble(amountET.getText().toString().trim());
+                    confirmDialog = new AlertDialog.Builder(getActivity()).create();
+                    confirmDialog.setTitle("This will cost you ".concat(Double.toString(amount / 10)).concat(" toilet paper rolls."));
+                    confirmDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            qrCodeViewModel.setBalance(balance + amount);
+                        }
+                    });
+                    confirmDialog.show();
+                }
             }
+        });
+
+        switch (v.getId()) {
+            case R.id.addFundsButton:
+                dialog.setTitle("Enter amount of QRBucks to add");
+                id = v.getId();
+                dialog.show();
+                break;
+            case R.id.sendPaymentButton:
+                dialog.setTitle("Enter amount of QRBucks to send");
+                id = v.getId();
+                dialog.show();
+                break;
         }
-        Bitmap bp = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
-        bp.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
-        return bp;
+
     }
 }

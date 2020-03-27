@@ -91,6 +91,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         super.onViewCreated(view, savedInstanceState);
 
         mMapView = (MapView) view.findViewById(R.id.ride_request_live_route);
+        rideRequestStatus = view.findViewById(R.id.rideRequestStatus);
 
         navController = findNavController(view);
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
