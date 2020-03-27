@@ -36,6 +36,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -79,6 +80,8 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private static final String TAG = "Auto Complete Log";
     private GeoApiContext mGeoApiContext = null;
     private LatLngBounds latLngBounds;
+    private List<com.google.maps.model.LatLng> decodedPath;
+    private Marker driverMaker;
 
     private GeoPoint driverLocation;
 
@@ -142,8 +145,16 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     }
 
     private void updateDriverPin() {
-        mMap.addMarker(new MarkerOptions().position(new com.google.android.gms.maps.model.LatLng(driverLocation.getLatitude(), driverLocation.getLongitude()))
-                .title("Driver Is Here")).showInfoWindow();
+        com.google.android.gms.maps.model.LatLng driveLatLng = new com.google.android.gms.maps.model.LatLng(driverLocation.getLatitude(), driverLocation.getLongitude());
+        if (driverMaker != null) {
+            driverMaker.remove();
+        }
+        driverMaker = mMap.addMarker(new MarkerOptions().position(driveLatLng)
+                .title("Driver Is Here")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_icon)).anchor(0.5f, 0.5f));
+        if (decodedPath != null) {
+            setBounds();
+        }
     }
 
     public void cancelRideRequest(Request request) {
@@ -192,18 +203,28 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         }
     }
 
-    private List<com.google.android.gms.maps.model.LatLng> setBoundsAndGetRoute(List<com.google.maps.model.LatLng> decodedPath) {
-        List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
+    public void setBounds() {
         LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
         for(com.google.maps.model.LatLng latLng : decodedPath){
             latLngBoundsBuilder.include(new com.google.android.gms.maps.model.LatLng(
                     latLng.lat,
                     latLng.lng));
+        }
+        if (driverLocation != null) {
+            latLngBoundsBuilder.include(new com.google.android.gms.maps.model.LatLng(driverLocation.getLatitude(), driverLocation.getLongitude()));
+        }
+        latLngBounds = latLngBoundsBuilder.build();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
+    }
+
+    private List<com.google.android.gms.maps.model.LatLng> getRoute() {
+        List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
+        for(com.google.maps.model.LatLng latLng : decodedPath){
             newDecodedPath.add(new com.google.android.gms.maps.model.LatLng(
                     latLng.lat,
                     latLng.lng));
         }
-        latLngBounds = latLngBoundsBuilder.build();
+        setBounds();
         return newDecodedPath;
     }
 
@@ -250,8 +271,8 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
-                    List<LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
-                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = setBoundsAndGetRoute(decodedPath);
+                    decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
+                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = getRoute();
 
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
@@ -260,7 +281,6 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
                     mMap.addMarker(new MarkerOptions().position(currentRequest.getPath().getDestination().getLatLng())
                             .title("Destination")).showInfoWindow();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
                 }
             }
         });

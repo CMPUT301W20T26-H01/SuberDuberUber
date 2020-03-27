@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,10 +42,12 @@ import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.RequestRepository;
 import com.example.suberduberuber.Repositories.UserLocationRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
+import com.example.suberduberuber.Services.LocationService;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.model.Dash;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -242,6 +245,7 @@ abstract class DashboardActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         User user = task.getResult().toObject(User.class);
+                        ((UserClient)(getApplicationContext())).setUser(user);
                         userLocation.setUser(user);
                         getDeviceLocation();
                     }
@@ -270,6 +274,7 @@ abstract class DashboardActivity extends AppCompatActivity {
             userLocation.setGeoPoint(userGeoPoint);
             userLocation.setTimeStamp(null);
             saveUserLocation();
+            startLocationService();
         }
         else {
             getLocationPermission();
@@ -289,7 +294,29 @@ abstract class DashboardActivity extends AppCompatActivity {
         }
     }
 
+    private void startLocationService(){
+        if(!isLocationServiceRunning()){
+            Intent serviceIntent = new Intent(this, LocationService.class);
+            //        this.startService(serviceIntent);
 
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+                DashboardActivity.this.startForegroundService(serviceIntent);
+            }else{
+                startService(serviceIntent);
+            }
+        }
+    }
+    private boolean isLocationServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+            if("com.example.suberduberuber.Services.LocationService".equals(service.service.getClassName())) {
+                Log.d(TAG, "isLocationServiceRunning: location service is already running.");
+                return true;
+            }
+        }
+        Log.d(TAG, "isLocationServiceRunning: location service is not running.");
+        return false;
+    }
 
 
 
