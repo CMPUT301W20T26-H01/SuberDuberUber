@@ -28,8 +28,11 @@
         android:label="QRCodeFragment" />
         android:label="DriverNavigationFragment" />
     <action
-        android:id="@+id/action_to_home"
+        android:id="@+id/action_to_driver_req_home"
         app:destination="@id/viewRequestsFragment" />
+    <action
+    android:id="@+id/action_to_profile_page"
+    app:destination="@id/viewProfileFragment" />
     <action
         android:id="@+id/action_to_gen_qr_code"
         app:destination="@id/qrCodeFragment" />

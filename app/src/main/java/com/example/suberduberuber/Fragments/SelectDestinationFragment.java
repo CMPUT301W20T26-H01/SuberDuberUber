@@ -40,10 +40,6 @@ public class SelectDestinationFragment extends MapFullFragment {
     private Request tempRequest;
     private NavController navController;
 
-    private DrawerLayout drawerLayout;
-
-    private AppBarConfiguration appBarConfiguration;
-
     public SelectDestinationFragment() {
         // Required empty public constructor
     }
@@ -86,10 +82,6 @@ public class SelectDestinationFragment extends MapFullFragment {
             }
         });
 
-        drawerLayout = view.findViewById(R.id.drawer_layout);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
-//                .setDrawerLayout(drawerLayout)
-//                .build();
     }
 
     private void saveRequest() {

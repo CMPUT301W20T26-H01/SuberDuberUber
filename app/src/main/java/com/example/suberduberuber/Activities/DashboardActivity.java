@@ -81,7 +81,10 @@ abstract class DashboardActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
         configureNavigationDrawer();
 
-        goToDestHomeOrRidePending();
+        // only rider's page does this
+        if (getNavHostId() == R.id.nav_host_rider) {
+            goToDestHomeOrRidePending();
+        }
     }
 
     abstract int getNavHostId();
@@ -120,8 +123,11 @@ abstract class DashboardActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
 
-                if (itemId == R.id.menu_home) {
+                if (itemId == R.id.menu_home_rider) {
                     goToDestHomeOrRidePending();
+                }
+                else if (itemId == R.id.menu_home_driver) {
+                    navController.navigate(R.id.action_to_driver_req_home);
                 }
                 else if (itemId == R.id.profile) {
                     navController.navigate(R.id.action_to_profile_page);
@@ -169,20 +175,16 @@ abstract class DashboardActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 User user = task.getResult().toObject(User.class);
-                if(user.getDriver()) {
-                    navController.navigate(R.id.action_to_dest_home_page);
-                } else {
-                    requestRepository.getRidersCurrentRequest(user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.getResult().getDocuments().size() > 0) {
-                                navController.navigate(R.id.action_to_ridePending_page);
-                            } else {
-                                navController.navigate(R.id.action_to_dest_home_page);
-                            }
+                requestRepository.getRidersCurrentRequest(user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult().getDocuments().size() > 0) {
+                            navController.navigate(R.id.action_to_ridePending_page);
+                        } else {
+                            navController.navigate(R.id.action_to_dest_home);
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     }
