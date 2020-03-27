@@ -26,4 +26,7 @@
         android:id="@+id/QRCodeFragment"
         android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
         android:label="QRCodeFragment" />
+    <action
+        android:id="@+id/action_to_dest_home_page"
+        app:destination="@id/viewRequestsFragment" />
 </navigation>

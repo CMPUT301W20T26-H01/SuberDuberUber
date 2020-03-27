@@ -63,9 +63,8 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private Request currentRequest;
 
     private Button cancelButton;
+    private Button completeButton;
     private TextView rideRequestStatus;
-
-    private Button submitButton;
 
     private static final int DEFAULT_ZOOM = 150;
     private MapView mMapView;
@@ -97,6 +96,8 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
+        rideRequestStatus = view.findViewById(R.id.rideRequestStatus);
+
         currentUser = authViewModel.getCurrentUser().getValue();
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
@@ -110,6 +111,15 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
             currentRequest = getRideViewModel.getUsersCurrentRide(currentUser).getValue();
             updateRequestInfo();
         }
+
+        completeButton = view.findViewById(R.id.complete_ride_request_button);
+        completeButton.setVisibility(View.GONE);
+        completeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //on ride completion
+            }
+        });
 
         cancelButton = view.findViewById(R.id.cancel_ride_request_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +153,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 calculateDirections();
                 if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
                     Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
+                    completeButton.setVisibility(View.VISIBLE);
                     rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
                 }
             }
