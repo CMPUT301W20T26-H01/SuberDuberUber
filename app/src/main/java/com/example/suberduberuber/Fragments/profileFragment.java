@@ -69,7 +69,7 @@ public class profileFragment extends Fragment {
         usernamePro.setText(user.getUsername());
         emailPro.setText(user.getEmail());
         phoneNumberPro.setText(user.getPhone());
-        ratingPro.setText(String.format("%d", user.getRating()));
+        ratingPro.setText(String.valueOf(user.getRating()));
     }
     private void editUserDetails(){
         User user = profileViewModel.getCurrentUser().getValue();

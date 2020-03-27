@@ -49,12 +49,6 @@
             app:enterAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/qrCodeFragment"
-        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
-        android:label="fragment_qr_code"
-        tools:layout="@layout/fragment_qrcode_page">
-    </fragment>
-    <fragment
         android:id="@+id/scanQRCodeFragment"
         android:name="com.example.suberduberuber.Fragments.ScanQRCodeFragment"
         android:label="fragment_scan_qr_code"
