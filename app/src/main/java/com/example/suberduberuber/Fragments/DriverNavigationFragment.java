@@ -30,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -186,24 +187,35 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
                     List<LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
+                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = setBoundsAndGetRoute(decodedPath);
 
-                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
-
-                    // This loops through all the LatLng coordinates of ONE polyline.
-                    for(com.google.maps.model.LatLng latLng: decodedPath){
-                        newDecodedPath.add(new com.google.android.gms.maps.model.LatLng(
-                                latLng.lat,
-                                latLng.lng
-                        ));
-                    }
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                    mMap.addMarker(new MarkerOptions().position(request.getPath().getStartLocation().getLatLng()).title(request.getPath().getStartLocation().getLocationName()));
-                    mMap.addMarker(new MarkerOptions().position(request.getPath().getDestination().getLatLng()).title(request.getPath().getDestination().getLocationName()));
+                    mMap.addMarker(new MarkerOptions().position(request.getPath().getStartLocation().getLatLng())
+                            .title(request.getPath().getStartLocation().getLocationName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    mMap.addMarker(new MarkerOptions().position(request.getPath().getDestination().getLatLng())
+                            .title(request.getPath().getDestination().getLocationName()));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
                 }
             }
         });
+    }
+
+    private List<com.google.android.gms.maps.model.LatLng> setBoundsAndGetRoute(List<com.google.maps.model.LatLng> decodedPath) {
+        List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
+        LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
+        for(com.google.maps.model.LatLng latLng : decodedPath){
+            latLngBoundsBuilder.include(new com.google.android.gms.maps.model.LatLng(
+                    latLng.lat,
+                    latLng.lng));
+            newDecodedPath.add(new com.google.android.gms.maps.model.LatLng(
+                    latLng.lat,
+                    latLng.lng
+            ));
+        }
+        latLngBounds = latLngBoundsBuilder.build();
+        return newDecodedPath;
     }
 
     @Override
@@ -221,7 +233,6 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setMyLocationEnabled(true);
 
     }
     @Override
