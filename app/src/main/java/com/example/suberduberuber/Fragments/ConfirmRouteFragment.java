@@ -252,7 +252,6 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
     }
     @Override
     public void onPause() {
