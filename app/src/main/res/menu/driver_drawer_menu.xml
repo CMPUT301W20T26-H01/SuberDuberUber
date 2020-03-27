@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item android:id="@+id/menu_home_driver"
+            android:title="Home"
+            android:icon="@drawable/ic_action_home" />
+        <item android:id="@+id/profile"
+            android:title="View Profile"
+            android:icon="@drawable/ic_action_profile" />
+        <item android:id="@+id/genQRCode"
+            android:title="Generate your Wallet"
+            android:icon="@drawable/ic_action_qrcode" />
+        <item android:id="@+id/logout"
+            android:title="Log Out"
+            android:icon="@drawable/ic_stop_black_24dp" />
+    </group>
+</menu>

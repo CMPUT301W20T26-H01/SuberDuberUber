@@ -100,11 +100,11 @@ public class Request {
     }
 
     /**
-     * Returns a String (either initiated, in-progress, or completed)
+     * Returns a String (either PENDING_ACCEPTANCE, IN_PROGRESS, or COMPLETED)
      * @return      The status of the ride request
      */
-    public Status getStatus() {
-        return status;
+    public String getStatus() {
+        return status.toString();
     }
 
     /**

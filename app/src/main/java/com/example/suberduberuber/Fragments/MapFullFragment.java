@@ -54,9 +54,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.DroppedPinPlace;
@@ -121,9 +118,6 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     PlacesClient placesClient;
     LatLng mDefaultLocation = new LatLng(53.2734, -7.77832031);
     int AUTOCOMPLETE_REQUEST_CODE = 1;
-
-
-    protected NavController navController;
 
     public boolean locationPermissionGranted = false;
     public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
@@ -203,7 +197,6 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
     }
 
     private void initGoogleMap(Bundle savedInstanceState) {
