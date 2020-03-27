@@ -20,4 +20,12 @@ public class RiderDashboardActivity extends DashboardActivity {
     int getContentViewId() {
         return R.layout.activity_rider_dashboard;
     }
+    @Override
+    int getDrawerLayoutId() {
+        return R.id.rider_drawer_layout;
+    }
+    @Override
+    int getMenuLayoutId() {
+        return R.menu.rider_drawer_menu;
+    }
 }
