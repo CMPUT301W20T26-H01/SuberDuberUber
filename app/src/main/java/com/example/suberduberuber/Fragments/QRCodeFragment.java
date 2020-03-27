@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Models.QRCode;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.ViewModels.QRCodeViewModel;
@@ -42,11 +43,9 @@ import com.google.zxing.common.BitMatrix;
 
 public class QRCodeFragment extends Fragment implements View.OnClickListener {
     private NavController navController;
-    private UserRepository firestoreRepository;
 
     private ImageView qrImageView;
     private Bitmap bitmap;
-    public final static int qrWidth = 500;
 
     private TextView balanceTV;
     private Button addFundsBtn;
@@ -78,8 +77,6 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener {
         qrCodeViewModel = ViewModelProviders.of(this).get(QRCodeViewModel.class);
         navController = Navigation.findNavController(view);
 
-        firestoreRepository = new UserRepository();
-
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         qrImageView = view.findViewById(R.id.qrCodeImage);
@@ -99,7 +96,8 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener {
 
         // generating QR Code
         try {
-            bitmap = generateQRCode(userID);
+            QRCode qrCode = new QRCode(this.getContext(), userID);
+            bitmap = qrCode.genQRCode();
             qrImageView.setImageBitmap(bitmap);
         }
         catch (WriterException e) {
@@ -111,31 +109,6 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener {
     private void displayBalance(User user) {
         balance = user.getBalance();
         balanceTV.setText("Balance: ".concat(Double.toString(balance)));
-    }
-
-    public Bitmap generateQRCode(String id) throws WriterException {
-        BitMatrix bitMatrix;
-        try {
-            bitMatrix = new MultiFormatWriter().encode(id, BarcodeFormat.DATA_MATRIX.QR_CODE, qrWidth, qrWidth, null);
-        }
-        catch (IllegalArgumentException e){
-            return null;
-        }
-        int bitMatrixWidth = bitMatrix.getWidth();
-        int bitMatrixHeight = bitMatrix.getHeight();
-        int [] pixels = new int[bitMatrixWidth * bitMatrixHeight];
-
-        for (int y = 0; y < bitMatrixHeight; y++) {
-            int offset = y * bitMatrixWidth;
-
-            for (int x = 0; x < bitMatrixWidth; x++) {
-                pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.colorSecondaryDark): getResources().getColor(R.color.colorPrimaryLight);
-            }
-        }
-        Bitmap bp = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
-        bp.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
-        return bp;
     }
 
     @Override
