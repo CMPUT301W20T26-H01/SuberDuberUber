@@ -84,4 +84,9 @@ public class RequestRepository {
                 .whereEqualTo("status", "IN_PROGRESS")
                 .limit(1);
     }
+
+    public Query getRequestByPickupName(String name) {
+        return myDb.collection("requests")
+                .whereEqualTo("path.startLocation.locationName", name);
+    }
 }

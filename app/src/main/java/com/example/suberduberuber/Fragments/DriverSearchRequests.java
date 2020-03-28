@@ -45,6 +45,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
@@ -57,7 +60,7 @@ import com.google.maps.model.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DriverSearchRequests extends Fragment implements OnMapReadyCallback, AvailableRequestListAdapter.RequestCardTouchListener {
+public class DriverSearchRequests extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,  AvailableRequestListAdapter.RequestCardTouchListener {
 
     private static final int DEFAULT_ZOOM = 150;
     private MapView mMapView;
@@ -113,11 +116,33 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
                 adapter.setRequestDataset(requests);
             }
         });
+
+        requestRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                shrinkAllPopups();
+            }
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        viewRequestsViewModel.getRequestByPickupName(marker.getTitle()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(queryDocumentSnapshots != null && queryDocumentSnapshots.getDocuments().size() > 0) {
+                    Request request = queryDocumentSnapshots.getDocuments().get(0).toObject(Request.class);
+                    showRequestInList(request);
+                }
+            }
+        });
+
+        return false;
     }
 
     private void setMapBounds(List<Request> requests) {
@@ -170,6 +195,10 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
             outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
         }
         mMapView.onSaveInstanceState(mapViewBundle);
+    }
+
+    private void showRequestInList(Request request) {
+
     }
 
     private void configureRecyclerView() {
