@@ -2,6 +2,7 @@ package com.example.suberduberuber.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText usernameField;
     private EditText emailField;
+    private EditText phoneField;
     private EditText passwordField;
     private EditText passConf;
 
@@ -68,6 +70,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         usernameField = findViewById(R.id.username_field);
         emailField = findViewById(R.id.email_field);
+        phoneField = findViewById(R.id.phone_field);
+        phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         passwordField = findViewById(R.id.password_field);
         passConf = findViewById(R.id.password_field_confirm);
 
@@ -132,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void attemptRegistration() {
         if (isDriver) {
-            if(emailIsValid() & passwordIsValid() & usernameIsValid() & carIsValid()) {
+            if(emailIsValid() & passwordIsValid() & usernameIsValid() & phoneIsValid() & carIsValid()) {
                 createAccount();
             }
             else {
@@ -140,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
         } else {
-            if (emailIsValid() & passwordIsValid() & usernameIsValid()) {
+            if (emailIsValid() & passwordIsValid() & usernameIsValid() & phoneIsValid()) {
                 createAccount();
             } else {
                 return;
@@ -161,6 +165,22 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         emailField.setError(null);
+        return true;
+    }
+
+    boolean phoneIsValid() {
+        String phone = phoneField.getText().toString().trim().replaceAll("\\D", "");
+
+        if (phone.isEmpty()) {
+            phoneField.setError("Please enter your phone number.");
+            return false;
+        }
+        else if (phone.length() != 10) {
+            phoneField.setError("Invalid phone number. Must be 10 digits.");
+            return false;
+        }
+
+        phoneField.setError(null);
         return true;
     }
 
@@ -259,12 +279,13 @@ public class RegisterActivity extends AppCompatActivity {
         final String email = emailField.getText().toString().trim().toLowerCase();
         String password = passwordField.getText().toString().trim();
         final String username = usernameField.getText().toString().trim();
+        final String phone = phoneField.getText().toString().trim().replaceAll("\\D", "");
 
         myAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    saveUserData(email, username);
+                    saveUserData(email, username, phone);
                     Toast.makeText(RegisterActivity.this, "You're Signed Up", Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -288,23 +309,23 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserData(String email, String username) {
+    private void saveUserData(String email, String username, String phone) {
         User user;
         if (isDriver) {
             Car car = new Car(carMake.getText().toString().trim(), carModel.getText().toString().trim(), carPlate.getText().toString().trim(), carColor.getText().toString().trim(), Integer.parseInt(carYear.getText().toString().trim()));
-            user = new Driver(username, email, car);
+            user = new Driver(username, email, phone, car);
 
         } else {
-            user = new Rider(username, email);
+            user = new Rider(username, email, phone);
         }
 
         registerViewModel.createNewUser(user);
-        redirectToLogin();
+        redirectToMain();
     }
 
-    private void redirectToLogin() {
+    private void redirectToMain() {
 
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }

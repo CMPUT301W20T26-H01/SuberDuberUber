@@ -2,7 +2,6 @@ package com.example.suberduberuber.ViewModels;
 
 import android.app.Application;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -10,15 +9,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.Request;
-import com.example.suberduberuber.Models.Ride;
 import com.example.suberduberuber.Repositories.RequestRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -56,15 +53,18 @@ public class ViewRequestsViewModel extends AndroidViewModel {
         return allRequests;
     }
 
+    public Query getRequestByPickupName(String pickup) {
+        return requestRepository.getRequestByPickupName(pickup);
+    }
+
     public void acceptRequest(Request request) {
         userRepository.getCurrentUser().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Driver driver = documentSnapshot.toObject(Driver.class);
 
-                Ride ride = request.createRide(driver);
-                requestRepository.acceptRequest(request);
-                requestRepository.createRide(ride);
+                request.accept(driver);
+                requestRepository.updateRequest(request);
             }
         });
     }

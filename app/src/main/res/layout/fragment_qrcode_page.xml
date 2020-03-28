@@ -5,19 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.ConfirmRideFragment"
     android:orientation="vertical"
-    android:layout_margin="20dp"
-    android:background="@color/quantum_bluegrey900">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Generate QR Code Wallet"
-        android:id="@+id/qrGen_button"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/btn_round"
-        android:textColor="@color/quantum_white_100">
-    </Button>
+    android:gravity="center">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -26,5 +14,33 @@
         android:id="@+id/qrCodeImage"
         android:layout_marginTop="6dp">
     </ImageView>
+
+    <TextView
+        android:id="@+id/balanceTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/addFundsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/add_funds" />
+
+        <Button
+            android:id="@+id/sendPaymentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/send_funds" />
+
+    </LinearLayout>
 
 </LinearLayout>

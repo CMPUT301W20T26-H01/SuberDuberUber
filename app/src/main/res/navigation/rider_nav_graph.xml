@@ -12,8 +12,10 @@
         tools:layout="@layout/fragment_confirm_ride" >
         <action
             android:id="@+id/action_confirmRideFragment2_to_ridePendingFragment"
-            app:destination="@id/ridePendingFragment" />
+            app:destination="@id/ridePendingFragment"
+            app:enterAnim="@android:anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/rateDriverFragment"
         android:name="com.example.suberduberuber.Fragments.RateDriverFragment"
@@ -21,7 +23,8 @@
         tools:layout="@layout/fragment_rate_driver" >
         <action
             android:id="@+id/action_rateDriverFragment_to_selectDestinationFragment"
-            app:destination="@id/selectDestinationFragment" />
+            app:destination="@id/selectDestinationFragment"
+            app:enterAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/ridePendingFragment"
@@ -31,6 +34,9 @@
         <action
             android:id="@+id/action_ridePendingFragment_to_scanqrcodeFragment"
             app:destination="@id/scanQRCodeFragment" />
+        <action
+            android:id="@+id/action_ridePendingFragment_to_selectDestinationFragment"
+            app:destination="@id/selectDestinationFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectDestinationFragment"
@@ -39,13 +45,8 @@
         tools:layout="@layout/fragment_select_destination" >
         <action
             android:id="@+id/action_selectDestinationFragment_to_selectOriginFragment"
-            app:destination="@id/selectOriginFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/qrCodeFragment"
-        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
-        android:label="fragment_qr_code"
-        tools:layout="@layout/fragment_qrcode_page">
+            app:destination="@id/selectOriginFragment"
+            app:enterAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/scanQRCodeFragment"
@@ -63,7 +64,8 @@
         tools:layout="@layout/fragment_select_origin" >
         <action
             android:id="@+id/action_selectOriginFragment_to_confirmRideFragment2"
-            app:destination="@id/confirmRideFragment2" />
+            app:enterAnim="@android:anim/slide_out_right"
+            app:destination="@id/confrimRouteFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFullFragment2"
@@ -82,6 +84,12 @@
             android:id="@+id/action_viewProfileFragment_to_editInformationFragment"
             app:destination="@id/editInformationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
+        android:label="fragment_qr_code"
+        tools:layout="@layout/fragment_qrcode_page">
+    </fragment>
     <action
         android:id="@+id/action_to_profile_page"
         app:destination="@id/viewProfileFragment" />
@@ -93,11 +101,23 @@
         android:id="@+id/action_to_request_page"
         app:destination="@id/usersRequestsFragment" />
     <action
-        android:id="@+id/action_to_dest_home_page"
+        android:id="@+id/action_to_dest_home"
         app:destination="@id/selectDestinationFragment" />
     <action
-        android:id="@+id/action_to_gen_qr_code"
+        android:id="@+id/action_to_ridePending_page"
+        app:destination="@+id/ridePendingFragment" />
+    <action
+        android:id="@+id/action_to_wallet"
         app:destination="@id/qrCodeFragment" />
+    <fragment
+        android:id="@+id/confrimRouteFragment"
+        android:name="com.example.suberduberuber.Fragments.ConfirmRouteFragment"
+        android:label="fragment_confrim_route"
+        tools:layout="@layout/fragment_confirm_route" >
+        <action
+            android:id="@+id/action_confrimRouteFragment_to_ridePendingFragment2"
+            app:destination="@id/ridePendingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editInformationFragment"
         android:name="com.example.suberduberuber.Fragments.EditInformationFragment"

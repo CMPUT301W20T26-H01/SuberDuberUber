@@ -22,9 +22,27 @@ locations as well as the route between them and estimated fare. This will be upd
 GoogleRoutes API.
  */
 
+import android.content.res.Resources;
+import android.util.Log;
+
+import com.example.suberduberuber.R;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.PendingResult;
+import com.google.maps.model.DirectionsResult;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.List;
+
 public class Path {
 
-    private static final double COST_FACTOR = 0.05;
+
+    private static final String TAG = "Auto Complete Log";
+    private static final double COST_FACTOR_PER_METER = 0.001;
+    private static final double COST_FACTOR_PER_SECOND = 0.005;
+    private static final double BASE_RATE = 5.00;
     private CustomLocation startLocation;
     private CustomLocation destination;
     private double estimatedFare;
@@ -42,19 +60,21 @@ public class Path {
     public Path(CustomLocation startLocation, CustomLocation destination) {
         this.startLocation = startLocation;
         this.destination = destination;
-        this.generateEstimatedFare();
     }
 
     /**
      * Generates Estimated Fare for the Path
      * Uses distance between two locations and a set COST_FACTOR
      */
-    public void generateEstimatedFare() {
-        double distance = 0;
-        if (startLocation != null && destination != null) {
-            distance = startLocation.getDistanceBetween(destination);
-        }
-        this.estimatedFare = distance * COST_FACTOR;
+    public void generateEstimatedFare(double distance, double duration) {
+        double costPerKm = COST_FACTOR_PER_METER * distance;
+        double costPerMin = COST_FACTOR_PER_SECOND * duration;
+        BigDecimal bigDecimal = new BigDecimal(costPerMin + costPerKm + BASE_RATE).setScale(2, RoundingMode.HALF_UP);
+        this.setEstimatedFare(bigDecimal.doubleValue());
+    }
+
+    public void setEstimatedFare(double estimatedFare) {
+        this.estimatedFare = estimatedFare;
     }
 
     /**
@@ -73,7 +93,6 @@ public class Path {
      */
     public void setDestination(CustomLocation destination) {
         this.destination = destination;
-        this.generateEstimatedFare();
     }
 
     /**
@@ -83,7 +102,7 @@ public class Path {
      */
     public void setStartLocation(CustomLocation startLocation) {
         this.startLocation = startLocation;
-        this.generateEstimatedFare();
+
     }
 
     /**
@@ -103,4 +122,5 @@ public class Path {
     public CustomLocation getStartLocation() {
         return startLocation;
     }
+
 }

@@ -13,8 +13,8 @@ public class Rider extends User {
      * @param emailAddress
      *      User's unique email address
      */
-    public Rider(String username, String emailAddress) {
-        super(username, emailAddress, false);
+    public Rider(String username, String emailAddress, String phoneNum) {
+        super(username, emailAddress, phoneNum, false);
         this.rides = new ArrayList<String>();
         this.requests = new ArrayList<Request>();
     }

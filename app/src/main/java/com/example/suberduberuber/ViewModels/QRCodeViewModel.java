@@ -1,7 +1,6 @@
 package com.example.suberduberuber.ViewModels;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,44 +10,31 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.Rider;
-import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.UserRepository;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.example.suberduberuber.Models.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 
-/**
- * This is a ViewModelClass used to expose livedata to the fragments and activities that persists their
- * Life cycle changes. Viewmodels also serve to data security by giving views access ONLY to the database
- * opertaions that are relavent to them. In this case it provides the views with AuthRelated data.
- */
-public class AuthViewModel extends AndroidViewModel {
-
-    private static final String TAG = "AUTH_VIEW_MODEL";
+public class QRCodeViewModel extends AndroidViewModel {
 
     private UserRepository userRepository;
+    private MutableLiveData<User> currentUser = new MutableLiveData<User>();
 
-    private MutableLiveData<User> currentUser = new MutableLiveData<>();
-
-    public AuthViewModel(Application application) {
+    public QRCodeViewModel(Application application) {
         super(application);
         userRepository = new UserRepository();
     }
 
-    // Get the current user and setup listening for live updates
     public LiveData<User> getCurrentUser() {
         userRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if(documentSnapshot != null) {
+                if (documentSnapshot != null) {
                     User user = documentSnapshot.toObject(User.class);
-
-                    if(user.getDriver()) {
+                    if (user.getDriver()) {
                         currentUser.setValue(documentSnapshot.toObject(Driver.class));
                     } else {
                         currentUser.setValue(documentSnapshot.toObject(Rider.class));
@@ -60,7 +46,10 @@ public class AuthViewModel extends AndroidViewModel {
         return currentUser;
     }
 
-    public void setUserDeviceToken(String token) {
-        userRepository.updateDeviceToken(token);
+    public void setBalance(Double balance) {
+        User user = this.currentUser.getValue();
+        user.setBalance(balance);
+        userRepository.updateCurrentUser(user);
     }
+
 }

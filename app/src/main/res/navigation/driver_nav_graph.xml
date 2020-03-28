@@ -3,19 +3,78 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/driver_nav_graph"
-    app:startDestination="@id/viewRequestsFragment">
+    app:startDestination="@id/driverSearchRequests">
 
     <fragment
-        android:id="@+id/viewRequestsFragment"
-        android:name="com.example.suberduberuber.Fragments.ViewRequestsFragment"
-        android:label="fragment_view_requests"
-        tools:layout="@layout/fragment_view_requests" >
+        android:id="@+id/qrCodeDriverFragment"
+        android:name="com.example.suberduberuber.Fragments.DriverQRCodeFragment"
+        android:label="fragment_qr_code"
+        tools:layout="@layout/fragment_qrcode_page">
         <action
-            android:id="@+id/action_viewRequestsFragment_to_driverNavigationFragment"
-            app:destination="@id/driverNavigationFragment" />
+            android:id="@+id/action_driverQRCode_to_rateUser"
+            app:destination="@id/rateUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rateUserFragment"
+        android:name="com.example.suberduberuber.Fragments.RateDriverFragment"
+        android:label="fragment_rate_user">
+    </fragment>
+
+    <fragment
+        android:id="@+id/qrCodeHamburgerFragment"
+        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
+        android:label="fragment_qr_code"
+        tools:layout="@layout/fragment_qrcode_page">
+        <action
+            android:id="@+id/action_qrCodeHamburgerFragment_to_driverSearchRequests"
+            app:destination="@id/driverSearchRequests" />
     </fragment>
     <fragment
         android:id="@+id/driverNavigationFragment"
         android:name="com.example.suberduberuber.Fragments.DriverNavigationFragment"
-        android:label="DriverNavigationFragment" />
+        android:label="DriverNavigationFragment" >
+        <action
+            android:id="@+id/action_driverNavigationFragment_to_QRDriverCodeFragment"
+            app:destination="@id/qrCodeDriverFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/QRCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
+        android:label="QRCodeFragment" />
+    <fragment
+        android:id="@+id/viewProfileFragment"
+        android:name="com.example.suberduberuber.Fragments.profileFragment"
+        android:label="profileFragment" >
+        <action
+            android:id="@+id/action_viewProfileFragment_to_editInformationFragment"
+            app:destination="@id/editInformationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editInformationFragment"
+        android:name="com.example.suberduberuber.Fragments.EditInformationFragment"
+        android:label="EditInformationFragment" >
+        <action
+            android:id="@+id/action_editInformationFragment_to_viewProfileFragment"
+            app:destination="@id/viewProfileFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_to_driver_req_home"
+        app:destination="@id/driverSearchRequests" />
+    <action
+        android:id="@+id/action_to_profile_page"
+        app:destination="@id/viewProfileFragment" />
+    <action
+        android:id="@+id/action_to_driver_navigation_page"
+        app:destination="@+id/driverNavigationFragment" />
+    <action
+        android:id="@+id/action_to_wallet"
+        app:destination="@id/qrCodeHamburgerFragment" />
+    <fragment
+        android:id="@+id/driverSearchRequests"
+        android:name="com.example.suberduberuber.Fragments.DriverSearchRequests"
+        android:label="DriverSearchRequests" >
+        <action
+            android:id="@+id/action_driverSearchRequests_to_driverNavigationFragment"
+            app:destination="@id/driverNavigationFragment" />
+    </fragment>
 </navigation>

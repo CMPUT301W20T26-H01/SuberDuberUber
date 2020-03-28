@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Driver extends User {
     private Car car;
-    private String currentRide; // TODO: Need to change once ride class is created
     private ArrayList<Request> acceptedRequests; // TODO: Need to change once request class is created
     private boolean isAvailable;
 
@@ -18,10 +17,9 @@ public class Driver extends User {
      * @param emailAddress
      *      User's unique email address
      */
-    public Driver(String username, String emailAddress, Car car) {
-        super(username, emailAddress, true);
+    public Driver(String username, String emailAddress, String phoneNum, Car car) {
+        super(username, emailAddress, phoneNum, true);
         this.car = car;
-        this.currentRide = "";
         this.acceptedRequests = new ArrayList<Request>();
         this.isAvailable = true;
     }
@@ -43,24 +41,6 @@ public class Driver extends User {
      */
     public Car getCar() {
         return this.car;
-    }
-
-    /**
-     * Sets the current ride of the driver
-     * @param ride
-     *      Ride to be set as current
-     */
-    public void setCurrentRide(String ride) {
-        this.currentRide = ride;
-    }
-
-    /**
-     * Gets the current ride of the driver
-     * @return
-     *      Current ride of the driver
-     */
-    public String getCurrentRide() {
-        return this.currentRide;
     }
 
     /**

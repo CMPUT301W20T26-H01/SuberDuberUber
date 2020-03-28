@@ -10,7 +10,7 @@ public class User implements Serializable {
     private String email;
     private String username;
     private String phone;
-    private int rating;
+    private double rating;
     private boolean driver;
     private double balance;
     private int numberOfRatings;
@@ -21,15 +21,16 @@ public class User implements Serializable {
 
     /**
      * This generates an user with an unique username, phone number and email address
-     * @param username
+     *@param username
      *      User's identifier
-     * @param emailAddress
+     *@param emailAddress
      *      User's unique email address
-     *
+     * @param isDriver
+     *      If the user is a driver or not
      */
-    public User(String username, String emailAddress, boolean isDriver) {
+    public User(String username, String emailAddress, String phoneNum, boolean isDriver) {
         this.username = username;
-        this.phone = "";
+        this.phone = phoneNum;
         this.email = emailAddress;
         this.rating = 0;
         this.driver = isDriver;
@@ -65,7 +66,7 @@ public class User implements Serializable {
      * @return
      *      User's rating
      */
-    public int getRating() {
+    public double getRating() {
         return this.rating;
     }
 
@@ -119,7 +120,7 @@ public class User implements Serializable {
      * @param rating
      *      New desired rating for user
      */
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
@@ -158,4 +159,5 @@ public class User implements Serializable {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
 }
