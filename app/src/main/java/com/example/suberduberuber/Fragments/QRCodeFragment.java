@@ -123,7 +123,7 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener {
                 if (id == R.id.addFundsButton) {
                     double amount = Double.parseDouble(amountET.getText().toString().trim());
                     confirmDialog = new AlertDialog.Builder(getActivity()).create();
-                    confirmDialog.setTitle("This will cost you ".concat(Double.toString(amount / 10)).concat(" toilet paper rolls."));
+                    confirmDialog.setTitle("This will cost you \uD83E\uDDFB".concat(String.format("%.2f", amount / 10)).concat(" toilet paper rolls."));
                     confirmDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
