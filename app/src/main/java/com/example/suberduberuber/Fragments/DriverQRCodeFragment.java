@@ -42,7 +42,6 @@ public class DriverQRCodeFragment extends Fragment {
     private double updatedBalance;
 
     private int setupFlag;
-
     private AlertDialog dialog;
 
     public DriverQRCodeFragment() {
@@ -99,12 +98,13 @@ public class DriverQRCodeFragment extends Fragment {
                     dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface d, int which) {
-                            navController.navigate(R.id.action_driverQRCode_to_rateUser);
                             dialog.dismiss();
+                            navController.navigate(R.id.action_driverQRCode_to_rateUser);
                         }
                     });
 
                     dialog.show();
+                    setupFlag = -1; // ensures that it only enters this if statement once
                 }
             }
         });
