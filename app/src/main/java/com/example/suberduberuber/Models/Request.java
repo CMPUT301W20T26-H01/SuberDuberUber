@@ -133,4 +133,12 @@ public class Request {
     public void setTime(Date time) {
         this.time = time;
     }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 }

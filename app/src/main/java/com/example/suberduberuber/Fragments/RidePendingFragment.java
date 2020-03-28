@@ -92,6 +92,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         super.onViewCreated(view, savedInstanceState);
 
         mMapView = (MapView) view.findViewById(R.id.ride_request_live_route);
+        rideRequestStatus = view.findViewById(R.id.rideRequestStatus);
 
         navController = findNavController(view);
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
@@ -115,17 +116,11 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
-                    @Override
-                    public void onChanged(Request request) {
-                        currentRequest = request;
-                        if (currentRequest != null) {
-                            updateRequestInfo();
-                            cancelRideRequest(currentRequest);
-                            navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
-                        }
-                    }
-                });
+                if (currentRequest != null) {
+                    updateRequestInfo();
+                    cancelRideRequest(currentRequest);
+                    navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
+                }
             }
         });
         initGoogleMap(savedInstanceState);

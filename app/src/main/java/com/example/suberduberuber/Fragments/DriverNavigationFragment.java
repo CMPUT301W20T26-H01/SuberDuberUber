@@ -35,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -134,7 +135,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                                 }
 
                                 setLatLngBounds(start, finish);
-                                calculateDirections(start, finish);
+                                calculateDirections(start, finish, request);
                             }
                         });
                     }
@@ -155,7 +156,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     }
 
     private void redirectToRecievePaymentFragment() {
-        navController.navigate(R.id.action_driverNavigationFragment_to_QRCodeFragment);
+        navController.navigate(R.id.action_driverNavigationFragment_to_QRDriverCodeFragment);
     }
 
     @Override
@@ -186,7 +187,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         }
     }
 
-    private void calculateDirections(LatLng start, LatLng finish) {
+    private void calculateDirections(LatLng start, LatLng finish, Request request) {
         Log.d(TAG, "calculateDirections: calculating directions.");
 
 
@@ -202,7 +203,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                 Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
                 Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
                 Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
-                addPolylinesToMap(result, start, finish);
+                addPolylinesToMap(result, start, finish, request);
             }
 
             @Override
@@ -213,7 +214,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result, LatLng start, LatLng finish){
+    private void addPolylinesToMap(final DirectionsResult result, LatLng start, LatLng finish, Request request){
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -222,25 +223,54 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
+
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
-                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
+                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = setBoundsAndGetRoute(decodedPath);
 
-                    // This loops through all the LatLng coordinates of ONE polyline.
-                    for(com.google.maps.model.LatLng latLng: decodedPath){
-                        newDecodedPath.add(new com.google.android.gms.maps.model.LatLng(
-                                latLng.lat,
-                                latLng.lng
-                        ));
-                    }
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+
+                    String originTitle;
+                    String destTitle;
+
+                    if(showingPickupRoute) {
+                        originTitle = "";
+                        destTitle = "Pickup";
+                    } else {
+                        originTitle = request.getPath().getStartLocation().getLocationName();
+                        destTitle = request.getPath().getDestination().getLocationName();
+                    }
+
                     mMap.addMarker(new MarkerOptions().position(start));
                     mMap.addMarker(new MarkerOptions().position(finish));
+
+                    mMap.addMarker(new MarkerOptions().position(start)
+                            .title(originTitle)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    mMap.addMarker(new MarkerOptions().position(finish)
+                            .title(destTitle));
+
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
                 }
             }
         });
+    }
+
+    private List<com.google.android.gms.maps.model.LatLng> setBoundsAndGetRoute(List<com.google.maps.model.LatLng> decodedPath) {
+        List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
+        LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
+        for(com.google.maps.model.LatLng latLng : decodedPath){
+            latLngBoundsBuilder.include(new com.google.android.gms.maps.model.LatLng(
+                    latLng.lat,
+                    latLng.lng));
+            newDecodedPath.add(new com.google.android.gms.maps.model.LatLng(
+                    latLng.lat,
+                    latLng.lng
+            ));
+        }
+        latLngBounds = latLngBoundsBuilder.build();
+        return newDecodedPath;
     }
 
     @Override
@@ -258,7 +288,6 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setMyLocationEnabled(true);
 
     }
     @Override
