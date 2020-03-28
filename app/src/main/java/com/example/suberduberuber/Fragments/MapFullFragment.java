@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +59,8 @@ import com.example.suberduberuber.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -65,12 +68,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.gson.internal.$Gson$Preconditions;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -101,6 +107,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     LatLng mDefaultLocation = new LatLng(53.2734, -7.77832031);
     int AUTOCOMPLETE_REQUEST_CODE = 1;
 
+    FusedLocationProviderClient fusedLocationProviderClient;
     public boolean locationPermissionGranted = false;
     public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
@@ -122,6 +129,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
 
         Places.initialize(getActivity().getApplicationContext(), getString(R.string.google_map_api_key));
         placesClient = Places.createClient(getContext());
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,6 +218,28 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
     private void getDeviceLocation() {
 
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Class<?> currentClass = this.getClass();
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    if(task.isSuccessful()) {
+                        Location location = task.getResult();
+                        LatLng deviceLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        if (currentClass == SelectOriginFragment.class) {
+                            try {
+                                currentPlace = new DroppedPinPlace(deviceLatLng, getContext(), "Current Location").getDroppedPinPlace();
+                                updateMarker();
+                            } catch (IOError | IOException exception) { }
+                        }
+                        else {
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(deviceLatLng, DEFAULT_ZOOM));
+                        }
+                    }
+                }
+            });
+
+
+            /*
             SimpleLocation location = new SimpleLocation(getContext());
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
@@ -225,6 +255,7 @@ public class MapFullFragment extends Fragment implements OnMapReadyCallback {
             else {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(deviceLatLng, DEFAULT_ZOOM));
             }
+             */
         } else {
             getLocationPermission();
         }

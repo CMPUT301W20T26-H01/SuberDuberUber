@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.RequestRepository;
-import com.example.suberduberuber.Repositories.RideRepository;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -36,5 +35,4 @@ public class NavigationViewModel extends AndroidViewModel {
 
         return requestLiveData;
     }
-
 }

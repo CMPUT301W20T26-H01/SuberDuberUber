@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -50,6 +51,10 @@ public class ViewRequestsViewModel extends AndroidViewModel {
         });
 
         return allRequests;
+    }
+
+    public Query getRequestByPickupName(String pickup) {
+        return requestRepository.getRequestByPickupName(pickup);
     }
 
     public void acceptRequest(Request request) {
