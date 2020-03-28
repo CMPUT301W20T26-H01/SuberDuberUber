@@ -10,17 +10,17 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        app:contentPadding="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:background="@color/colorPrimary"
             android:id="@+id/constant_details"
             android:layout_width="match_parent"
-            android:layout_height="88dp">
+            android:layout_height="90dp">
 
 
             <TextView

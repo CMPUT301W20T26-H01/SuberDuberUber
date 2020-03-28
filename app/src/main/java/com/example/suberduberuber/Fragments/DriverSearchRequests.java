@@ -66,6 +66,8 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     private static final String TAG = "Auto Complete Log";
     private GeoApiContext mGeoApiContext = null;
 
+    private LatLngBounds mapBounds;
+
     private ViewRequestsViewModel viewRequestsViewModel;
     protected NavController navController;
     private RecyclerView requestRecyclerView;
@@ -97,6 +99,7 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
             @Override
             public void onChanged(List<Request> requests) {
+                setMapBounds(requests);
                 displayRequests(requests);
             }
         });
@@ -117,6 +120,16 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void setMapBounds(List<Request> requests) {
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        for(Request request : requests) {
+            builder.include(request.getPath().getStartLocation().getLatLng());
+        }
+
+        mapBounds = builder.build();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, DEFAULT_ZOOM));
+    }
+
     private void displayRequests(List<Request> requests) {
         for (Request request : requests) {
             displayRequest(request);
@@ -124,7 +137,11 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     }
 
     private void displayRequest(Request request) {
-        mMap.addMarker(new MarkerOptions().position(request.getPath().getStartLocation().getLatLng()));
+        mMap.addMarker(
+                new MarkerOptions()
+                .position(request.getPath().getStartLocation().getLatLng())
+                .title(request.getPath().getStartLocation().getLocationName())
+        );
     }
 
     private void initGoogleMap(Bundle savedInstanceState) {
