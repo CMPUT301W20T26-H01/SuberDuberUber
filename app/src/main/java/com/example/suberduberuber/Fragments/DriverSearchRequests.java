@@ -145,6 +145,21 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         return false;
     }
 
+    private void showRequestInList(Request request) {
+        int position = getPositionInRecyclerView(request);
+        requestRecyclerView.scrollToPosition(position);
+    }
+
+    private int getPositionInRecyclerView(Request request) {
+        List<Request> requests = viewRequestsViewModel.getAllRequests().getValue();
+        for(int i = 0; i < requests.size(); i++) {
+            if(requests.get(i).getRequestID().equals(request.getRequestID())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private void setMapBounds(List<Request> requests) {
         LatLngBounds.Builder builder = LatLngBounds.builder();
         for(Request request : requests) {
@@ -156,6 +171,7 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     }
 
     private void displayRequests(List<Request> requests) {
+        mMap.setOnMarkerClickListener(this);
         for (Request request : requests) {
             displayRequest(request);
         }
@@ -195,10 +211,6 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
             outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
         }
         mMapView.onSaveInstanceState(mapViewBundle);
-    }
-
-    private void showRequestInList(Request request) {
-
     }
 
     private void configureRecyclerView() {
