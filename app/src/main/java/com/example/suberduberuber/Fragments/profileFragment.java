@@ -1,6 +1,7 @@
 package com.example.suberduberuber.Fragments;
 
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,8 +105,8 @@ public class profileFragment extends Fragment {
 
         usernamePro.setText(user.getUsername());
         emailPro.setText(user.getEmail());
-        phoneNumberPro.setText(user.getPhone());
-        ratingPro.setText(String.format("%d", user.getRating()));
+        phoneNumberPro.setText(PhoneNumberUtils.formatNumber(user.getPhone(), "CA"));
+        ratingPro.setText(String.valueOf(user.getRating()));
     }
     private void editUserDetails(){
         //User user = profileViewModel.getCurrentUser().getValue();

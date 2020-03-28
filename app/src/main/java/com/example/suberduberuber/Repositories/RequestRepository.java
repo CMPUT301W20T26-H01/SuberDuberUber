@@ -1,26 +1,21 @@
 package com.example.suberduberuber.Repositories;
 
-import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.suberduberuber.Models.Request;
-import com.example.suberduberuber.Models.Ride;
 import com.example.suberduberuber.Models.User;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Transaction;
+
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This class serves to encapsulate all he interactions with the Request collection in firebase. It keeps
  * The system modular and keeps all the queries in one place, so that if database changes occur it can be
@@ -61,18 +56,38 @@ public class RequestRepository {
     }
 
     public Query getAllRequests() {
-        return myDb.collection("requests");
+        return myDb.collection("requests")
+                .orderBy("time");
     }
 
     public Task<Void> acceptRequest(Request request) {
         return myDb.collection("requests").document(request.getRequestID()).update("status", "claimed");
     }
 
-    public Task<DocumentReference> createRide(Ride ride) {
-        return myDb.collection("rides").add(ride);
-    }
-
     public void cancelRequest(Request request) {
         myDb.collection("requests").document(request.getRequestID()).delete();
+    }
+
+    public void updateRequest(Request request) {
+        myDb.collection("requests").document(request.getRequestID()).set(request);
+    }
+
+    public Query getRidersCurrentRequest(User user) {
+        return myDb.collection("requests")
+                .whereEqualTo("requestingUser.email", user.getEmail())
+                .whereIn("status", Arrays.asList("PENDING_ACCEPTANCE", "IN_PROGRESS"))
+                .limit(1);
+    }
+
+    public Query getDriverCurrentRequest(User user) {
+        return myDb.collection("requests")
+                .whereEqualTo("driver.email", user.getEmail())
+                .whereEqualTo("status", "IN_PROGRESS")
+                .limit(1);
+    }
+
+    public Query getRequestByPickupName(String name) {
+        return myDb.collection("requests")
+                .whereEqualTo("path.startLocation.locationName", name);
     }
 }

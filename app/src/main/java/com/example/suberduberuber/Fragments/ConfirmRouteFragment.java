@@ -1,16 +1,15 @@
 package com.example.suberduberuber.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
 
 import android.os.Handler;
 import android.os.Looper;
@@ -19,20 +18,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
-import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
-import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -42,29 +44,13 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.LatLng;
+import com.google.maps.model.Distance;
+import com.google.maps.model.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static androidx.navigation.Navigation.findNavController;
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class RidePendingFragment extends Fragment implements OnMapReadyCallback {
-
-    private NavController navController;
-    private GetRideViewModel getRideViewModel;
-    private AuthViewModel authViewModel;
-
-    private User currentUser;
-    private Request currentRequest;
-
-    private Button cancelButton;
-    private Button completeButton;
-    private TextView rideRequestStatus;
+public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int DEFAULT_ZOOM = 150;
     private MapView mMapView;
@@ -74,8 +60,24 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private GeoApiContext mGeoApiContext = null;
     private LatLngBounds latLngBounds;
 
+    Button submitButton;
+    TextView textView;
+    TextView pickupTextView;
+    TextView pickupTimeTextView;
+    TextView destinationTextView;
+    EditText bidAmount;
+    ImageButton submitBid;
 
-    public RidePendingFragment() {
+
+    private GetRideViewModel getRideViewModel;
+    private Request tempRequest;
+
+    protected NavController navController;
+
+    private long duration;
+    private long distance;
+
+    public ConfirmRouteFragment() {
         // Required empty public constructor
     }
 
@@ -83,80 +85,85 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ride_pending, container, false);
+        return inflater.inflate(R.layout.fragment_confirm_route, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mMapView = (MapView) view.findViewById(R.id.route_map);
 
-        mMapView = (MapView) view.findViewById(R.id.ride_request_live_route);
-        rideRequestStatus = view.findViewById(R.id.rideRequestStatus);
+        navController = Navigation.findNavController(view);
 
-        navController = findNavController(view);
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
-        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        tempRequest = getRideViewModel.getTempRequest().getValue();
 
-        rideRequestStatus = view.findViewById(R.id.rideRequestStatus);
+        pickupTextView = view.findViewById(R.id.pickupLocation);
+        destinationTextView = view.findViewById(R.id.destination);
+        setTextViews();
 
-        currentUser = authViewModel.getCurrentUser().getValue();
-        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                currentUser = user;
-                updateRequestInfo();
-            }
-        });
+        pickupTimeTextView = view.findViewById(R.id.pickupTime);
+        pickupTimeTextView.setText(tempRequest.getTime().toString());
 
-        if (currentUser != null) {
-            currentRequest = getRideViewModel.getUsersCurrentRide(currentUser).getValue();
-            updateRequestInfo();
-        }
-
-        completeButton = view.findViewById(R.id.complete_ride_request_button);
-        completeButton.setVisibility(View.GONE);
-        completeButton.setOnClickListener(new View.OnClickListener() {
+        bidAmount = view.findViewById(R.id.bid_amount);
+        submitBid = view.findViewById(R.id.confirm_bid_button);
+        submitBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //on ride completion
-            }
-        });
-
-        cancelButton = view.findViewById(R.id.cancel_ride_request_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentRequest != null) {
-                    updateRequestInfo();
-                    cancelRideRequest(currentRequest);
-                    navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
+                try {
+                    double bid = Double.valueOf(bidAmount.getText().toString());
+                    if (bid >= tempRequest.getPath().getEstimatedFare()) {
+                        tempRequest.setPrice(bid);
+                        Toast.makeText(getContext(), "Bid Updated", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Bid is less than recommended amount", Toast.LENGTH_LONG).show();
+                    }
                 }
+                catch (Exception exception) {
+                    Toast.makeText(getContext(), "Invalid Bid", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        submitButton = view.findViewById(R.id.submit_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Submit ride to database
+                saveRequest();
+                getRideViewModel.commitTempRequest();
+                navController.navigate(R.id.action_confrimRouteFragment_to_ridePendingFragment2);
             }
         });
         initGoogleMap(savedInstanceState);
     }
 
-    public void cancelRideRequest(Request request) {
-        getRideViewModel.cancelRequest(request);
+    private void setTextViews() {
+        if (tempRequest.getPath().getStartLocation().hasUniqueName) {
+            pickupTextView.setText(tempRequest.getPath().getStartLocation().getLocationName());
+        }
+        else {
+            pickupTextView.setText(tempRequest.getPath().getStartLocation().getAddress());
+        }
+
+        if (tempRequest.getPath().getDestination().hasUniqueName) {
+            destinationTextView.setText(tempRequest.getPath().getDestination().getLocationName());
+        }
+        else {
+            destinationTextView.setText(tempRequest.getPath().getDestination().getAddress());
+        }
     }
 
-    public void updateRequestInfo() {
-        getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
-            @Override
-            public void onChanged(Request request) {
-                currentRequest = request;
-                calculateDirections();
-                if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
-                    Toast.makeText(getContext(), request.getDriver().getUsername() + " accepted your ride!", Toast.LENGTH_SHORT).show();
-                    completeButton.setVisibility(View.VISIBLE);
-                    rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
-                }
-            }
-        });
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void saveRequest() {
+        getRideViewModel.saveTempRequest(tempRequest);
+    }
 
-    // BEGINS MAPS CODE
     private void initGoogleMap(Bundle savedInstanceState) {
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
@@ -165,42 +172,29 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         mMapView.onCreate(mapViewBundle);
         mMapView.getMapAsync(this);
 
+
         if (mGeoApiContext == null) {
             mGeoApiContext = new GeoApiContext.Builder()
                     .apiKey(getString(R.string.google_map_api_key))
                     .build();
         }
-    }
-
-    private List<com.google.android.gms.maps.model.LatLng> setBoundsAndGetRoute(List<com.google.maps.model.LatLng> decodedPath) {
-        List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
-        LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
-        for(com.google.maps.model.LatLng latLng : decodedPath){
-            latLngBoundsBuilder.include(new com.google.android.gms.maps.model.LatLng(
-                    latLng.lat,
-                    latLng.lng));
-            newDecodedPath.add(new com.google.android.gms.maps.model.LatLng(
-                    latLng.lat,
-                    latLng.lng));
-        }
-        latLngBounds = latLngBoundsBuilder.build();
-        return newDecodedPath;
+        calculateDirections();
     }
 
     private void calculateDirections() {
         Log.d(TAG, "calculateDirections: calculating directions.");
 
         com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
-                currentRequest.getPath().getDestination().getLatLng().latitude,
-                currentRequest.getPath().getDestination().getLatLng().longitude
+                tempRequest.getPath().getDestination().getLatLng().latitude,
+                tempRequest.getPath().getDestination().getLatLng().longitude
         );
         DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
 
         directions.alternatives(false);
         directions.origin(
                 new com.google.maps.model.LatLng(
-                        currentRequest.getPath().getStartLocation().getLatLng().latitude,
-                        currentRequest.getPath().getStartLocation().getLatLng().longitude
+                        tempRequest.getPath().getStartLocation().getLatLng().latitude,
+                        tempRequest.getPath().getStartLocation().getLatLng().longitude
                 )
         );
         Log.d(TAG, "calculateDirections: destination: " + destination.toString());
@@ -222,6 +216,36 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         });
     }
 
+    public void setRouteValues(DirectionsRoute route) {
+        distance = route.legs[0].distance.inMeters;
+        duration = route.legs[0].duration.inSeconds;
+        tempRequest.getPath().generateEstimatedFare(distance, duration);
+        try {
+            tempRequest.setPrice(tempRequest.getPath().getEstimatedFare());
+            bidAmount.setText(String.valueOf(tempRequest.getPrice()));
+        }
+        catch (Exception exception) {
+            Toast.makeText(getContext(), "Estimated Bid Error", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private List<LatLng> setBoundsAndGetRoute(List<com.google.maps.model.LatLng> decodedPath) {
+        List<LatLng> newDecodedPath = new ArrayList<>();
+        LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
+        for(com.google.maps.model.LatLng latLng : decodedPath){
+            latLngBoundsBuilder.include(new LatLng(
+                    latLng.lat,
+                    latLng.lng));
+            newDecodedPath.add(new LatLng(
+                    latLng.lat,
+                    latLng.lng
+            ));
+        }
+        latLngBounds = latLngBoundsBuilder.build();
+        return newDecodedPath;
+    }
+
     private void addPolylinesToMap(final DirectionsResult result){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -230,16 +254,17 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
-                    List<LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
-                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = setBoundsAndGetRoute(decodedPath);
+                    List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
+                    List<LatLng> newDecodedPath = setBoundsAndGetRoute(decodedPath);
+                    setRouteValues(route);
 
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                    mMap.addMarker(new MarkerOptions().position(currentRequest.getPath().getStartLocation().getLatLng())
+                    mMap.addMarker(new MarkerOptions().position(tempRequest.getPath().getStartLocation().getLatLng())
                             .title("Start")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
-                    mMap.addMarker(new MarkerOptions().position(currentRequest.getPath().getDestination().getLatLng())
-                            .title("Destination")).showInfoWindow();
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    mMap.addMarker(new MarkerOptions().position(tempRequest.getPath().getDestination().getLatLng())
+                            .title("Destination"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
                 }
             }
@@ -296,5 +321,4 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         super.onStop();
         mMapView.onStop();
     }
-
 }

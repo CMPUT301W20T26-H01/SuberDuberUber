@@ -45,4 +45,10 @@ public class UserRepository {
         return myDb.collection("users")
                 .document(uid);
     }
+
+    public Task<Void> updateDeviceToken(String token) {
+        return myDb.collection("users")
+                .document(myAuth.getCurrentUser().getUid())
+                .update("deviceToken", token);
+    }
 }

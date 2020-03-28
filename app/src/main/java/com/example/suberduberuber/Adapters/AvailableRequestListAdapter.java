@@ -1,9 +1,11 @@
 package com.example.suberduberuber.Adapters;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,11 +23,11 @@ import java.util.List;
  * This is a custom adapter that is used to bind a list of data to the recycler view elements, and \
  * enables live updates of the data they contain.
  */
-public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.RequestViewHolder> {
+public class AvailableRequestListAdapter extends RecyclerView.Adapter<AvailableRequestListAdapter.RequestViewHolder> {
 
     private RequestCardTouchListener cardTouchListener;
 
-    public RequestListAdapter(RequestCardTouchListener listener) {
+    public AvailableRequestListAdapter(RequestCardTouchListener listener) {
         this.cardTouchListener = listener;
     }
 
@@ -104,7 +106,6 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
         private void togglePopupState() {
             if(popup.getVisibility() == View.GONE) {
                 popup.setVisibility(View.VISIBLE);
-                view.setBackgroundColor(Color.GREEN);
             }
             else {
                 popup.setVisibility(View.GONE);

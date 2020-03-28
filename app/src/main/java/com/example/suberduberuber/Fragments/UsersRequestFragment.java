@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.suberduberuber.Adapters.RequestListAdapter;
+import com.example.suberduberuber.Adapters.AvailableRequestListAdapter;
 import com.example.suberduberuber.Adapters.UsersRequestsAdapter;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;

@@ -64,7 +64,7 @@ public class ConfirmRideFragment extends Fragment {
                 //Submit ride to database
                 saveRequest();
                 getRideViewModel.commitTempRequest();
-                navController.navigate(R.id.action_confirmRideFragment2_to_ridePendingFragment);
+                //navController.navigate(R.id.action_confirmRideFragment2_to_ridePendingFragment);
             }
         });
     }
