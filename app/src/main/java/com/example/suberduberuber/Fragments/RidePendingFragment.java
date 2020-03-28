@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -22,10 +23,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.suberduberuber.Clients.UserClient;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
+import com.example.suberduberuber.Models.UserLocation;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
+import com.example.suberduberuber.ViewModels.DriverLocationViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,9 +37,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
@@ -58,6 +64,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private NavController navController;
     private GetRideViewModel getRideViewModel;
     private AuthViewModel authViewModel;
+    private DriverLocationViewModel driverLocationViewModel;
 
     private User currentUser;
     private Request currentRequest;
@@ -73,6 +80,10 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private static final String TAG = "Auto Complete Log";
     private GeoApiContext mGeoApiContext = null;
     private LatLngBounds latLngBounds;
+    private List<com.google.maps.model.LatLng> decodedPath;
+    private Marker driverMaker;
+    private Boolean directionsCalculated = false;
+    private GeoPoint driverLocation;
 
 
     public RidePendingFragment() {
@@ -96,17 +107,9 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         navController = findNavController(view);
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        driverLocationViewModel = new ViewModelProvider(requireActivity()).get(DriverLocationViewModel.class);
 
-        rideRequestStatus = view.findViewById(R.id.rideRequestStatus);
-
-        currentUser = authViewModel.getCurrentUser().getValue();
-        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                currentUser = user;
-                updateRequestInfo();
-            }
-        });
+        currentUser = ((UserClient)(getActivity().getApplicationContext())).getUser();
 
         if (currentUser != null) {
             currentRequest = getRideViewModel.getUsersCurrentRide(currentUser).getValue();
@@ -133,7 +136,32 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 }
             }
         });
+
         initGoogleMap(savedInstanceState);
+    }
+
+    private void updateDriverPin() {
+
+        try {
+            if (driverMaker != null) {
+                driverMaker.remove();
+
+            }
+            if (driverLocation != null) {
+                com.google.android.gms.maps.model.LatLng driveLatLng = new com.google.android.gms.maps.model.LatLng(driverLocation.getLatitude(), driverLocation.getLongitude());
+                driverMaker = mMap.addMarker(new MarkerOptions().position(driveLatLng)
+                        .title("Driver Is Here")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_icon))
+                        .anchor(0.5f, 0.5f)
+                        .zIndex(2.0f));
+            }
+            if (decodedPath != null) {
+                setBounds();
+            }
+        }
+        catch (NullPointerException exception) {
+            Log.i(TAG, "Null Pointer Exception");
+        }
     }
 
     public void cancelRideRequest(Request request) {
@@ -142,17 +170,40 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
     public void updateRequestInfo() {
         getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
-            @Override
-            public void onChanged(Request request) {
+                @Override
+                public void onChanged(Request request) {
                 currentRequest = request;
-                calculateDirections();
-                if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
-                    Toast.makeText(getContext(), request.getDriver().getUsername() + " accepted your ride!", Toast.LENGTH_SHORT).show();
-                    completeButton.setVisibility(View.VISIBLE);
-                    rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
+                if (!directionsCalculated && currentRequest != null) {
+                    calculateDirections();
+                    directionsCalculated = true;
+                }
+                if (currentRequest != null) {
+                    if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+                        Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
+                        updateDriverLocation();
+                        rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
+                    }
                 }
             }
         });
+
+    }
+
+    private void updateDriverLocation() {
+        if (currentRequest != null) {
+            driverLocationViewModel.getDriverLocation(currentRequest).observe(getViewLifecycleOwner(), new Observer<GeoPoint>() {
+                @Override
+                public void onChanged(GeoPoint geoPoint) {
+                    try {
+                        driverLocation = geoPoint;
+                        if (geoPoint != null) {
+                            updateDriverPin();
+                        }
+                    } catch (NullPointerException exception) {
+                    }
+                }
+            });
+        }
     }
 
 
@@ -172,18 +223,28 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         }
     }
 
-    private List<com.google.android.gms.maps.model.LatLng> setBoundsAndGetRoute(List<com.google.maps.model.LatLng> decodedPath) {
-        List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
+    public void setBounds() {
         LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
         for(com.google.maps.model.LatLng latLng : decodedPath){
             latLngBoundsBuilder.include(new com.google.android.gms.maps.model.LatLng(
                     latLng.lat,
                     latLng.lng));
+        }
+        if (driverLocation != null) {
+            latLngBoundsBuilder.include(new com.google.android.gms.maps.model.LatLng(driverLocation.getLatitude(), driverLocation.getLongitude()));
+        }
+        latLngBounds = latLngBoundsBuilder.build();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
+    }
+
+    private List<com.google.android.gms.maps.model.LatLng> getRoute() {
+        List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
+        for(com.google.maps.model.LatLng latLng : decodedPath){
             newDecodedPath.add(new com.google.android.gms.maps.model.LatLng(
                     latLng.lat,
                     latLng.lng));
         }
-        latLngBounds = latLngBoundsBuilder.build();
+        setBounds();
         return newDecodedPath;
     }
 
@@ -230,8 +291,8 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
-                    List<LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
-                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = setBoundsAndGetRoute(decodedPath);
+                    decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
+                    List<com.google.android.gms.maps.model.LatLng> newDecodedPath = getRoute();
 
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
@@ -239,8 +300,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                             .title("Start")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
                     mMap.addMarker(new MarkerOptions().position(currentRequest.getPath().getDestination().getLatLng())
-                            .title("Destination")).showInfoWindow();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
+                            .title("Destination"));
                 }
             }
         });

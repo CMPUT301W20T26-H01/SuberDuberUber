@@ -36,12 +36,18 @@ public class DroppedPinPlace {
         List<Address> addresses;
         geocoder = new Geocoder(context, Locale.CANADA);
         addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-        address = addresses.get(0).getAddressLine(0);
-        if (!address.contains(addresses.get(0).getFeatureName())) {
-            name = addresses.get(0).getFeatureName();
+        if (addresses.size() >0) {
+            address = addresses.get(0).getAddressLine(0);
+            if (!address.contains(addresses.get(0).getFeatureName())) {
+                name = addresses.get(0).getFeatureName();
+            }
+            if (newName != null) {
+                name = newName;
+            }
         }
-        if (newName != null) {
-            name = newName;
+        else {
+            name = "ERROR - NO LOCATION DATA";
+            address = "ERROR - NO LOCATION DATA";
         }
         createPlace(latLng, address, name);
     }
