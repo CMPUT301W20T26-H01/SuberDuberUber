@@ -7,10 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 
 import android.os.Handler;
@@ -21,12 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.suberduberuber.Clients.UserClient;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
-import com.example.suberduberuber.Models.UserLocation;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.DriverLocationViewModel;
@@ -48,7 +44,6 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +62,6 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private DriverLocationViewModel driverLocationViewModel;
 
     private User currentUser;
-    private Request currentRequest;
 
     private Button cancelButton;
     private Button completeButton;
@@ -111,11 +105,6 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
         currentUser = ((UserClient)(getActivity().getApplicationContext())).getUser();
 
-        if (currentUser != null) {
-            currentRequest = getRideViewModel.getUsersCurrentRide(currentUser).getValue();
-            updateRequestInfo();
-        }
-
         completeButton = view.findViewById(R.id.complete_ride_request_button);
         completeButton.setVisibility(View.GONE);
         completeButton.setOnClickListener(new View.OnClickListener() {
@@ -129,10 +118,16 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentRequest != null) {
-                    updateRequestInfo();
-                    cancelRideRequest(currentRequest);
-                    navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
+                getRideViewModel.cancelCurrentRequest(currentUser);
+                navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
+            }
+        });
+
+        getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
+            @Override
+            public void onChanged(Request request) {
+                if(request != null) {
+                    updateRequestInfo(request);
                 }
             }
         });
@@ -168,30 +163,18 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         getRideViewModel.cancelRequest(request);
     }
 
-    public void updateRequestInfo() {
-        getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
-                @Override
-                public void onChanged(Request request) {
-                currentRequest = request;
-                if (!directionsCalculated && currentRequest != null) {
-                    calculateDirections();
-                    directionsCalculated = true;
-                }
-                if (currentRequest != null) {
-                    if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
-                        Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
-                        updateDriverLocation();
-                        rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
-                    }
-                }
-            }
-        });
+    public void updateRequestInfo(Request request) {
 
+        if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+            updateDriverLocation(request);
+            rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
+        }
+
+        calculateDirections(request);
     }
 
-    private void updateDriverLocation() {
-        if (currentRequest != null) {
-            driverLocationViewModel.getDriverLocation(currentRequest).observe(getViewLifecycleOwner(), new Observer<GeoPoint>() {
+    private void updateDriverLocation(Request request) {
+            driverLocationViewModel.getDriverLocation(request).observe(getViewLifecycleOwner(), new Observer<GeoPoint>() {
                 @Override
                 public void onChanged(GeoPoint geoPoint) {
                     try {
@@ -203,7 +186,6 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                     }
                 }
             });
-        }
     }
 
 
@@ -244,24 +226,25 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                     latLng.lat,
                     latLng.lng));
         }
+
         setBounds();
         return newDecodedPath;
     }
 
-    private void calculateDirections() {
+    private void calculateDirections(Request request) {
         Log.d(TAG, "calculateDirections: calculating directions.");
 
         com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
-                currentRequest.getPath().getDestination().getLatLng().latitude,
-                currentRequest.getPath().getDestination().getLatLng().longitude
+                request.getPath().getDestination().getLatLng().latitude,
+                request.getPath().getDestination().getLatLng().longitude
         );
         DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
 
         directions.alternatives(false);
         directions.origin(
                 new com.google.maps.model.LatLng(
-                        currentRequest.getPath().getStartLocation().getLatLng().latitude,
-                        currentRequest.getPath().getStartLocation().getLatLng().longitude
+                        request.getPath().getStartLocation().getLatLng().latitude,
+                        request.getPath().getStartLocation().getLatLng().longitude
                 )
         );
         Log.d(TAG, "calculateDirections: destination: " + destination.toString());
@@ -272,18 +255,18 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
                 Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
                 Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
-                addPolylinesToMap(result);
+
+                drawPath(result, request);
             }
 
             @Override
             public void onFailure(Throwable e) {
                 Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage());
-
             }
         });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result){
+    private void drawPath(final DirectionsResult result, Request request){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -293,17 +276,21 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
                     decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
                     List<com.google.android.gms.maps.model.LatLng> newDecodedPath = getRoute();
-
+                    mMap.clear();
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                    mMap.addMarker(new MarkerOptions().position(currentRequest.getPath().getStartLocation().getLatLng())
-                            .title("Start")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
-                    mMap.addMarker(new MarkerOptions().position(currentRequest.getPath().getDestination().getLatLng())
-                            .title("Destination"));
+                    addMarkersToMap(request);
                 }
             }
         });
+    }
+
+    private void addMarkersToMap(Request request) {
+        mMap.addMarker(new MarkerOptions().position(request.getPath().getStartLocation().getLatLng())
+                .title("Start")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
+        mMap.addMarker(new MarkerOptions().position(request.getPath().getDestination().getLatLng())
+                .title("Destination"));
     }
 
     @Override

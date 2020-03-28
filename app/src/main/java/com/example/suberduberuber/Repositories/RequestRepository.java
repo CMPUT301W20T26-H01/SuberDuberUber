@@ -51,6 +51,7 @@ public class RequestRepository {
     public Task<QuerySnapshot> getUsersRequests(User currentUser) {
         return myDb.collection("requests")
                 .whereEqualTo("requestingUser.email", currentUser.getEmail())
+                .whereEqualTo("status", "")
                 .limit(10)
                 .get();
     }
