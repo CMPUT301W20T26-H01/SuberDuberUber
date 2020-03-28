@@ -1,6 +1,8 @@
 package com.example.suberduberuber.Fragments;
 
 import android.content.Intent;
+import android.icu.util.ULocale;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,21 +28,24 @@ import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.NavigationViewModel;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +62,9 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     private static final String TAG = "Auto Complete Log";
     private GeoApiContext mGeoApiContext = null;
     private LatLngBounds latLngBounds;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
+    private Boolean showingPickupRoute = Boolean.TRUE;
 
     private NavigationViewModel navigationViewModel;
     private AuthViewModel authViewModel;
@@ -72,6 +80,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         return inflater.inflate(R.layout.fragment_driver_navigation, container, false);
     }
 
@@ -87,27 +96,62 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         navigationViewModel= new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
+        showPickupRoute();
+
+        doneRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(showingPickupRoute) {
+                    showRideRoute();
+                } else {
+                    redirectToRecievePaymentFragment();
+                }
+            }
+        });
+
+        initGoogleMap(savedInstanceState);
+    }
+
+    private void showRoute() {
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 navigationViewModel.getCurrentRequest(user).observe(getViewLifecycleOwner(), new Observer<Request>() {
                     @Override
                     public void onChanged(Request request) {
-                        setLatLngBounds(request);
-                        calculateDirections(request);
+                        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                LatLng start;
+                                LatLng finish;
+
+                                if(showingPickupRoute) {
+                                    start = new LatLng(location.getLatitude(), location.getLongitude());
+                                    finish = request.getPath().getStartLocation().getLatLng();
+                                } else {
+                                    start = request.getPath().getStartLocation().getLatLng();
+                                    finish = request.getPath().getDestination().getLatLng();
+                                }
+
+                                setLatLngBounds(start, finish);
+                                calculateDirections(start, finish);
+                            }
+                        });
                     }
                 });
             }
         });
+    }
 
-        doneRideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                redirectToRecievePaymentFragment();
-            }
-        });
+    private void showPickupRoute() {
+        showingPickupRoute = Boolean.TRUE;
+        showRoute();
+    }
 
-        initGoogleMap(savedInstanceState);
+    private void showRideRoute() {
+        mMap.clear();
+        showingPickupRoute = Boolean.FALSE;
+        showRoute();
     }
 
     private void redirectToRecievePaymentFragment() {
@@ -119,10 +163,10 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void setLatLngBounds(Request request) {
+    public void setLatLngBounds(LatLng start, LatLng finish) {
         LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
-        latLngBoundsBuilder.include(request.getPath().getDestination().getLatLng());
-        latLngBoundsBuilder.include(request.getPath().getStartLocation().getLatLng());
+        latLngBoundsBuilder.include(start);
+        latLngBoundsBuilder.include(finish);
         latLngBounds = latLngBoundsBuilder.build();
     }
 
@@ -142,31 +186,23 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         }
     }
 
-    private void calculateDirections(Request request) {
+    private void calculateDirections(LatLng start, LatLng finish) {
         Log.d(TAG, "calculateDirections: calculating directions.");
 
-        com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
-                request.getPath().getDestination().getLatLng().latitude,
-                request.getPath().getDestination().getLatLng().longitude
-        );
+
         DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
 
+        directions.origin(new com.google.maps.model.LatLng(start.latitude, start.longitude));
+
         directions.alternatives(false);
-        directions.origin(
-                new com.google.maps.model.LatLng(
-                        request.getPath().getStartLocation().getLatLng().latitude,
-                        request.getPath().getStartLocation().getLatLng().longitude
-                )
-        );
-        Log.d(TAG, "calculateDirections: destination: " + destination.toString());
-        directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
+        directions.destination(new com.google.maps.model.LatLng(finish.latitude, finish.longitude)).setCallback(new PendingResult.Callback<DirectionsResult>() {
             @Override
             public void onResult(DirectionsResult result) {
                 Log.d(TAG, "calculateDirections: routes: " + result.routes[0].toString());
                 Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
                 Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
                 Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
-                addPolylinesToMap(result, request);
+                addPolylinesToMap(result, start, finish);
             }
 
             @Override
@@ -177,7 +213,8 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result, Request request){
+    private void addPolylinesToMap(final DirectionsResult result, LatLng start, LatLng finish){
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -185,7 +222,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
-                    List<LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
+                    List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<com.google.android.gms.maps.model.LatLng> newDecodedPath = new ArrayList<>();
 
@@ -198,8 +235,8 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                     }
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                    mMap.addMarker(new MarkerOptions().position(request.getPath().getStartLocation().getLatLng()).title(request.getPath().getStartLocation().getLocationName()));
-                    mMap.addMarker(new MarkerOptions().position(request.getPath().getDestination().getLatLng()).title(request.getPath().getDestination().getLocationName()));
+                    mMap.addMarker(new MarkerOptions().position(start));
+                    mMap.addMarker(new MarkerOptions().position(finish));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
                 }
             }

@@ -36,5 +36,4 @@ public class NavigationViewModel extends AndroidViewModel {
 
         return requestLiveData;
     }
-
 }
