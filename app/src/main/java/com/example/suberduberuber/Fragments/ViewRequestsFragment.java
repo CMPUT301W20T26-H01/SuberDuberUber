@@ -92,6 +92,6 @@ public class ViewRequestsFragment extends Fragment implements AvailableRequestLi
     @Override
     public void onRequestAccept(int position) {
         viewRequestsViewModel.acceptRequest(adapter.getRequestAtPosition(position));
-        navController.navigate(R.id.action_viewRequestsFragment_to_driverNavigationFragment);
+        navController.navigate(R.id.action_driverSearchRequests_to_driverNavigationFragment);
     }
 }
