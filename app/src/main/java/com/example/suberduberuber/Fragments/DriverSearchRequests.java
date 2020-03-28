@@ -165,15 +165,19 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         for(Request request : requests) {
             builder.include(request.getPath().getStartLocation().getLatLng());
         }
-
         mapBounds = builder.build();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, DEFAULT_ZOOM));
+        if (mMap != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, DEFAULT_ZOOM));
+        }
+
     }
 
     private void displayRequests(List<Request> requests) {
-        mMap.setOnMarkerClickListener(this);
-        for (Request request : requests) {
-            displayRequest(request);
+        if (mMap != null) {
+            mMap.setOnMarkerClickListener(this);
+            for (Request request : requests) {
+                displayRequest(request);
+            }
         }
     }
 
