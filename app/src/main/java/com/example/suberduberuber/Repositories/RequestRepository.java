@@ -56,7 +56,8 @@ public class RequestRepository {
     }
 
     public Query getAllRequests() {
-        return myDb.collection("requests");
+        return myDb.collection("requests")
+                .orderBy("time");
     }
 
     public Task<Void> acceptRequest(Request request) {
