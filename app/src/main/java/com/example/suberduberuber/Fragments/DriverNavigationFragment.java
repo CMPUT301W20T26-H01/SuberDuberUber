@@ -25,6 +25,7 @@ import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
+import com.example.suberduberuber.ViewModels.DriverPaidRateViewModel;
 import com.example.suberduberuber.ViewModels.NavigationViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,6 +61,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
     private NavigationViewModel navigationViewModel;
     private AuthViewModel authViewModel;
+    private DriverPaidRateViewModel driverPaidRateViewModel;
 
     protected NavController navController;
     private ImageButton doneRideButton;
@@ -86,6 +88,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
         navigationViewModel= new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        driverPaidRateViewModel = new ViewModelProvider(requireActivity()).get(DriverPaidRateViewModel.class);
 
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
@@ -95,6 +98,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                     public void onChanged(Request request) {
                         setLatLngBounds(request);
                         calculateDirections(request);
+                        driverPaidRateViewModel.setRider(request.getRequestingUser());
                     }
                 });
             }
