@@ -44,6 +44,10 @@
             app:destination="@id/qrCodeDriverFragment" />
     </fragment>
     <fragment
+        android:id="@+id/QRCodeFragment"
+        android:name="com.example.suberduberuber.Fragments.QRCodeFragment"
+        android:label="QRCodeFragment" />
+    <fragment
         android:id="@+id/viewProfileFragment"
         android:name="com.example.suberduberuber.Fragments.profileFragment"
         android:label="profileFragment" >
@@ -63,8 +67,11 @@
         android:id="@+id/action_to_driver_req_home"
         app:destination="@id/viewRequestsFragment" />
     <action
-    android:id="@+id/action_to_profile_page"
-    app:destination="@id/viewProfileFragment" />
+        android:id="@+id/action_to_profile_page"
+        app:destination="@id/viewProfileFragment" />
+    <action
+        android:id="@+id/action_to_driver_navigation_page"
+        app:destination="@+id/driverNavigationFragment" />
     <action
         android:id="@+id/action_to_wallet"
         app:destination="@id/qrCodeHamburgerFragment" />
