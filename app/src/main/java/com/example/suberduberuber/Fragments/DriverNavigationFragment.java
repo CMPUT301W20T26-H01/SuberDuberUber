@@ -242,9 +242,6 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                         destTitle = request.getPath().getDestination().getLocationName();
                     }
 
-                    mMap.addMarker(new MarkerOptions().position(start));
-                    mMap.addMarker(new MarkerOptions().position(finish));
-
                     mMap.addMarker(new MarkerOptions().position(start)
                             .title(originTitle)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
