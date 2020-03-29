@@ -1,5 +1,6 @@
 package com.example.suberduberuber.Fragments;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -84,6 +85,8 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private Marker driverMaker;
     private Boolean directionsCalculated = false;
     private GeoPoint driverLocation;
+    private double DISTANCE_FACTOR = 0.002;
+    private LatLngBounds nearbyBounds;
 
 
     public RidePendingFragment() {
@@ -173,6 +176,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 @Override
                 public void onChanged(Request request) {
                 currentRequest = request;
+                nearbyBounds(request.getPath().getStartLocation().getLatLng());
                 if (!directionsCalculated && currentRequest != null) {
                     calculateDirections();
                     directionsCalculated = true;
@@ -182,6 +186,20 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                         Toast.makeText(getContext(), request.getDriver().getUsername() + "Accepted this Ride!", Toast.LENGTH_LONG).show();
                         updateDriverLocation();
                         rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
+                        rideRequestStatus.setClickable(true);
+                        rideRequestStatus.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (currentRequest.getDriver() != null) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("driverEmail", currentRequest.getDriver().getEmail());
+                                    bundle.putString("driverName", currentRequest.getDriver().getUsername());
+                                    bundle.putString("driverPhone", currentRequest.getDriver().getPhone());
+                                    bundle.putInt("driverRating", (int) currentRequest.getDriver().getRating());
+                                    navController.navigate(R.id.action_ridePendingFragment_to_driverDetailsFragment, bundle);
+                                }
+                            }
+                        });
                     }
                 }
             }
@@ -199,11 +217,21 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                         if (geoPoint != null) {
                             updateDriverPin();
                         }
+                        if (nearbyBounds != null) {
+                            if (nearbyBounds.contains(new com.google.android.gms.maps.model.LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()))) {
+                                driverNearby();
+                            }
+                        }
                     } catch (NullPointerException exception) {
                     }
                 }
             });
         }
+    }
+
+    private void driverNearby() {
+        cancelButton.setClickable(false);
+        cancelButton.setText("Get Ready, Your Driver is Close!");
     }
 
 
@@ -221,6 +249,17 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                     .apiKey(getString(R.string.google_map_api_key))
                     .build();
         }
+    }
+
+    private void nearbyBounds(com.google.android.gms.maps.model.LatLng location) {
+        double latDist = DISTANCE_FACTOR;
+        double longDist = DISTANCE_FACTOR/Math.cos(Math.toRadians(location.latitude));
+        com.google.android.gms.maps.model.LatLng min = new com.google.android.gms.maps.model.LatLng(location.latitude - latDist, location.longitude - longDist);
+        com.google.android.gms.maps.model.LatLng max = new com.google.android.gms.maps.model.LatLng(location.latitude + latDist, location.longitude + longDist);
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        builder.include(min);
+        builder.include(max);
+        nearbyBounds = builder.build();
     }
 
     public void setBounds() {
