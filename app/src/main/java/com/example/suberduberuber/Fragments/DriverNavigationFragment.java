@@ -27,6 +27,7 @@ import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
+import com.example.suberduberuber.ViewModels.DriverPaidRateViewModel;
 import com.example.suberduberuber.ViewModels.NavigationViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -69,6 +70,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
     private NavigationViewModel navigationViewModel;
     private AuthViewModel authViewModel;
+    private DriverPaidRateViewModel driverPaidRateViewModel;
 
     protected NavController navController;
     private ImageButton doneRideButton;
@@ -96,6 +98,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
         navigationViewModel= new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        driverPaidRateViewModel = new ViewModelProvider(requireActivity()).get(DriverPaidRateViewModel.class);
 
         showPickupRoute();
 
@@ -121,6 +124,8 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                 navigationViewModel.getCurrentRequest(user).observe(getViewLifecycleOwner(), new Observer<Request>() {
                     @Override
                     public void onChanged(Request request) {
+                        driverPaidRateViewModel.setRequest(request);
+                        driverPaidRateViewModel.setRider(request.getRequestingUser());
                         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
