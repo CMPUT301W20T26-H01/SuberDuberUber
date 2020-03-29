@@ -253,6 +253,7 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     @Override
     public void onPause() {
         mMapView.onPause();
+        viewRequestsViewModel.removeObservers(getViewLifecycleOwner());
         super.onPause();
     }
 

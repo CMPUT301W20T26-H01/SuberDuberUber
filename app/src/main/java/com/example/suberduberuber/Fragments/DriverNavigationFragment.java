@@ -304,6 +304,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onPause() {
         mMapView.onPause();
+        navigationViewModel.removeObservers(getViewLifecycleOwner());
         super.onPause();
     }
 
