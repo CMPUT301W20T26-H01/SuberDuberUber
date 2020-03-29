@@ -60,10 +60,6 @@ public class RequestRepository {
                 .orderBy("time");
     }
 
-    public Task<Void> acceptRequest(Request request) {
-        return myDb.collection("requests").document(request.getRequestID()).update("status", "claimed");
-    }
-
     public void cancelRequest(Request request) {
         myDb.collection("requests").document(request.getRequestID()).delete();
     }

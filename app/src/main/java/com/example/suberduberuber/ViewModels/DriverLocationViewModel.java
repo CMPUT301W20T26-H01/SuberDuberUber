@@ -5,8 +5,10 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.Request;
@@ -58,5 +60,10 @@ public class DriverLocationViewModel extends AndroidViewModel {
         }
         return currentLocation;
 
+    }
+
+    public void removeObserver(Observer<GeoPoint> observer) {
+        currentLocation.removeObserver(observer);
+        currentLocation = new MutableLiveData<GeoPoint>();
     }
 }

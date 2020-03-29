@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -73,7 +74,7 @@ public class AvailableRequestListAdapter extends RecyclerView.Adapter<AvailableR
         private TextView riderName;
         private TextView price;
         private RequestCardTouchListener requestCardTouchListener;
-        private ConstraintLayout popup;
+        private LinearLayout popup;
         private Button acceptButton;
         private Button cancelButton;
         private View view;
@@ -100,15 +101,15 @@ public class AvailableRequestListAdapter extends RecyclerView.Adapter<AvailableR
         }
 
         public void shrink() {
-            popup.setVisibility(View.GONE);
+            popup.setVisibility(View.INVISIBLE);
             view.setBackgroundColor(Color.WHITE);
         }
         private void togglePopupState() {
-            if(popup.getVisibility() == View.GONE) {
+            if(popup.getVisibility() == View.INVISIBLE) {
                 popup.setVisibility(View.VISIBLE);
             }
             else {
-                popup.setVisibility(View.GONE);
+                popup.setVisibility(View.INVISIBLE);
                 view.setBackgroundColor(Color.WHITE);
             }
         }
