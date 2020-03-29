@@ -123,9 +123,11 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
 
         @Override
         public void onClick(View v) {
-            usersRequestTouchListener.shrinkAllPopups();
-            togglePopupState();
-            setButtonListeners();
+            if (this.status.getText().equals("IN_PROGRESS") || this.status.getText().equals("ACCEPTED")) {
+                usersRequestTouchListener.shrinkAllPopups();
+                togglePopupState();
+                setButtonListeners();
+            }
         }
 
         public void shrink() {
