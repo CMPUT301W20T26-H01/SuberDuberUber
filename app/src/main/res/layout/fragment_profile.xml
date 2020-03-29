@@ -9,12 +9,12 @@
         android:id="@+id/usernameProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.75"
+        android:layout_weight="0.80"
         android:text="Username"
         android:textAlignment="center"
         android:textColor="@color/quantum_white_100"
         android:textSize="60dp"
-        android:textStyle="italic" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/emailProfile"
@@ -48,23 +48,149 @@
 
 
     <TextView
-        android:id="@+id/prevRidesProfile"
+        android:id="@+id/CarBelow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="previos rides"
+        android:text="Car Information:"
         android:textAlignment="center"
-        android:textColor="@color/quantum_white_100"/>
-
-
-    <Button
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:background="@drawable/btn_round"
         android:textColor="@color/quantum_white_100"
-        android:id="@+id/editInfoProfile"
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Your Information"
-        android:textAlignment="center" />
+        android:layout_weight="0.80"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/yearView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Year"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+
+        <TextView
+            android:id="@+id/carYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Year"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.80"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/makeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Make"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+
+        <TextView
+            android:id="@+id/carMake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Make"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.80"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/modelView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Model"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+
+        <TextView
+            android:id="@+id/carModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Model"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.80"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/colorView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Colour"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+
+        <TextView
+            android:id="@+id/carColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Color"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.80"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/plateView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="License Plate"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+
+        <TextView
+            android:id="@+id/carPlate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="License Plate"
+            android:textAlignment="center"
+            android:textColor="@color/quantum_white_100" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/editInfoProfile"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_round"
+        android:text="Edit Your Information"
+        android:textAlignment="center"
+        android:textColor="@color/quantum_white_100" />
 </LinearLayout>
+
+
+

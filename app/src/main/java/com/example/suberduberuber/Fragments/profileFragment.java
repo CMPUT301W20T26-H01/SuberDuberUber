@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Models.Car;
+import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.ProfileViewModel;
@@ -25,11 +27,20 @@ public class profileFragment extends Fragment {
     private ProfileViewModel profileViewModel;
     private NavController navController;
     private TextView usernamePro;
+    private TextView year;
+    private TextView make;
+    private TextView model;
+    private TextView color;
+    private TextView plateNumber;
     private TextView emailPro;
     private TextView ratingPro;
     private TextView phoneNumberPro;
     private Button editButton;
 
+
+    private User user;
+    boolean isDriver;
+    private Driver driver;
 
     public profileFragment() {
         // Required empty public constructor
@@ -47,35 +58,72 @@ public class profileFragment extends Fragment {
         profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
 
         navController = Navigation.findNavController(view);
+
         usernamePro = view.findViewById(R.id.usernameProfile);
         emailPro = view.findViewById(R.id.emailProfile);
         ratingPro = view.findViewById(R.id.ratingProfile);
         phoneNumberPro = view.findViewById(R.id.phoneNumberProfile);
         editButton = view.findViewById(R.id.editInfoProfile);
+        year = view.findViewById(R.id.carYear);
+        make = view.findViewById(R.id.carMake);
+        model = view.findViewById(R.id.carModel);
+        color = view.findViewById(R.id.carColor);
+        plateNumber = view.findViewById(R.id.carPlate);
 
         profileViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 displayUserDetails(user);
             }
-        });editButton.setOnClickListener(new View.OnClickListener() {
+        });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editUserDetails();
             }
         });
+
     }
 
     private void displayUserDetails(User user) {
+        assert user != null;
+        isDriver = user.getDriver();
+        driver = profileViewModel.getCurrentDriver().getValue();
+        if (isDriver){
+            assert driver != null;
+            Car car = driver.getCar();
+            assert car != null;
+            year.setVisibility(View.VISIBLE);
+            make.setVisibility(View.VISIBLE);
+            model.setVisibility(View.VISIBLE);
+            color.setVisibility(View.VISIBLE);
+            plateNumber.setVisibility(View.VISIBLE);
+
+            year.setText(Integer.toString(car.getYear()));
+            make.setText(car.getMake());
+            model.setText(car.getModel());
+            color.setText(car.getColor());
+            plateNumber.setText(car.getLicensePlate());
+
+        } else {year.setVisibility(View.GONE);
+            make.setVisibility(View.GONE);
+            model.setVisibility(View.GONE);
+            color.setVisibility(View.GONE);
+            plateNumber.setVisibility(View.GONE);}
+
         usernamePro.setText(user.getUsername());
         emailPro.setText(user.getEmail());
         phoneNumberPro.setText(PhoneNumberUtils.formatNumber(user.getPhone(), "CA"));
         ratingPro.setText(String.valueOf(user.getRating()));
     }
+
     private void editUserDetails(){
-        User user = profileViewModel.getCurrentUser().getValue();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
+        if (isDriver){
+            bundle.putSerializable("user", driver);
+        }else{bundle.putSerializable("user", user);}
         navController.navigate(R.id.action_viewProfileFragment_to_editInformationFragment,bundle);
     }
+
 }
