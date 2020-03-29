@@ -106,34 +106,32 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
         pickupTimeTextView.setText(tempRequest.getTime().toString());
 
         bidAmount = view.findViewById(R.id.bid_amount);
-        submitBid = view.findViewById(R.id.confirm_bid_button);
-        submitBid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    double bid = Double.valueOf(bidAmount.getText().toString());
-                    if (bid >= tempRequest.getPath().getEstimatedFare()) {
-                        tempRequest.setPrice(bid);
-                        Toast.makeText(getContext(), "Bid Updated", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(getContext(), "Bid is less than recommended amount", Toast.LENGTH_LONG).show();
-                    }
-                }
-                catch (Exception exception) {
-                    Toast.makeText(getContext(), "Invalid Bid", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         submitButton = view.findViewById(R.id.submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Submit ride to database
-                saveRequest();
-                getRideViewModel.commitTempRequest();
-                navController.navigate(R.id.action_confrimRouteFragment_to_ridePendingFragment2);
+                try {
+                    bidAmount.setError(null);
+                    double bid = Double.valueOf(bidAmount.getText().toString());
+                    if (bid >= tempRequest.getPath().getEstimatedFare()) {
+                        tempRequest.setPrice(bid);
+                        if (bid > tempRequest.getPath().getEstimatedFare()) {
+                            Toast.makeText(getContext(), "Bid Updated", Toast.LENGTH_SHORT).show();
+                        }
+                        saveRequest();
+                        getRideViewModel.commitTempRequest();
+                        navController.navigate(R.id.action_confrimRouteFragment_to_ridePendingFragment2);
+                    }
+                    else {
+                        bidAmount.setText(Double.toString(tempRequest.getPath().getEstimatedFare()));
+                        bidAmount.setError("Bid is less than recommended amount");
+                    }
+                }
+                catch (Exception exception) {
+                    Toast.makeText(getContext(), "Invalid Bid", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         initGoogleMap(savedInstanceState);

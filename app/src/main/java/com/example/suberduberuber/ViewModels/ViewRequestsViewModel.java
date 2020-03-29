@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -67,5 +68,10 @@ public class ViewRequestsViewModel extends AndroidViewModel {
                 requestRepository.updateRequest(request);
             }
         });
+    }
+
+    public void removeObservers(LifecycleOwner owner) {
+        allRequests.removeObservers(owner);
+        allRequests = new MutableLiveData<>();
     }
 }

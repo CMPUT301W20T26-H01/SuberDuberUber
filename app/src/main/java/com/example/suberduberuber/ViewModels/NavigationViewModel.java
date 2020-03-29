@@ -3,6 +3,7 @@ package com.example.suberduberuber.ViewModels;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -41,5 +42,10 @@ public class NavigationViewModel extends AndroidViewModel {
 
     public void updateRequest(Request request) {
         requestRepository.updateRequest(request);
+    }
+
+    public void removeObservers(LifecycleOwner owner) {
+        requestLiveData.removeObservers(owner);
+        requestLiveData = new MutableLiveData<>();
     }
 }
