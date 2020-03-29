@@ -80,7 +80,6 @@ public class RateRiderFragment extends Fragment {
                 double rating_num = (double) rating.getRating();
 
                 driverPaidRateViewModel.updateUserRating(riderID, rating_num);
-                //ratingViewModel.updateDriverRating(paymentViewModel.getCurrentDriverUID(), paymentViewModel.getCurrentDriver(), rating_num);
                 navController.navigate(R.id.action_rateDriverFragment_to_viewRequestFragment);
             }
         });
