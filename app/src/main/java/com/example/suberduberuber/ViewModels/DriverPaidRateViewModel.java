@@ -92,6 +92,9 @@ public class DriverPaidRateViewModel extends AndroidViewModel {
         double newRating = ((getRider().getRating() * getRider().getNumberOfRatings()) + rating) / (getRider().getNumberOfRatings() + 1);
 
         ratingRepository.saveRating(riderID, newRating);
+    }
+
+    public void updateUserNumOfRatings(String riderID) {
         ratingRepository.saveNumOfRatings(riderID, getRider().getNumberOfRatings() + 1);
     }
 
