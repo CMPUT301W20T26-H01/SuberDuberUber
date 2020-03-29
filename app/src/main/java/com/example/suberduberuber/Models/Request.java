@@ -16,6 +16,7 @@ public class Request {
 
     enum Status {
         PENDING_ACCEPTANCE,
+        ACCEPTED,
         IN_PROGRESS,
         COMPLETED
     }
@@ -51,7 +52,7 @@ public class Request {
         if(status != Status.PENDING_ACCEPTANCE) {
             Log.d(TAG, "Cannot accept request that is not pending acceptance");
         }
-        status = Status.IN_PROGRESS;
+        status = Status.ACCEPTED;
         this.driver = driver;
     }
 
