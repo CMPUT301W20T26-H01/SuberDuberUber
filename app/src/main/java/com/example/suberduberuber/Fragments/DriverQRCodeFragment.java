@@ -91,10 +91,14 @@ public class DriverQRCodeFragment extends Fragment {
                 if (setupFlag != -1 && updatedBalance != previousBalance) {
                     dialog = new AlertDialog.Builder(getActivity()).create();
 
-                    dialog.setTitle("Received Payment");
-                    TextView amount = new TextView(getActivity());
-                    amount.setText(String.valueOf(updatedBalance - previousBalance));
-                    dialog.setView(amount);
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    View v = inflater.inflate(R.layout.dialog_driver_payment, null);
+                    dialog.setView(v);
+
+                    TextView amount = v.findViewById(R.id.payment_amount);
+                    String amountStr = "$" + String.format("%.2f", updatedBalance-previousBalance);
+                    amount.setText(amountStr);
+
                     dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface d, int which) {
