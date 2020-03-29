@@ -104,16 +104,18 @@ public class ScanQRCodeFragment extends Fragment {
     }
 
     public void findUser() {
-        paymentViewModel.getDriverByUID(scannedUid).observe(getViewLifecycleOwner(), new Observer<Driver>() {
-            @Override
-            public void onChanged(Driver user) {
-                if (user != null) {
-                    qrCodeId.setText(user.getUsername());
-                    paymentViewModel.setDriver(user); // sets the user being paid
-                    paymentViewModel.setCurrentDriverUID(scannedUid); // sets the user being paid UID
+        if (scannedUid != null) {
+            paymentViewModel.getDriverByUID(scannedUid).observe(getViewLifecycleOwner(), new Observer<Driver>() {
+                @Override
+                public void onChanged(Driver user) {
+                    if (user != null) {
+                        qrCodeId.setText(user.getUsername());
+                        paymentViewModel.setDriver(user); // sets the user being paid
+                        paymentViewModel.setCurrentDriverUID(scannedUid); // sets the user being paid UID
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
 }
