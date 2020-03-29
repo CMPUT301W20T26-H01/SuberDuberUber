@@ -182,6 +182,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
             });
         }
         nearbyBounds(request.getPath().getStartLocation().getLatLng());
+        endBounds(request.getPath().getDestination().getLatLng());
         calculateDirections(request);
     }
 
@@ -198,6 +199,11 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                         driverNearby();
                     }
                 }
+                if (endBounds != null) {
+                    if (endBounds.contains(new com.google.android.gms.maps.model.LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()))) {
+                        driverEnd();
+                    }
+                }
             } catch (NullPointerException exception) {
             }
         }
@@ -211,6 +217,17 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private void driverNearby() {
         cancelButton.setClickable(false);
         cancelButton.setText("Get Ready, Your Driver is Close!");
+    }
+
+    private void driverEnd() {
+        cancelButton.setClickable(true);
+        cancelButton.setText("Pay Driver");
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_ridePendingFragment_to_scanqrcodeFragment);
+            }
+        });
     }
 
 
@@ -239,6 +256,17 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         builder.include(min);
         builder.include(max);
         nearbyBounds = builder.build();
+    }
+
+    private void endBounds(com.google.android.gms.maps.model.LatLng location) {
+        double latDist = DISTANCE_FACTOR;
+        double longDist = DISTANCE_FACTOR/Math.cos(Math.toRadians(location.latitude));
+        com.google.android.gms.maps.model.LatLng min = new com.google.android.gms.maps.model.LatLng(location.latitude - latDist, location.longitude - longDist);
+        com.google.android.gms.maps.model.LatLng max = new com.google.android.gms.maps.model.LatLng(location.latitude + latDist, location.longitude + longDist);
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        builder.include(min);
+        builder.include(max);
+        endBounds = builder.build();
     }
 
     public void setBounds() {
