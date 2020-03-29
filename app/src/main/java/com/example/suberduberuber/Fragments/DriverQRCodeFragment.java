@@ -103,6 +103,7 @@ public class DriverQRCodeFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface d, int which) {
                             dialog.dismiss();
+                            driverPaidRateViewModel.finishRequest();
                             navController.navigate(R.id.action_driverQRCode_to_rateUser);
                         }
                     });

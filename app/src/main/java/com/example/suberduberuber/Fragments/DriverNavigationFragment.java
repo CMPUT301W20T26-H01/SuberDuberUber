@@ -98,6 +98,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                     public void onChanged(Request request) {
                         setLatLngBounds(request);
                         calculateDirections(request);
+                        driverPaidRateViewModel.setRequest(request);
                         driverPaidRateViewModel.setRider(request.getRequestingUser());
                     }
                 });
