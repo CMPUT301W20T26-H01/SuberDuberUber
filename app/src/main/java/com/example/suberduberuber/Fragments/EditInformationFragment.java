@@ -49,7 +49,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
     private TextView makeEdit;
     private TextView modelEdit;
     private TextView colorEdit;
-    private TextView plateEdit;
+
 
     private AlertDialog dialog;
 
@@ -94,7 +94,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
         makeEdit = view.findViewById(R.id.makeEdit);
         modelEdit = view.findViewById(R.id.modelEdit);
         colorEdit = view.findViewById(R.id.colorEdit);
-        plateEdit = view.findViewById(R.id.plateEdit);
+
 
         if(isDriver){
             driver = (Driver) user;
@@ -104,13 +104,11 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
             makeEdit.setOnClickListener(this);
             modelEdit.setOnClickListener(this);
             colorEdit.setOnClickListener(this);
-            plateEdit.setOnClickListener(this);
 
         } else{ yearEdit.setVisibility(View.GONE);
             makeEdit.setVisibility(View.GONE);
             modelEdit.setVisibility(View.GONE);
-            colorEdit.setVisibility(View.GONE);
-            plateEdit.setVisibility(View.GONE);}
+            colorEdit.setVisibility(View.GONE);}
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(this);
@@ -135,6 +133,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
                 }
             }
         });
+
         switch(v.getId()) {
             case R.id.emailEdit:
                 newInfoField.setText(emailEdit.getText());
@@ -166,11 +165,6 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
                 dialog.show();
                 id = v.getId();
                 break;
-            case R.id.plateEdit:
-                newInfoField.setText(plateEdit.getText());
-                dialog.show();
-                id = v.getId();
-                break;
             case R.id.confirmButton:
                 user.setPhone(PhoneNumberUtils.formatNumber(phoneNumberEdit.getText().toString()));
                 user.setEmail(emailEdit.getText().toString());
@@ -194,13 +188,11 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
         makeEdit.setVisibility(View.VISIBLE);
         modelEdit.setVisibility(View.VISIBLE);
         colorEdit.setVisibility(View.VISIBLE);
-        plateEdit.setVisibility(View.VISIBLE);
 
-        yearEdit.setText(car.getYear());
+        yearEdit.setText(Integer.toString(car.getYear()));
         makeEdit.setText(car.getMake());
         modelEdit.setText(car.getModel());
         colorEdit.setText(car.getColor());
-        plateEdit.setText(car.getLicensePlate());
 
     }
 

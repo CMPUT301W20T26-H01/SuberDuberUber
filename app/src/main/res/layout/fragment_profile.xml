@@ -69,7 +69,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+<<<<<<< HEAD
             android:text="Year:"
+=======
+            android:text="Year"
+>>>>>>> 409692d8e590abd58330de091eabfc055e5b4e70
             android:textAlignment="center"
             android:textColor="@color/quantum_white_100" />
 
@@ -94,7 +98,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+<<<<<<< HEAD
             android:text="Make:"
+=======
+            android:text="Make"
+>>>>>>> 409692d8e590abd58330de091eabfc055e5b4e70
             android:textAlignment="center"
             android:textColor="@color/quantum_white_100" />
 
@@ -118,7 +126,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+<<<<<<< HEAD
             android:text="Model:"
+=======
+            android:text="Model"
+>>>>>>> 409692d8e590abd58330de091eabfc055e5b4e70
             android:textAlignment="center"
             android:textColor="@color/quantum_white_100" />
 
@@ -143,7 +155,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+<<<<<<< HEAD
             android:text="Colour:"
+=======
+            android:text="Colour"
+>>>>>>> 409692d8e590abd58330de091eabfc055e5b4e70
             android:textAlignment="center"
             android:textColor="@color/quantum_white_100" />
 
@@ -167,7 +183,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+<<<<<<< HEAD
             android:text="License Plate:"
+=======
+            android:text="License Plate"
+>>>>>>> 409692d8e590abd58330de091eabfc055e5b4e70
             android:textAlignment="center"
             android:textColor="@color/quantum_white_100" />
 

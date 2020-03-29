@@ -41,7 +41,7 @@ import com.google.zxing.common.BitMatrix;
     to a user id.
  */
 
-public class QRCodeFragment extends Fragment implements View.OnClickListener {
+public class QRCodeFragment extends Fragment {
     private NavController navController;
 
     private ImageView qrImageView;
@@ -49,7 +49,6 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener {
 
     private TextView balanceTV;
     private Button addFundsBtn;
-    private Button sendFundsBtn;
     private EditText amountET;
 
     private AlertDialog dialog;
@@ -83,9 +82,12 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener {
 
         balanceTV = view.findViewById(R.id.balanceTextView);
         addFundsBtn = view.findViewById(R.id.addFundsButton);
-        addFundsBtn.setOnClickListener(this);
-        sendFundsBtn = view.findViewById(R.id.sendPaymentButton);
-        sendFundsBtn.setOnClickListener(this);
+        addFundsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFunds();
+            }
+        });
 
         qrCodeViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
@@ -111,42 +113,27 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener {
         balanceTV.setText("Balance: ".concat(Double.toString(balance)));
     }
 
-    @Override
-    public void onClick(View v) {
+    public void addFunds() {
         dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setTitle("Enter amount of QRBucks to add");
         amountET = new EditText(getActivity());
         amountET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         dialog.setView(amountET);
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (id == R.id.addFundsButton) {
-                    double amount = Double.parseDouble(amountET.getText().toString().trim());
-                    confirmDialog = new AlertDialog.Builder(getActivity()).create();
-                    confirmDialog.setTitle("This will cost you \uD83E\uDDFB".concat(String.format("%.2f", amount / 10)).concat(" toilet paper rolls."));
-                    confirmDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            qrCodeViewModel.setBalance(balance + amount);
-                        }
-                    });
-                    confirmDialog.show();
-                }
+                double amount = Double.parseDouble(amountET.getText().toString().trim());
+                confirmDialog = new AlertDialog.Builder(getActivity()).create();
+                confirmDialog.setTitle("This will cost you \uD83E\uDDFB".concat(String.format("%.2f", amount / 10)).concat(" toilet paper rolls."));
+                confirmDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        qrCodeViewModel.setBalance(balance + amount);
+                    }
+                });
+                confirmDialog.show();
             }
         });
-
-        switch (v.getId()) {
-            case R.id.addFundsButton:
-                dialog.setTitle("Enter amount of QRBucks to add");
-                id = v.getId();
-                dialog.show();
-                break;
-            case R.id.sendPaymentButton:
-                dialog.setTitle("Enter amount of QRBucks to send");
-                id = v.getId();
-                dialog.show();
-                break;
-        }
-
+        dialog.show();
     }
 }

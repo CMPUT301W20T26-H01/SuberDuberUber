@@ -1,5 +1,9 @@
 package com.example.suberduberuber.Fragments;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
@@ -10,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -37,8 +43,11 @@ public class profileFragment extends Fragment {
     private TextView phoneNumberPro;
     private Button editButton;
 
-    private User user = profileViewModel.getCurrentUser().getValue();
-    private boolean isDriver = user.getDriver();
+
+    private User user;
+    boolean isDriver;
+    private Driver driver;
+
     public profileFragment() {
         // Required empty public constructor
     }
@@ -72,26 +81,45 @@ public class profileFragment extends Fragment {
             public void onChanged(User user) {
                 displayUserDetails(user);
             }
+        });
 
-        });editButton.setOnClickListener(new View.OnClickListener() {
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editUserDetails();
             }
         });
+
+        emailPro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail(emailPro.getText().toString(), usernamePro.getText().toString());
+            }
+        });
+
+        phoneNumberPro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dial(phoneNumberPro.getText().toString());
+            }
+        });
     }
 
     private void displayUserDetails(User user) {
+        assert user != null;
+        isDriver = user.getDriver();
+        driver = profileViewModel.getCurrentDriver().getValue();
         if (isDriver){
-            Driver driver = (Driver) user;
+            assert driver != null;
             Car car = driver.getCar();
+            assert car != null;
             year.setVisibility(View.VISIBLE);
             make.setVisibility(View.VISIBLE);
             model.setVisibility(View.VISIBLE);
             color.setVisibility(View.VISIBLE);
             plateNumber.setVisibility(View.VISIBLE);
 
-            year.setText(car.getYear());
+            year.setText(Integer.toString(car.getYear()));
             make.setText(car.getMake());
             model.setText(car.getModel());
             color.setText(car.getColor());
@@ -108,11 +136,30 @@ public class profileFragment extends Fragment {
         phoneNumberPro.setText(PhoneNumberUtils.formatNumber(user.getPhone(), "CA"));
         ratingPro.setText(String.valueOf(user.getRating()));
     }
+
     private void editUserDetails(){
-        //User user = profileViewModel.getCurrentUser().getValue();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
+        if (isDriver){
+            bundle.putSerializable("user", driver);
+        }else{bundle.putSerializable("user", user);}
         navController.navigate(R.id.action_viewProfileFragment_to_editInformationFragment,bundle);
     }
+    private void dial(String phone) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) ==
+        PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:".concat(phone)));
+            startActivity(intent);
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CALL_PHONE}, 1);
+        }
+    }
 
+    private void sendEmail(String email, String userName) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("plain/text");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {email});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "SuberDuberUber: Message from ".concat(userName));
+        startActivity(intent);
+    }
 }
