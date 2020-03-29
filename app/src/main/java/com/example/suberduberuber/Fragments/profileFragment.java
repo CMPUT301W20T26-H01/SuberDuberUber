@@ -37,8 +37,11 @@ public class profileFragment extends Fragment {
     private TextView phoneNumberPro;
     private Button editButton;
 
-    private User user = profileViewModel.getCurrentUser().getValue();
-    private boolean isDriver = user.getDriver();
+
+    private User user;
+    boolean isDriver;
+    private Driver driver;
+
     public profileFragment() {
         // Required empty public constructor
     }
@@ -72,26 +75,32 @@ public class profileFragment extends Fragment {
             public void onChanged(User user) {
                 displayUserDetails(user);
             }
+        });
 
-        });editButton.setOnClickListener(new View.OnClickListener() {
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editUserDetails();
             }
         });
+
     }
 
     private void displayUserDetails(User user) {
+        assert user != null;
+        isDriver = user.getDriver();
+        driver = profileViewModel.getCurrentDriver().getValue();
         if (isDriver){
-            Driver driver = (Driver) user;
+            assert driver != null;
             Car car = driver.getCar();
+            assert car != null;
             year.setVisibility(View.VISIBLE);
             make.setVisibility(View.VISIBLE);
             model.setVisibility(View.VISIBLE);
             color.setVisibility(View.VISIBLE);
             plateNumber.setVisibility(View.VISIBLE);
 
-            year.setText(car.getYear());
+            year.setText(Integer.toString(car.getYear()));
             make.setText(car.getMake());
             model.setText(car.getModel());
             color.setText(car.getColor());
@@ -108,10 +117,12 @@ public class profileFragment extends Fragment {
         phoneNumberPro.setText(PhoneNumberUtils.formatNumber(user.getPhone(), "CA"));
         ratingPro.setText(String.valueOf(user.getRating()));
     }
+
     private void editUserDetails(){
-        //User user = profileViewModel.getCurrentUser().getValue();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
+        if (isDriver){
+            bundle.putSerializable("user", driver);
+        }else{bundle.putSerializable("user", user);}
         navController.navigate(R.id.action_viewProfileFragment_to_editInformationFragment,bundle);
     }
 

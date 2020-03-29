@@ -22,6 +22,8 @@
 
     <TextView
         android:id="@+id/emailEdit"
+        android:textAlignment="center"
+
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:textColor="@color/quantum_white_100">
@@ -29,6 +31,8 @@
     </TextView>
     <TextView
         android:id="@+id/phoneNumberEdit"
+        android:textAlignment="center"
+
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:textColor="@color/quantum_white_100">
@@ -36,6 +40,8 @@
     </TextView>
     <TextView
         android:id="@+id/yearEdit"
+        android:textAlignment="center"
+
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:textColor="@color/quantum_white_100"
@@ -44,6 +50,8 @@
     </TextView>
     <TextView
         android:id="@+id/makeEdit"
+        android:textAlignment="center"
+
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:textColor="@color/quantum_white_100">
@@ -51,6 +59,8 @@
     </TextView>
     <TextView
         android:id="@+id/modelEdit"
+        android:textAlignment="center"
+
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:textColor="@color/quantum_white_100">
@@ -58,19 +68,13 @@
     </TextView>
     <TextView
         android:id="@+id/colorEdit"
+        android:textAlignment="center"
+
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:textColor="@color/quantum_white_100">
 
     </TextView>
-    <TextView
-        android:id="@+id/plateEdit"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:textColor="@color/quantum_white_100">
-
-    </TextView>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
