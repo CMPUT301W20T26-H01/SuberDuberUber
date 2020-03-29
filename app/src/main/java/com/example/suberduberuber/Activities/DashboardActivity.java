@@ -47,7 +47,7 @@ import com.google.firebase.firestore.QuerySnapshot;
     (redirects back to log in page and logs out user).
  */
 
-abstract class DashboardActivity extends AppCompatActivity {
+public abstract class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
     private UserRepository userRepository;

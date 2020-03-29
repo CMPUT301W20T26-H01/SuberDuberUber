@@ -1,18 +1,10 @@
 package com.example.suberduberuber.Repositories;
 
-import android.util.Log;
-import androidx.annotation.NonNull;
-
 import com.example.suberduberuber.Models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 /**
  * This class serves to encapsulate all he interactions with the User collection in firebase. It keeps
@@ -50,5 +42,10 @@ public class UserRepository {
         return myDb.collection("users")
                 .document(myAuth.getCurrentUser().getUid())
                 .update("deviceToken", token);
+    }
+
+    public void deleteUser(){
+        myDb.collection("users")
+                .document(myAuth.getCurrentUser().getUid());
     }
 }
