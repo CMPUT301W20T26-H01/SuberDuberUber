@@ -118,7 +118,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //on ride completion
+                navController.navigate(R.id.action_ridePendingFragment_to_scanqrcodeFragment);
             }
         });
 
@@ -147,9 +147,11 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 currentRequest = request;
                 calculateDirections();
                 if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
-                    Toast.makeText(getContext(), request.getDriver().getUsername() + " accepted your ride!", Toast.LENGTH_SHORT).show();
-                    completeButton.setVisibility(View.VISIBLE);
-                    rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
+                    if (!(Objects.equals(rideRequestStatus.getText(), "Waiting for " + request.getDriver().getUsername() + " to pick you up."))) {
+                        Toast.makeText(getContext(), request.getDriver().getUsername() + " accepted your ride!", Toast.LENGTH_SHORT).show();
+                        completeButton.setVisibility(View.VISIBLE);
+                        rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
+                    }
                 }
             }
         });

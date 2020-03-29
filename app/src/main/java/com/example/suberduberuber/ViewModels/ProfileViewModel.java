@@ -9,11 +9,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.suberduberuber.Models.Car;
+import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 /**
@@ -30,6 +33,7 @@ import com.google.firebase.firestore.QuerySnapshot;
     private UserRepository userRepository;
 
     private MutableLiveData<User> currentUser = new MutableLiveData<User>();
+    private MutableLiveData<Driver> currentDriver = new MutableLiveData<Driver>();
 
     public ProfileViewModel(Application application) {
         super(application);
@@ -38,11 +42,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 
     // Get the current user and setup listening for live updates
     public LiveData<User> getCurrentUser() {
-        userRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        UserRepository.getCurrentUser().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null) {
+                    if(documentSnapshot.getBoolean("driver")){
+                        currentDriver.setValue(documentSnapshot.toObject(Driver.class));}
                     currentUser.setValue(documentSnapshot.toObject(User.class));
+
                 }
             }
         });
@@ -54,4 +61,8 @@ import com.google.firebase.firestore.QuerySnapshot;
         userRepository.updateCurrentUser(user);
     }
 
+
+    public LiveData<Driver> getCurrentDriver(){
+        return currentDriver;
+    }
 }

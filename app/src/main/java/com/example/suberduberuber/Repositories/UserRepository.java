@@ -1,18 +1,15 @@
 package com.example.suberduberuber.Repositories;
 
-import android.util.Log;
-import androidx.annotation.NonNull;
-
+import com.example.suberduberuber.Models.Car;
 import com.example.suberduberuber.Models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+
+import java.util.Map;
 
 /**
  * This class serves to encapsulate all he interactions with the User collection in firebase. It keeps
@@ -21,8 +18,8 @@ import com.google.firebase.firestore.Query;
  */
 public class UserRepository {
 
-    FirebaseAuth myAuth = FirebaseAuth.getInstance();
-    FirebaseFirestore myDb = FirebaseFirestore.getInstance();
+    static FirebaseAuth myAuth = FirebaseAuth.getInstance();
+    static FirebaseFirestore myDb = FirebaseFirestore.getInstance();
 
     public void saveUser(User user) {
         myDb.collection("users")
@@ -30,7 +27,7 @@ public class UserRepository {
                 .set(user);
     }
 
-    public DocumentReference getCurrentUser() {
+    public static DocumentReference getCurrentUser() {
         return myDb.collection("users")
                 .document(myAuth.getCurrentUser().getUid());
     }
@@ -51,4 +48,6 @@ public class UserRepository {
                 .document(myAuth.getCurrentUser().getUid())
                 .update("deviceToken", token);
     }
+
+
 }

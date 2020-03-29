@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/amount"
-        android:text="$5.00 to"
+        android:text="Amount to"
         android:textSize="15dp"
         android:layout_marginTop="20dp">
     </TextView>
@@ -42,15 +42,25 @@
     </TextView>
 
     <Button
+    android:background="@drawable/btn_round"
+    android:textColor="@color/quantum_white_100"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Confirm Payment"
+    android:textSize="15dp"
+    android:layout_marginTop="40dp"
+    android:layout_gravity="center_horizontal"
+    android:id="@+id/next_button"/>
+
+    <Button
         android:background="@drawable/btn_round"
         android:textColor="@color/quantum_white_100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirm Payment"
+        android:text="Rescan QR Code"
         android:textSize="15dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/next_button"/>
-
+        android:id="@+id/rescan_button"/>
 
 </LinearLayout>
