@@ -49,7 +49,6 @@ public class DriverQRCodeFragment extends Fragment {
 
         view.findViewById(R.id.balanceTextView).setVisibility(View.GONE);
         view.findViewById(R.id.addFundsButton).setVisibility(View.GONE);
-        view.findViewById(R.id.sendPaymentButton).setVisibility(View.GONE);
 
         // generating QR Code
         try {
