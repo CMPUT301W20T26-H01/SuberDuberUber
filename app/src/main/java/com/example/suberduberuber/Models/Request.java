@@ -56,6 +56,13 @@ public class Request {
         this.driver = driver;
     }
 
+    public void pickup() {
+        if(status != Status.ACCEPTED) {
+            Log.d(TAG, "Cannot complete request that is not accepted");
+        }
+        status = Status.IN_PROGRESS;
+    }
+
     public void complete() {
         if(status != Status.IN_PROGRESS) {
             Log.d(TAG, "Cannot complete request that is not in progress");
