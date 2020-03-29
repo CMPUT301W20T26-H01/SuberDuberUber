@@ -88,8 +88,8 @@ public class AvailableRequestListAdapter extends RecyclerView.Adapter<AvailableR
             this.riderName = v.findViewById(R.id.rider_name);
             this.price = v.findViewById(R.id.suggested_price);
             this.popup = v.findViewById(R.id.request_card_poppup_details);
-            this.acceptButton = v.findViewById(R.id.cancel_button);
-            this.cancelButton = v.findViewById(R.id.back_button);
+            this.acceptButton = v.findViewById(R.id.accept_button);
+            this.cancelButton = v.findViewById(R.id.cancel_button);
             this.view = v;
         }
 
