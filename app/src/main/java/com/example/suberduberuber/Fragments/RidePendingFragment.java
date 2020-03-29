@@ -80,7 +80,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private GeoPoint driverLocation;
     private double DISTANCE_FACTOR = 0.002;
     private LatLngBounds nearbyBounds;
-
+    private LatLngBounds endBounds;
 
     public RidePendingFragment() {
         // Required empty public constructor
@@ -112,7 +112,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //on ride completion
+                navController.navigate(R.id.action_ridePendingFragment_to_scanqrcodeFragment);
             }
         });
 

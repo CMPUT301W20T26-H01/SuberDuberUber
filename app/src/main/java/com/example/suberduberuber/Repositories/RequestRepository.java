@@ -71,14 +71,14 @@ public class RequestRepository {
     public Query getRidersCurrentRequest(User user) {
         return myDb.collection("requests")
                 .whereEqualTo("requestingUser.email", user.getEmail())
-                .whereIn("status", Arrays.asList("PENDING_ACCEPTANCE", "IN_PROGRESS"))
+                .whereIn("status", Arrays.asList("PENDING_ACCEPTANCE", "ACCEPTED", "IN_PROGRESS"))
                 .limit(1);
     }
 
     public Query getDriverCurrentRequest(User user) {
         return myDb.collection("requests")
                 .whereEqualTo("driver.email", user.getEmail())
-                .whereEqualTo("status", "IN_PROGRESS")
+                .whereIn("status", Arrays.asList("ACCEPTED", "IN_PROGRESS"))
                 .limit(1);
     }
 

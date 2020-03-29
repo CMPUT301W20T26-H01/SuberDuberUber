@@ -113,4 +113,8 @@ public class GetRideViewModel extends AndroidViewModel {
         currentRequest.removeObservers(owner);
         currentRequest = new MutableLiveData<>();
     }
+
+    public Request getCurrentRequest() {
+        return this.currentRequest.getValue();
+    }
 }

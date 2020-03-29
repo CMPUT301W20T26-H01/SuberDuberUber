@@ -83,6 +83,7 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     private RecyclerView requestRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AvailableRequestListAdapter adapter;
+
     private LatLngBounds bound;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private double DISTANCE_FACTOR = 0.16;
@@ -113,31 +114,31 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         initGoogleMap(savedInstanceState);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
-
-
         requestRecyclerView = view.findViewById(R.id.request_list);
         configureRecyclerView();
 
         noRequestsMessage = view.findViewById(R.id.no_requests_message);
 
+
         viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
             @Override
             public void onChanged(List<Request> requests) {
                 if(requests.size() > 0) {
-                    noRequestsMessage.setVisibility(View.GONE);
-                    adapter.setRequestDataset(requests);
-                    displayRequests(requests);
+                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            setBounds(location);
+                            noRequestsMessage.setVisibility(View.GONE);
+                            displayRequests(requests);
+                            adapter.setRequestDataset(requests);
+                        }
+                    });
+
                 }
                 else {
                     noRequestsMessage.setVisibility(View.VISIBLE);
                 }
-                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        setBounds(location);
 
-                    }
-                });
             }
         });
 
@@ -199,23 +200,6 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         return -1;
     }
 
-    private void setMapBounds(List<Request> requests) {
-        LatLngBounds.Builder builder = LatLngBounds.builder();
-        boolean requestNearby = false;
-        for(Request request : requests) {
-            if (bound.contains(request.getPath().getStartLocation().getLatLng())) {
-                builder.include(request.getPath().getStartLocation().getLatLng());
-                requestNearby = true;
-            }
-        }
-        if (requestNearby) {
-            mapBounds = builder.build();
-        }
-        if (mMap != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bound, DEFAULT_ZOOM));
-        }
-
-    }
 
     private void displayRequests(List<Request> requests) {
         if (mMap != null) {

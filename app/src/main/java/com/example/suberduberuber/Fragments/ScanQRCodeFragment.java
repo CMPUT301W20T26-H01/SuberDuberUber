@@ -18,7 +18,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.Models.Driver;
+import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.ViewModels.GetRideViewModel;
 import com.example.suberduberuber.ViewModels.PaymentViewModel;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -31,12 +33,17 @@ import com.google.zxing.integration.android.IntentResult;
 public class ScanQRCodeFragment extends Fragment {
     private NavController navController;
     private PaymentViewModel paymentViewModel;
+    private GetRideViewModel getRideViewModel;
 
     private LinearLayout scanQRLayout;
+    private TextView amountText;
     private TextView qrCodeId;
     private Button nextButton;
+    private Button rescanQRButton;
 
     private String scannedUid;
+
+    private Request currentRequest;
 
     public ScanQRCodeFragment() {
         // Required empty public constructor
@@ -55,23 +62,38 @@ public class ScanQRCodeFragment extends Fragment {
         navController = Navigation.findNavController(view);
 
         paymentViewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
+        getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+
+        currentRequest = getRideViewModel.getCurrentRequest();
+        double amount = currentRequest.getPrice();
 
         scanQRLayout = view.findViewById(R.id.scan_qr_layout);
+        amountText = view.findViewById(R.id.amount);
         qrCodeId = view.findViewById(R.id.scannedId);
 
+        String amountStr = "$" + String.format("%.2f", amount) + " to";
+        amountText.setText(amountStr);
+
         nextButton = view.findViewById(R.id.next_button);
+        rescanQRButton = view.findViewById(R.id.rescan_button);
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (paymentViewModel.getCurrentDriver() != null) {
-
-                    double amount = 5; // TODO: change hard coded value to actual amount
+                    double amount = currentRequest.getPrice();
 
                     paymentViewModel.completeTransaction(amount);
 
                     navController.navigate(R.id.action_scanQRCode_to_rateDriverFragment);
                 }
+            }
+        });
+
+        rescanQRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanQRCode();
             }
         });
 
@@ -104,16 +126,25 @@ public class ScanQRCodeFragment extends Fragment {
     }
 
     public void findUser() {
-        paymentViewModel.getDriverByUID(scannedUid).observe(getViewLifecycleOwner(), new Observer<Driver>() {
-            @Override
-            public void onChanged(Driver user) {
-                if (user != null) {
-                    qrCodeId.setText(user.getUsername());
-                    paymentViewModel.setDriver(user); // sets the user being paid
-                    paymentViewModel.setCurrentDriverUID(scannedUid); // sets the user being paid UID
+        if (scannedUid != null) {
+            paymentViewModel.getDriverByUID(scannedUid).observe(getViewLifecycleOwner(), new Observer<Driver>() {
+                @Override
+                public void onChanged(Driver user) {
+                    if (user == null || !user.getEmail().equals(currentRequest.getDriver().getEmail())) {
+                        qrCodeId.setText("The QR Code does not match with the driver. Please rescan the driver's QR Code.");
+                        amountText.setVisibility(View.GONE);
+                        nextButton.setVisibility(View.GONE);
+                    }
+                    else {
+                        qrCodeId.setText(user.getUsername());
+                        paymentViewModel.setDriver(user); // sets the user being paid
+                        paymentViewModel.setCurrentDriverUID(scannedUid); // sets the user being paid UID
+                        amountText.setVisibility(View.VISIBLE);
+                        nextButton.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
 }
