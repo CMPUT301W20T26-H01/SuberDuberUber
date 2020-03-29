@@ -30,9 +30,16 @@ public class NavigationViewModel extends AndroidViewModel {
                 if(queryDocumentSnapshots != null && queryDocumentSnapshots.getDocuments().size() > 0) {
                     requestLiveData.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(Request.class));
                 }
+                else {
+                    requestLiveData.setValue(null);
+                }
             }
         });
 
         return requestLiveData;
+    }
+
+    public void updateRequest(Request request) {
+        requestRepository.updateRequest(request);
     }
 }

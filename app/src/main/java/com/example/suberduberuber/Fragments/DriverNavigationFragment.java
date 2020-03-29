@@ -104,6 +104,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
             public void onClick(View v) {
                 if(showingPickupRoute) {
                     showRideRoute();
+                    setRequestToInProgress();
                 } else {
                     redirectToRecievePaymentFragment();
                 }
@@ -126,22 +127,30 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                                 LatLng start;
                                 LatLng finish;
 
-                                if(showingPickupRoute) {
+                                if(showingPickupRoute & location != null) {
                                     start = new LatLng(location.getLatitude(), location.getLongitude());
                                     finish = request.getPath().getStartLocation().getLatLng();
+                                    setLatLngBounds(start, finish);
+                                    calculateDirections(start, finish, request);
                                 } else {
                                     start = request.getPath().getStartLocation().getLatLng();
                                     finish = request.getPath().getDestination().getLatLng();
+                                    setLatLngBounds(start, finish);
+                                    calculateDirections(start, finish, request);
                                 }
-
-                                setLatLngBounds(start, finish);
-                                calculateDirections(start, finish, request);
                             }
                         });
                     }
                 });
             }
         });
+    }
+
+    private void setRequestToInProgress() {
+        User user = authViewModel.getCurrentUser().getValue();
+        Request request = navigationViewModel.getCurrentRequest(user).getValue();
+        request.pickup();
+        navigationViewModel.updateRequest(request);
     }
 
     private void showPickupRoute() {
