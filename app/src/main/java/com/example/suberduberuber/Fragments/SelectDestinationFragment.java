@@ -39,6 +39,7 @@ public class SelectDestinationFragment extends MapFullFragment {
     private AuthViewModel authViewModel;
     private Request tempRequest;
     private NavController navController;
+    private User currentUser;
 
     public SelectDestinationFragment() {
         // Required empty public constructor
@@ -70,6 +71,13 @@ public class SelectDestinationFragment extends MapFullFragment {
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
         navController = findNavController(view);
 
+        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                currentUser = user;
+            }
+        });
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,14 +97,11 @@ public class SelectDestinationFragment extends MapFullFragment {
     }
 
     private void createTempRequest() {
-        authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                tempRequest = new Request((Rider) user, new Path(), new Date());
-                tempRequest.getPath().setDestination(new CustomLocation(currentPlace));
-                saveRequest();
-                navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
-            }
-        });
+        if (currentUser != null) {
+            tempRequest = new Request((Rider) currentUser, new Path(), new Date());
+            tempRequest.getPath().setDestination(new CustomLocation(currentPlace));
+            saveRequest();
+            navController.navigate(R.id.action_selectDestinationFragment_to_selectOriginFragment);
+        }
     }
 }

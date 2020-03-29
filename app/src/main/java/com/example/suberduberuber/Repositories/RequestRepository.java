@@ -56,7 +56,8 @@ public class RequestRepository {
     }
 
     public Query getAllRequests() {
-        return myDb.collection("requests");
+        return myDb.collection("requests")
+                .orderBy("time");
     }
 
     public Task<Void> acceptRequest(Request request) {
@@ -83,5 +84,10 @@ public class RequestRepository {
                 .whereEqualTo("driver.email", user.getEmail())
                 .whereEqualTo("status", "IN_PROGRESS")
                 .limit(1);
+    }
+
+    public Query getRequestByPickupName(String name) {
+        return myDb.collection("requests")
+                .whereEqualTo("path.startLocation.locationName", name);
     }
 }

@@ -18,7 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
@@ -31,6 +34,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -40,6 +44,8 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.Distance;
+import com.google.maps.model.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +62,20 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
 
     Button submitButton;
     TextView textView;
+    TextView pickupTextView;
+    TextView pickupTimeTextView;
+    TextView destinationTextView;
+    EditText bidAmount;
+    ImageButton submitBid;
+
 
     private GetRideViewModel getRideViewModel;
     private Request tempRequest;
 
     protected NavController navController;
+
+    private long duration;
+    private long distance;
 
     public ConfirmRouteFragment() {
         // Required empty public constructor
@@ -83,14 +98,33 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
         tempRequest = getRideViewModel.getTempRequest().getValue();
 
-        TextView pickupTextView = view.findViewById(R.id.pickupLocation);
-        pickupTextView.setText(tempRequest.getPath().getStartLocation().getLocationName());
-        TextView destinationTextView = view.findViewById(R.id.destination);
-        destinationTextView.setText(tempRequest.getPath().getDestination().getLocationName());
-        TextView pickupTimeTextView = view.findViewById(R.id.pickupTime);
+        pickupTextView = view.findViewById(R.id.pickupLocation);
+        destinationTextView = view.findViewById(R.id.destination);
+        setTextViews();
+
+        pickupTimeTextView = view.findViewById(R.id.pickupTime);
         pickupTimeTextView.setText(tempRequest.getTime().toString());
 
-        setLatLngBounds(tempRequest);
+        bidAmount = view.findViewById(R.id.bid_amount);
+        submitBid = view.findViewById(R.id.confirm_bid_button);
+        submitBid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    double bid = Double.valueOf(bidAmount.getText().toString());
+                    if (bid >= tempRequest.getPath().getEstimatedFare()) {
+                        tempRequest.setPrice(bid);
+                        Toast.makeText(getContext(), "Bid Updated", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Bid is less than recommended amount", Toast.LENGTH_LONG).show();
+                    }
+                }
+                catch (Exception exception) {
+                    Toast.makeText(getContext(), "Invalid Bid", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         submitButton = view.findViewById(R.id.submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -105,11 +139,20 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
         initGoogleMap(savedInstanceState);
     }
 
-    public void setLatLngBounds(Request request) {
-        LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
-        latLngBoundsBuilder.include(request.getPath().getDestination().getLatLng());
-        latLngBoundsBuilder.include(request.getPath().getStartLocation().getLatLng());
-        latLngBounds = latLngBoundsBuilder.build();
+    private void setTextViews() {
+        if (tempRequest.getPath().getStartLocation().hasUniqueName) {
+            pickupTextView.setText(tempRequest.getPath().getStartLocation().getLocationName());
+        }
+        else {
+            pickupTextView.setText(tempRequest.getPath().getStartLocation().getAddress());
+        }
+
+        if (tempRequest.getPath().getDestination().hasUniqueName) {
+            destinationTextView.setText(tempRequest.getPath().getDestination().getLocationName());
+        }
+        else {
+            destinationTextView.setText(tempRequest.getPath().getDestination().getAddress());
+        }
     }
 
     @Override
@@ -173,6 +216,36 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
         });
     }
 
+    public void setRouteValues(DirectionsRoute route) {
+        distance = route.legs[0].distance.inMeters;
+        duration = route.legs[0].duration.inSeconds;
+        tempRequest.getPath().generateEstimatedFare(distance, duration);
+        try {
+            tempRequest.setPrice(tempRequest.getPath().getEstimatedFare());
+            bidAmount.setText(String.valueOf(tempRequest.getPrice()));
+        }
+        catch (Exception exception) {
+            Toast.makeText(getContext(), "Estimated Bid Error", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private List<LatLng> setBoundsAndGetRoute(List<com.google.maps.model.LatLng> decodedPath) {
+        List<LatLng> newDecodedPath = new ArrayList<>();
+        LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
+        for(com.google.maps.model.LatLng latLng : decodedPath){
+            latLngBoundsBuilder.include(new LatLng(
+                    latLng.lat,
+                    latLng.lng));
+            newDecodedPath.add(new LatLng(
+                    latLng.lat,
+                    latLng.lng
+            ));
+        }
+        latLngBounds = latLngBoundsBuilder.build();
+        return newDecodedPath;
+    }
+
     private void addPolylinesToMap(final DirectionsResult result){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -182,23 +255,16 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
+                    List<LatLng> newDecodedPath = setBoundsAndGetRoute(decodedPath);
+                    setRouteValues(route);
 
-                    List<LatLng> newDecodedPath = new ArrayList<>();
-
-                    // This loops through all the LatLng coordinates of ONE polyline.
-                    for(com.google.maps.model.LatLng latLng: decodedPath){
-                        newDecodedPath.add(new LatLng(
-                                latLng.lat,
-                                latLng.lng
-                        ));
-                    }
                     Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                     mMap.addMarker(new MarkerOptions().position(tempRequest.getPath().getStartLocation().getLatLng())
                             .title("Start")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
                     mMap.addMarker(new MarkerOptions().position(tempRequest.getPath().getDestination().getLatLng())
-                            .title("Destination")).showInfoWindow();
+                            .title("Destination"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, DEFAULT_ZOOM));
                 }
             }
@@ -220,8 +286,6 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setMyLocationEnabled(true);
-
     }
     @Override
     public void onPause() {

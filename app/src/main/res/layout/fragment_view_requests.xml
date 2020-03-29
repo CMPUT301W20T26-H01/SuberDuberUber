@@ -6,11 +6,11 @@
     tools:context=".Fragments.ViewRequestsFragment">
 
     <view
+        android:background="@color/colorPrimaryLight"
         android:id="@+id/request_list"
         class="androidx.recyclerview.widget.RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp"
         android:layout_margin="8dp"
         tools:layout_editor_absoluteX="8dp"
         tools:listitem="@layout/request_card" />
