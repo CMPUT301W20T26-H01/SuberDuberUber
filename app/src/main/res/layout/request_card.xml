@@ -38,11 +38,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorPrimaryText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.957"
@@ -77,6 +78,17 @@
                 app:layout_constraintVertical_bias="0.093" />
 
             <TextView
+                android:layout_width="8dp"
+                android:layout_height="17dp"
+                android:text="$"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/suggested_price"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.684" />
+
+            <TextView
                 android:textColor="@color/colorPrimaryText"
                 android:id="@+id/suggested_price"
                 android:layout_width="wrap_content"
@@ -101,7 +113,7 @@
             android:layout_height="48dp"
             android:layout_gravity="bottom"
             android:layout_marginTop="85dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <Button
                 android:id="@+id/back_button"

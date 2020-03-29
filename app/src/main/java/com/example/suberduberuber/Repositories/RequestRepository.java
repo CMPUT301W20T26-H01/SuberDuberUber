@@ -51,7 +51,6 @@ public class RequestRepository {
     public Task<QuerySnapshot> getUsersRequests(User currentUser) {
         return myDb.collection("requests")
                 .whereEqualTo("requestingUser.email", currentUser.getEmail())
-                .whereEqualTo("status", "")
                 .limit(10)
                 .get();
     }
@@ -59,10 +58,6 @@ public class RequestRepository {
     public Query getAllRequests() {
         return myDb.collection("requests")
                 .orderBy("time");
-    }
-
-    public Task<Void> acceptRequest(Request request) {
-        return myDb.collection("requests").document(request.getRequestID()).update("status", "claimed");
     }
 
     public void cancelRequest(Request request) {

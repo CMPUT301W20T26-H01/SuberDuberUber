@@ -57,6 +57,8 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.Distance;
 import com.google.maps.model.Duration;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +78,7 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     private RecyclerView requestRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AvailableRequestListAdapter adapter;
+    private TextView noRequestsMessage;
 
     public DriverSearchRequests() {
         // Required empty public constructor
@@ -99,21 +102,23 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
 
         initGoogleMap(savedInstanceState);
 
-        viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
-            @Override
-            public void onChanged(List<Request> requests) {
-                setMapBounds(requests);
-                displayRequests(requests);
-            }
-        });
-
         requestRecyclerView = view.findViewById(R.id.request_list);
         configureRecyclerView();
 
+        noRequestsMessage = view.findViewById(R.id.no_requests_message);
+
         viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
             @Override
             public void onChanged(List<Request> requests) {
-                adapter.setRequestDataset(requests);
+                if(requests.size() > 0) {
+                    noRequestsMessage.setVisibility(View.GONE);
+                    setMapBounds(requests);
+                    displayRequests(requests);
+                    adapter.setRequestDataset(requests);
+                }
+                else {
+                    noRequestsMessage.setVisibility(View.VISIBLE);
+                }
             }
         });
 

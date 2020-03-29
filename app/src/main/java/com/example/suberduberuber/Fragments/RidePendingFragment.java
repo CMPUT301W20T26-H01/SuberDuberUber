@@ -76,7 +76,6 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     private LatLngBounds latLngBounds;
     private List<com.google.maps.model.LatLng> decodedPath;
     private Marker driverMaker;
-    private Boolean directionsCalculated = false;
     private GeoPoint driverLocation;
 
 
@@ -119,6 +118,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
             @Override
             public void onClick(View v) {
                 getRideViewModel.cancelCurrentRequest(currentUser);
+                getRideViewModel.removeObservers(getViewLifecycleOwner());
                 navController.navigate(R.id.action_ridePendingFragment_to_selectDestinationFragment);
             }
         });
@@ -159,10 +159,6 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         }
     }
 
-    public void cancelRideRequest(Request request) {
-        getRideViewModel.cancelRequest(request);
-    }
-
     public void updateRequestInfo(Request request) {
 
         if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
@@ -173,19 +169,22 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         calculateDirections(request);
     }
 
-    private void updateDriverLocation(Request request) {
-            driverLocationViewModel.getDriverLocation(request).observe(getViewLifecycleOwner(), new Observer<GeoPoint>() {
-                @Override
-                public void onChanged(GeoPoint geoPoint) {
-                    try {
-                        driverLocation = geoPoint;
-                        if (geoPoint != null) {
-                            updateDriverPin();
-                        }
-                    } catch (NullPointerException exception) {
-                    }
+    private Observer<GeoPoint> driverLocationObserver = new Observer<GeoPoint>() {
+        @Override
+        public void onChanged(GeoPoint geoPoint) {
+            try {
+                driverLocation = geoPoint;
+                if (geoPoint != null) {
+                    updateDriverPin();
                 }
-            });
+            } catch (NullPointerException exception) {
+            }
+        }
+    };
+
+    private void updateDriverLocation(Request request) {
+            driverLocationViewModel.removeObserver(driverLocationObserver);
+            driverLocationViewModel.getDriverLocation(request).observe(getViewLifecycleOwner(), driverLocationObserver);
     }
 
 
@@ -257,6 +256,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
 
                 drawPath(result, request);
+                Log.d(TAG, "Drawing Path");
             }
 
             @Override
@@ -330,6 +330,14 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        getRideViewModel.getUsersCurrentRide(currentUser).observe(getViewLifecycleOwner(), new Observer<Request>() {
+            @Override
+            public void onChanged(Request request) {
+                if(request != null) {
+                    updateRequestInfo(request);
+                }
+            }
+        });
     }
 
     @Override

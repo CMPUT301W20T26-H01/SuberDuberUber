@@ -6,12 +6,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.RequestRepository;
+import com.google.android.gms.common.api.internal.LifecycleCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -105,5 +107,10 @@ public class GetRideViewModel extends AndroidViewModel {
 
     public void cancelRequest(Request request) {
         requestRepository.cancelRequest(request);
+    }
+
+    public void removeObservers(LifecycleOwner owner) {
+        currentRequest.removeObservers(owner);
+        currentRequest = new MutableLiveData<>();
     }
 }
