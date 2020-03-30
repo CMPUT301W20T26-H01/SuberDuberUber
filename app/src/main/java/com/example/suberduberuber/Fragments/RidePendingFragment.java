@@ -19,6 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.suberduberuber.Clients.UserClient;
@@ -28,6 +30,7 @@ import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
 import com.example.suberduberuber.ViewModels.DriverLocationViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
+import com.example.suberduberuber.ViewModels.ProfileViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -66,7 +69,9 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
     private Button cancelButton;
     private Button completeButton;
-    private TextView rideRequestStatus;
+    private Button viewDriverDetailsButton;
+    private LinearLayout waitingProgressBar;
+    private TextView titleText;
 
     private static final int DEFAULT_ZOOM = 150;
     private MapView mMapView;
@@ -98,7 +103,6 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         super.onViewCreated(view, savedInstanceState);
 
         mMapView = (MapView) view.findViewById(R.id.ride_request_live_route);
-        rideRequestStatus = view.findViewById(R.id.rideRequestStatus);
 
         navController = findNavController(view);
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
@@ -106,6 +110,9 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
         driverLocationViewModel = new ViewModelProvider(requireActivity()).get(DriverLocationViewModel.class);
 
         currentUser = ((UserClient)(getActivity().getApplicationContext())).getUser();
+
+        waitingProgressBar = view.findViewById(R.id.waiting_loader);
+        titleText = view.findViewById(R.id.title_text);
 
         completeButton = view.findViewById(R.id.complete_ride_request_button);
         completeButton.setVisibility(View.GONE);
@@ -115,6 +122,9 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                 navController.navigate(R.id.action_ridePendingFragment_to_scanqrcodeFragment);
             }
         });
+
+        viewDriverDetailsButton = view.findViewById(R.id.driver_details_button);
+        viewDriverDetailsButton.setVisibility(View.GONE);
 
         cancelButton = view.findViewById(R.id.cancel_ride_request_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -163,31 +173,48 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     }
 
     public void updateRequestInfo(Request request) {
-        if (Objects.equals(request.getStatus(), "ACCEPTED")) {
+
+        if(request.getStatus().equals("ACCEPTED")) {
+            displayAcceptedState(request);
             updateDriverLocation(request);
-            rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
-            rideRequestStatus.setClickable(true);
-            rideRequestStatus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (request.getDriver() != null) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("driverEmail", request.getDriver().getEmail());
-                        bundle.putString("driverName", request.getDriver().getUsername());
-                        bundle.putString("driverPhone", request.getDriver().getPhone());
-                        bundle.putFloat("driverRating",  (float) request.getDriver().getRating());
-                        navController.navigate(R.id.action_ridePendingFragment_to_driverDetailsFragment, bundle);
-                    }
-                }
-            });
         }
-        else if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+
+        else if(request.getStatus().equals("IN_PROGRESS")) {
+            displayInProgressState(request);
             updateDriverLocation(request);
-            rideRequestStatus.setText("Ride In Progress");
         }
+
         nearbyBounds = createBounds(request.getPath().getStartLocation().getLatLng());
         endBounds = createBounds(request.getPath().getDestination().getLatLng());
         calculateDirections(request);
+    }
+
+    private void displayAcceptedState(Request request) {
+        waitingProgressBar.setVisibility(View.GONE);
+        viewDriverDetailsButton.setVisibility(View.VISIBLE);
+        titleText.setText("Ride Accepted!");
+        completeButton.setText("Get ready, driver " + request.getDriver().getUsername() + " is nearby!");
+        viewDriverDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (request.getDriver() != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("driverEmail", request.getDriver().getEmail());
+                    bundle.putString("driverName", request.getDriver().getUsername());
+                    bundle.putString("driverPhone", request.getDriver().getPhone());
+                    bundle.putFloat("driverRating",  (float) request.getDriver().getRating());
+                    navController.navigate(R.id.action_ridePendingFragment_to_driverDetailsFragment, bundle);
+                }
+            }
+        });
+    }
+
+    private void displayInProgressState(Request request) {
+        titleText.setVisibility(View.GONE);
+        completeButton.setText("Almost There!");
+        cancelButton.setVisibility(View.GONE);
+        viewDriverDetailsButton.setVisibility(View.GONE);
+        completeButton.setVisibility(View.VISIBLE);
     }
 
     private Observer<GeoPoint> driverLocationObserver = new Observer<GeoPoint>() {
@@ -219,14 +246,18 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     }
 
     private void driverNearby() {
-        cancelButton.setClickable(false);
-        cancelButton.setText("Get Ready, Your Driver is Close!");
+        titleText.setText("Driver is Nearby!");
+        cancelButton.setVisibility(View.GONE);
+        completeButton.setVisibility(View.VISIBLE);
+        completeButton.setOnClickListener(null);
     }
 
     private void driverEnd() {
-        cancelButton.setClickable(true);
-        cancelButton.setText("Pay Driver");
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        completeButton.setVisibility(View.VISIBLE);
+        titleText.setVisibility(View.VISIBLE);
+        titleText.setText("Ride Completed");
+        completeButton.setText("Pay Driver!");
+        completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.action_ridePendingFragment_to_scanqrcodeFragment);
