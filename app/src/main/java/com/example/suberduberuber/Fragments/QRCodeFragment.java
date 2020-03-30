@@ -110,7 +110,7 @@ public class QRCodeFragment extends Fragment {
 
     private void displayBalance(User user) {
         balance = user.getBalance();
-        balanceTV.setText("Balance: ".concat(Double.toString(balance)));
+        balanceTV.setText("Balance: ".concat(String.format("%.2f", balance)));
     }
 
     public void addFunds() {

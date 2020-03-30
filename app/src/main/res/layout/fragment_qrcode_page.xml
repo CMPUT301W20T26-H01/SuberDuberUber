@@ -23,11 +23,13 @@
         android:textAlignment="center" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp">
 
         <Button
+            android:background="@color/colorPrimary"
             android:id="@+id/addFundsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
