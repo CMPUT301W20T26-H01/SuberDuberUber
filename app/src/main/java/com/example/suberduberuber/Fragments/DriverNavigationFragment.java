@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
@@ -130,6 +131,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                         // reqSetup accounts for the first onChange where request can == null from not being setup
                         if (request == null && reqSetup) {
                             reqSetup = false;
+                            Toast.makeText(getActivity(), "Rider has cancelled the rider", Toast.LENGTH_SHORT).show();
                             navController.navigate(R.id.action_to_viewRequests);
                         }
                         else if (request != null) {
