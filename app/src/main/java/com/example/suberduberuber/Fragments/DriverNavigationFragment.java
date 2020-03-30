@@ -72,6 +72,8 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     private AuthViewModel authViewModel;
     private DriverPaidRateViewModel driverPaidRateViewModel;
 
+    private Boolean reqSetup;
+
     protected NavController navController;
     private ImageButton doneRideButton;
 
@@ -90,6 +92,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        reqSetup = false;
         mMapView = (MapView) view.findViewById(R.id.route_map);
 
         navController = Navigation.findNavController(view);
@@ -121,30 +124,38 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                navigationViewModel.getCurrentRequest(user).observe(getViewLifecycleOwner(), new Observer<Request>() {
+                navigationViewModel.getCurrentRequestOnEvent(user).observe(getViewLifecycleOwner(), new Observer<Request>() {
                     @Override
                     public void onChanged(Request request) {
-                        driverPaidRateViewModel.setRequest(request);
-                        driverPaidRateViewModel.setRider(request.getRequestingUser());
-                        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                LatLng start;
-                                LatLng finish;
+                        // reqSetup accounts for the first onChange where request can == null from not being setup
+                        if (request == null && reqSetup) {
+                            reqSetup = false;
+                            navController.navigate(R.id.action_to_viewRequests);
+                        }
+                        else if (request != null) {
+                            driverPaidRateViewModel.setRequest(request);
+                            driverPaidRateViewModel.setRider(request.getRequestingUser());
+                            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    LatLng start;
+                                    LatLng finish;
 
-                                if(showingPickupRoute & location != null) {
-                                    start = new LatLng(location.getLatitude(), location.getLongitude());
-                                    finish = request.getPath().getStartLocation().getLatLng();
-                                    setLatLngBounds(start, finish);
-                                    calculateDirections(start, finish, request);
-                                } else {
-                                    start = request.getPath().getStartLocation().getLatLng();
-                                    finish = request.getPath().getDestination().getLatLng();
-                                    setLatLngBounds(start, finish);
-                                    calculateDirections(start, finish, request);
+                                    if (showingPickupRoute & location != null) {
+                                        start = new LatLng(location.getLatitude(), location.getLongitude());
+                                        finish = request.getPath().getStartLocation().getLatLng();
+                                        setLatLngBounds(start, finish);
+                                        calculateDirections(start, finish, request);
+                                    } else {
+                                        start = request.getPath().getStartLocation().getLatLng();
+                                        finish = request.getPath().getDestination().getLatLng();
+                                        setLatLngBounds(start, finish);
+                                        calculateDirections(start, finish, request);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        reqSetup = true;
                     }
                 });
             }
