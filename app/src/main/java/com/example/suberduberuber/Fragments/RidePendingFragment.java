@@ -163,7 +163,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     }
 
     public void updateRequestInfo(Request request) {
-        if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+        if (Objects.equals(request.getStatus(), "ACCEPTED")) {
             updateDriverLocation(request);
             rideRequestStatus.setText("Waiting for " + request.getDriver().getUsername() + " to pick you up.");
             rideRequestStatus.setClickable(true);
@@ -180,6 +180,10 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
                     }
                 }
             });
+        }
+        else if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+            updateDriverLocation(request);
+            rideRequestStatus.setText("Ride In Progress");
         }
         nearbyBounds = createBounds(request.getPath().getStartLocation().getLatLng());
         endBounds = createBounds(request.getPath().getDestination().getLatLng());
