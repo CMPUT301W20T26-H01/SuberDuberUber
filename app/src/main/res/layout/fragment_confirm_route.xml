@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="0dp"
     android:orientation="vertical"
     tools:context=".Fragments.SelectDestinationFragment">
 
@@ -24,69 +25,71 @@
             map:uiScrollGestures="false"
             map:uiRotateGestures="false"
             map:uiTiltGestures="false"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:fadingEdgeLength="10dp"
+            android:requiresFadingEdge="horizontal|vertical" />
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/selectedPickupLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
-            android:text="Your Selected Pickup Location:" />
+            android:text="Your Selected Pickup Location:"
+            android:textColor="@color/colorPrimaryText" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/pickupLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:text="Pickup"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/selectedDestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:text="Your Selected Destination:" />
+            android:text="Your Selected Destination:"
+            android:textColor="@color/colorPrimaryText" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:text="Destination"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/selectedTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:text="Pickup Time" />
+            android:text="Pickup Time"
+            android:textColor="@color/colorPrimaryText" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/pickupTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="5dp"
             android:text="12:00 AM"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <TextView
@@ -137,15 +140,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <Button
-            android:textColor="@color/colorSecondaryText"
-            android:background="@color/colorSecondary"
-            android:layout_marginTop="10dp"
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_weight="0"
-            android:text="Let's Do This!" />
+            android:background="@color/colorSecondary"
+            android:text="Let's Do This!"
+            android:textColor="@color/colorSecondaryText" />
 
     </LinearLayout>
 
