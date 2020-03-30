@@ -20,12 +20,22 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textColor="@color/colorPrimaryText"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="To edit your information, please touch any of the below fields."
+        android:textSize="12dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryText" />
+
+
     <LinearLayout
         android:id="@+id/emailLayout"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="15dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
