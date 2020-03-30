@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".Fragments.SelectDestinationFragment"
     android:layout_margin="5dp">
@@ -14,11 +17,43 @@
         android:layout_weight="1"
         android:gravity="bottom|center"
         android:orientation="vertical">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:cardBackgroundColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/refresh_location"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:background="@color/colorPrimaryDark"
+                android:text="Refresh Location"
+                android:textColor="@color/colorSecondaryText"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.906"
+                app:layout_constraintStart_toEndOf="@+id/back_button"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.826"
+                tools:ignore="RtlCompat" />
+
+        </androidx.cardview.widget.CardView>
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/route_map"
+            map:uiZoomGestures="false"
+            map:uiScrollGestures="false"
+            map:uiRotateGestures="false"
+            map:uiTiltGestures="false"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="335dp"
             android:layout_weight="0" />
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -39,6 +74,36 @@
                 tools:listitem="@layout/request_card"
                 />
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/no_requests_message"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="There are not requests right now!"
+                    android:textColor="@color/colorSecondaryText"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.906"
+                    app:layout_constraintStart_toEndOf="@+id/back_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.826"
+                    tools:ignore="RtlCompat" />
+
+            </androidx.cardview.widget.CardView>
+
         </RelativeLayout>
 
         <TextView
@@ -46,16 +111,6 @@
             android:layout_height="match_parent"
             android:text="YOLO"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            />
-
-        <TextView
-            android:id="@+id/no_requests_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No Ride Requests :("
-            android:layout_marginBottom="50dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:visibility="gone"
             />
 
 

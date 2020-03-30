@@ -178,6 +178,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
             displayAcceptedState(request);
             updateDriverLocation(request);
         }
+
         else if(request.getStatus().equals("IN_PROGRESS")) {
             displayInProgressState(request);
             updateDriverLocation(request);

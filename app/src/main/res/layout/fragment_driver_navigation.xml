@@ -18,18 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="101dp" />
 
-    <TextView
-        android:id="@+id/title_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Path to Pickup"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.083"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
     <LinearLayout
         android:id="@+id/arrived_button"
         android:clickable="true"
@@ -68,5 +56,18 @@
 
     </LinearLayout>
 
+
+    <TextView
+        android:id="@+id/driverNavStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary60Transparency"
+        android:text="Route to pickup rider:"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
