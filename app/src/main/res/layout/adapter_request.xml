@@ -9,33 +9,32 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:layout_margin="5dp"
-        app:contentPadding="5dp"
+        android:background="@color/colorPrimary"
+        app:contentPadding="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:background="@color/colorPrimary"
             android:id="@+id/constant_details"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/pickupLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Pickup: "
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/destination" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/driverField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,6 +44,7 @@
                 android:layout_marginBottom="8dp"
                 android:scrollHorizontally="true"
                 android:text="username"
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,30 +53,29 @@
                 app:layout_constraintTop_toBottomOf="@+id/pickupTimeField" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/pickupTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:text="Pickup Time:"
+                android:textColor="@color/colorPrimaryText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pickupLocation" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/destination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Destination: "
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,12 +84,12 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="Status = "
+                android:textColor="@color/colorPrimaryText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pickupTime" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/statusField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,12 +98,12 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="status"
+                android:textColor="@color/colorPrimaryText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/status"
                 app:layout_constraintTop_toBottomOf="@+id/pickupTimeField" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/destinationField"
                 android:layout_width="0dp"
                 android:layout_height="23dp"
@@ -114,6 +113,7 @@
                 android:scrollHorizontally="true"
                 android:text="Destination Location"
                 android:textAlignment="textEnd"
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -121,7 +121,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/pickupTimeField"
                 android:layout_width="0dp"
                 android:layout_height="19dp"
@@ -131,12 +130,12 @@
                 android:scrollHorizontally="true"
                 android:text="12:00 AM"
                 android:textAlignment="textEnd"
+                android:textColor="@color/colorPrimaryText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/pickupTime"
                 app:layout_constraintTop_toBottomOf="@+id/pickupLocation" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/pickupField"
                 android:layout_width="0dp"
                 android:layout_height="23dp"
@@ -146,6 +145,7 @@
                 android:scrollHorizontally="true"
                 android:text="Pickup Location"
                 android:textAlignment="textEnd"
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -153,7 +153,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/destinationField" />
 
             <TextView
-                android:textColor="@color/colorPrimaryText"
                 android:id="@+id/driver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -162,6 +161,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="Driver: "
+                android:textColor="@color/colorPrimaryText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/driverField"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -197,8 +197,8 @@
                 android:layout_width="284dp"
                 android:layout_height="46dp"
                 android:layout_marginStart="10dp"
-                android:text="Delete Request"
                 android:background="@color/colorPrimaryDark"
+                android:text="Delete Request"
                 android:textColor="@color/colorPrimaryText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
