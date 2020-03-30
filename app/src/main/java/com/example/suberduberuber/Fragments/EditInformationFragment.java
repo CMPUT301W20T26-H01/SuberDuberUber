@@ -141,13 +141,13 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
         switch(v.getId()) {
             case R.id.emailEdit:
                 newInfoField.setText(emailEdit.getText());
-                dialog.setTitle("Edit Email");
+                dialog.setTitle("Edit Email Address");
                 dialog.show();
                 id = v.getId();
                 break;
             case R.id.phoneNumberEdit:
                 newInfoField.setText(phoneNumberEdit.getText().toString());
-                dialog.setTitle("Edit Phone");
+                dialog.setTitle("Edit Phone Number");
                 dialog.show();
                 id = v.getId();
                 break;
