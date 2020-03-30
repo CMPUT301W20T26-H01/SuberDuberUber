@@ -48,7 +48,8 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
 
         // set fields
         Path path = request.getPath();
-        if (path.getDestination().getLocationName() != null) {
+        if (path.getDestination().getLocationName() != null && !(Objects.equals(path.getDestination().getLocationName(), "Selected Location"))
+            && !(Objects.equals(path.getDestination().getLocationName(), "Current Location"))) {
             holder.destination.setText(path.getDestination().getLocationName());
         } else if (path.getDestination().getAddress() != null) {
             holder.destination.setText(path.getDestination().getAddress());
@@ -58,7 +59,8 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
             holder.destination.setText("Unknown Location");
         }
 
-        if (path.getStartLocation().getLocationName() != null) {
+        if (path.getStartLocation().getLocationName() != null && !(Objects.equals(path.getStartLocation().getLocationName(), "Selected Location"))
+            && !(Objects.equals(path.getStartLocation().getLocationName(), "Current Location"))) {
             holder.pickupLocation.setText(path.getStartLocation().getLocationName());
         } else if (path.getStartLocation().getAddress() != null) {
             holder.pickupLocation.setText(path.getStartLocation().getAddress());
