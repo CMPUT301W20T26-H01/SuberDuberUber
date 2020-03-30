@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:map=""
     android:orientation="vertical"
     tools:context=".Fragments.SelectDestinationFragment">
 
@@ -19,6 +20,10 @@
             android:id="@+id/route_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            map:uiZoomGestures="false"
+            map:uiScrollGestures="false"
+            map:uiRotateGestures="false"
+            map:uiTiltGestures="false"
             android:layout_weight="1" />
         <TextView
             android:textColor="@color/colorPrimaryText"
