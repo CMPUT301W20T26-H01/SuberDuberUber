@@ -57,7 +57,7 @@ public class RequestRepository {
 
     public Query getAllRequests() {
         return myDb.collection("requests")
-                .orderBy("time");
+                .whereEqualTo("status", "PENDING_ACCEPTANCE");
     }
 
     public void cancelRequest(Request request) {
