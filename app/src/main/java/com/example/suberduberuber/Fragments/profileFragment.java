@@ -43,6 +43,11 @@ public class profileFragment extends Fragment {
     private TextView phoneNumberPro;
     private Button editButton;
 
+    private TextView yearT;
+    private TextView makeT;
+    private TextView modelT;
+    private TextView colorT;
+    private TextView plateNumberT;
 
     private User user;
     boolean isDriver;
@@ -75,6 +80,7 @@ public class profileFragment extends Fragment {
         model = view.findViewById(R.id.carModel);
         color = view.findViewById(R.id.carColor);
         plateNumber = view.findViewById(R.id.carPlate);
+
 
         profileViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
@@ -129,7 +135,8 @@ public class profileFragment extends Fragment {
             make.setVisibility(View.GONE);
             model.setVisibility(View.GONE);
             color.setVisibility(View.GONE);
-            plateNumber.setVisibility(View.GONE);}
+            plateNumber.setVisibility(View.GONE);
+        }
 
         usernamePro.setText(user.getUsername());
         emailPro.setText(user.getEmail());

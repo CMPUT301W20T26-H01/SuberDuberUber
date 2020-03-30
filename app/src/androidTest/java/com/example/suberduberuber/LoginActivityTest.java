@@ -84,10 +84,14 @@ public class LoginActivityTest {
         //intended(hasComponent(MainActivity.class.getName()));
     }
 
+    /**
+     * test that after log in, user is loginSuccessful
+     */
     @Test
     public void currentUserUpdated() {
 
     }
+
     /**
      * Test that login with valid user information is successful
      */
