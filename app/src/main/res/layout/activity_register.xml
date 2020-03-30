@@ -48,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number"
+            android:maxLength="14"
             android:inputType="phone" />
 
         <EditText
@@ -112,13 +113,13 @@
             android:hint="License Plate" />
 
         <Button
-            android:textColor="@color/colorSecondaryText"
-            android:layout_marginTop="5dp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_gravity="bottom"
             android:id="@+id/register_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register"
-            android:background="@color/colorSecondary"/>
+            android:background="@color/colorPrimary"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
