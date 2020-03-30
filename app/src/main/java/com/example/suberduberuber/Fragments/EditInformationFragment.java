@@ -105,7 +105,9 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
             modelEdit.setOnClickListener(this);
             colorEdit.setOnClickListener(this);
 
-        } else{ yearEdit.setVisibility(View.GONE);
+        } else{
+            this.user = user;
+            yearEdit.setVisibility(View.GONE);
             makeEdit.setVisibility(View.GONE);
             modelEdit.setVisibility(View.GONE);
             colorEdit.setVisibility(View.GONE);}
