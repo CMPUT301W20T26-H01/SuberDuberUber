@@ -10,23 +10,24 @@
     android:background="@color/quantum_bluegrey900">
 
     <TextView
-        android:textColor="@color/quantum_white_100"
-        android:layout_width="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Scanned QR"
-        android:textSize="15dp"
+        android:textAlignment="center"
+        android:text="Payment"
+        android:textSize="32dp"
         android:layout_marginTop="6dp">
     </TextView>
 
     <TextView
-        android:textColor="@color/quantum_white_100"
+        android:textColor="@color/colorPrimaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/amount"
         android:text="Amount to"
-        android:textSize="15dp"
+        android:textSize="24dp"
         android:layout_marginTop="20dp">
     </TextView>
 
@@ -37,30 +38,30 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/scannedId"
         android:text="No ID Scanned"
-        android:textSize="15dp"
+        android:textSize="24dp"
         android:layout_marginTop="6dp">
     </TextView>
 
     <Button
-    android:background="@drawable/btn_round"
-    android:textColor="@color/quantum_white_100"
-    android:layout_width="wrap_content"
+    android:background="@color/colorPrimary"
+    android:textColor="@color/colorPrimaryText"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Confirm Payment"
     android:textSize="15dp"
-    android:layout_marginTop="40dp"
+    android:layout_marginTop="200dp"
     android:layout_gravity="center_horizontal"
     android:id="@+id/next_button"/>
 
     <Button
-        android:background="@drawable/btn_round"
-        android:textColor="@color/quantum_white_100"
-        android:layout_width="wrap_content"
+        android:id="@+id/rescan_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rescan QR Code"
-        android:textSize="15dp"
-        android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/rescan_button"/>
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:text="Rescan QR Code"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="15dp" />
 
 </LinearLayout>

@@ -77,6 +77,10 @@ public class ScanQRCodeFragment extends Fragment {
         nextButton = view.findViewById(R.id.next_button);
         rescanQRButton = view.findViewById(R.id.rescan_button);
 
+        qrCodeId.setText("The QR Code does not match with the driver. Please rescan the driver's QR Code.");
+        amountText.setVisibility(View.GONE);
+        nextButton.setVisibility(View.GONE);
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
