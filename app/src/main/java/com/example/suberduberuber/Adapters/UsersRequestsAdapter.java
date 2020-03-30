@@ -18,6 +18,7 @@ import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -70,13 +71,25 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
             holder.pickupLocation.setText("Unknown Location");
         }
 
-        holder.time.setText(request.getTime().toString());
+        String timeFormat = "HH:mm - EEE MMM dd, YYYY";
+        holder.time.setText(new SimpleDateFormat(timeFormat).format(request.getTime()));
         if (Objects.equals(request.getStatus(), "PENDING_ACCEPTANCE")) {
             holder.driver_username.setText("None");
         } else {
             holder.driver_username.setText(request.getDriver().getUsername());
         }
-        holder.status.setText(request.getStatus());
+        if (request.getStatus() == "COMPLETED") {
+            holder.status.setText("Ride Completed");
+        }
+        else if (request.getStatus() == "IN_PROGRESS") {
+            holder.status.setText("Currently on this Ride");
+        }
+        else if (request.getStatus() == "PENDING_ACCEPTANCE") {
+            holder.status.setText("Waiting for a Driver");
+        }
+        else if (request.getStatus() == "ACCEPTED") {
+            holder.status.setText("Driver is on the way");
+        }
     }
 
     @Override

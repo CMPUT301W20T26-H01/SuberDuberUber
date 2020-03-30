@@ -3,182 +3,246 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/quantum_bluegrey900">
+    android:background="@color/colorPrimaryLight">
 
     <TextView
         android:id="@+id/usernameProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.80"
         android:text="Username"
         android:textAlignment="center"
-        android:textColor="@color/quantum_white_100"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="60dp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/emailProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Email"
-        android:textAlignment="center"
-        android:textColor="@color/quantum_white_100"/>
-
-
-    <TextView
-        android:id="@+id/phoneNumberProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="phone number"
-        android:textAlignment="center"
-        android:textColor="@color/quantum_white_100"/>
-
-
-    <TextView
-        android:id="@+id/ratingProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="rating"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@color/quantum_white_100"/>
-
-
-    <TextView
-        android:id="@+id/CarBelow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Car Information:"
-        android:textAlignment="center"
-        android:textColor="@color/quantum_white_100"
-        android:textSize="20sp"
-        android:textStyle="bold|italic" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.80"
-        android:orientation="horizontal">
-
+        android:layout_weight="0.8"
+        android:orientation="horizontal" >
         <TextView
-            android:id="@+id/yearView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Year"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
-
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="25dp"
+            android:text="Email:"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryText" />
         <TextView
-            android:id="@+id/carYear"
+            android:id="@+id/emailProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Year"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:text="email@email.ca"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryText" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.80"
-        android:orientation="horizontal">
+        android:layout_weight="0.8"
+        android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/makeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Make"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
+            android:layout_gravity="center"
+            android:text="Phone:"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_marginLeft="25dp"/>
 
         <TextView
-            android:id="@+id/carMake"
+            android:id="@+id/phoneNumberProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Make"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.80"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/modelView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Model"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
-
-        <TextView
-            android:id="@+id/carModel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Model"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
+            android:layout_gravity="center"
+            android:text="(123) 456-7890"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_marginLeft="6dp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.80"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/colorView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Colour"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
+        android:layout_weight="0.8"
+        android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/carColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Color"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
+            android:layout_gravity="center_vertical"
+            android:text="Rating: "
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_marginLeft="25dp"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:id="@+id/ratingStarBar"
+            android:theme="@style/RatingBar"
+            android:isIndicator="true" />
+
+        <TextView
+            android:id="@+id/ratingProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="6dp"
+            android:text="Rating"
+            android:textSize="16dp"
+            android:textColor="@color/colorPrimaryText" />
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.80"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:id="@+id/carInformation">
         <TextView
-            android:id="@+id/plateView"
-            android:layout_width="wrap_content"
+            android:id="@+id/CarBelow"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="License Plate"
+            android:text="Car Information:"
             android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
 
-        <TextView
-            android:id="@+id/carPlate"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="License Plate"
-            android:textAlignment="center"
-            android:textColor="@color/quantum_white_100" />
+            android:layout_weight="0.80"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/yearView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Year:"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+
+            <TextView
+                android:id="@+id/carYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Year"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.80"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/makeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Make:"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+
+            <TextView
+                android:id="@+id/carMake"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Make"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.80"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/modelView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Model:"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+
+            <TextView
+                android:id="@+id/carModel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Model"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.80"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/colorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Colour:"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+
+            <TextView
+                android:id="@+id/carColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Color"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.80"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/plateView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="License Plate:"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+
+            <TextView
+                android:id="@+id/carPlate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="License Plate"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText" />
+        </LinearLayout>
     </LinearLayout>
 
     <Button
@@ -186,10 +250,10 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_round"
+        android:background="@color/colorPrimary"
         android:text="Edit Your Information"
         android:textAlignment="center"
-        android:textColor="@color/quantum_white_100" />
+        android:textColor="@color/colorPrimaryText" />
 </LinearLayout>
 
 

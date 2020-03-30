@@ -56,9 +56,11 @@ public class RateDriverFragment extends Fragment {
         submitButton = view.findViewById(R.id.submit_button);
 
         rating = view.findViewById(R.id.rating);
-        driverName = view.findViewById(R.id.driver_name);
+        driverName = view.findViewById(R.id.driver_name_str);
 
-        driverName.setText(paymentViewModel.getCurrentDriver().getUsername());
+        String driverStr = "Please rate " + paymentViewModel.getCurrentDriver().getUsername();
+
+        driverName.setText(driverStr);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override

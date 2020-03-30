@@ -38,7 +38,7 @@ public class QRCode {
 
             for (int x = 0; x < bitMatrixWidth; x++) {
                 pixels[offset + x] = bitMatrix.get(x, y) ?
-                        context.getResources().getColor(R.color.colorSecondaryDark): context.getResources().getColor(R.color.colorPrimaryLight);
+                        context.getResources().getColor(R.color.black): context.getResources().getColor(R.color.colorPrimaryLight);
             }
         }
         Bitmap bp = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
