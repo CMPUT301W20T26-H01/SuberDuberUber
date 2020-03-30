@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/quantum_bluegrey900">
+    android:background="@color/colorPrimaryLight">
 
     <TextView
         android:id="@+id/nameDisplay"
@@ -18,80 +18,184 @@
         android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/quantum_white_100"/>
+        android:textColor="@color/colorPrimaryText"/>
 
-    <TextView
-        android:id="@+id/emailEdit"
-        android:textAlignment="center"
-
+    <LinearLayout
+        android:id="@+id/emailLayout"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:textColor="@color/quantum_white_100">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="25dp"
+            android:text="Email: "
+            android:textSize="20dp" />
 
-    </TextView>
-    <TextView
-        android:id="@+id/phoneNumberEdit"
-        android:textAlignment="center"
+        <TextView
+            android:id="@+id/emailEdit"
+            android:layout_marginLeft="6dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="email@email.ca">
+        </TextView>
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/phoneLayout"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:textColor="@color/quantum_white_100">
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="25dp"
+            android:text="Phone: "
+            android:textSize="20dp" />
+        <TextView
+            android:id="@+id/phoneNumberEdit"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:text="(123) 456-7890"
+            android:textSize="20dp" >
+        </TextView>
+    </LinearLayout>
 
-    </TextView>
-    <TextView
-        android:id="@+id/yearEdit"
-        android:textAlignment="center"
-
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:textColor="@color/quantum_white_100"
-        android:inputType="number">
+        android:layout_height="wrap_content"
+        android:id="@+id/car_edit"
+        android:orientation="vertical" >
 
-    </TextView>
-    <TextView
-        android:id="@+id/makeEdit"
-        android:textAlignment="center"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Car Information:"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:layout_marginTop="20dp" />
 
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:textColor="@color/quantum_white_100">
+        <LinearLayout
+            android:id="@+id/yearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="25dp"
+                android:text="Year: "
+                android:textSize="20dp" />
+            <TextView
+                android:id="@+id/yearEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="0000"
+                android:textSize="25dp"
+                android:inputType="number">
+            </TextView>
+        </LinearLayout>
 
-    </TextView>
-    <TextView
-        android:id="@+id/modelEdit"
-        android:textAlignment="center"
+        <LinearLayout
+            android:id="@+id/makeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="25dp"
+                android:text="Make: "
+                android:textSize="20dp" />
+            <TextView
+                android:id="@+id/makeEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="make"
+                android:textSize="20dp">
+            </TextView>
+        </LinearLayout>
 
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:textColor="@color/quantum_white_100">
+        <LinearLayout
+            android:id="@+id/modelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="25dp"
+                android:text="Model: "
+                android:textSize="20dp" />
+            <TextView
+                android:id="@+id/modelEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="model"
+                android:textSize="20dp" >
+            </TextView>
+        </LinearLayout>
 
-    </TextView>
-    <TextView
-        android:id="@+id/colorEdit"
-        android:textAlignment="center"
+        <LinearLayout
+            android:id="@+id/colourLayout"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="25dp"
+                android:text="Colour: "
+                android:textSize="20dp" />
+            <TextView
+                android:id="@+id/colorEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="colour"
+                android:textSize="20dp" >
+            </TextView>
+        </LinearLayout>
 
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:textColor="@color/quantum_white_100">
-
-    </TextView>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
 
         <Button
             android:id="@+id/confirmButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_round"
+            android:background="@color/colorPrimary"
             android:gravity="center|fill"
             android:text="@string/confirm"
             android:textAlignment="center"
-            android:textColor="@color/quantum_white_100"
+            android:textColor="@color/colorPrimaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cancelButton"
             app:layout_constraintHorizontal_bias="0.5"
@@ -112,8 +216,8 @@
             app:layout_constraintStart_toEndOf="@+id/confirmButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            android:background="@drawable/btn_round"
-            android:textColor="@color/quantum_white_100">
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryText">
 
         </Button>
     </androidx.constraintlayout.widget.ConstraintLayout>
