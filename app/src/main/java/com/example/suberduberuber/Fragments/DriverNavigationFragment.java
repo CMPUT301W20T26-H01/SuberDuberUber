@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
@@ -52,6 +53,7 @@ import com.google.maps.model.DirectionsRoute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +79,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
     protected NavController navController;
     private ImageButton doneRideButton;
+    private TextView navStatusBar;
 
     public DriverNavigationFragment() {
         // Required empty public constructor
@@ -99,6 +102,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         navController = Navigation.findNavController(view);
 
         doneRideButton = view.findViewById(R.id.done_button);
+        navStatusBar = view.findViewById(R.id.driverNavStatus);
 
         navigationViewModel= new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
@@ -135,6 +139,10 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                             navController.navigate(R.id.action_to_viewRequests);
                         }
                         else if (request != null) {
+                            if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+                                showingPickupRoute = Boolean.FALSE;
+                            }
+
                             driverPaidRateViewModel.setRequest(request);
                             driverPaidRateViewModel.setRider(request.getRequestingUser());
                             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -149,6 +157,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
                                         setLatLngBounds(start, finish);
                                         calculateDirections(start, finish, request);
                                     } else {
+                                        navStatusBar.setText("Route to drop off location");
                                         start = request.getPath().getStartLocation().getLatLng();
                                         finish = request.getPath().getDestination().getLatLng();
                                         setLatLngBounds(start, finish);
