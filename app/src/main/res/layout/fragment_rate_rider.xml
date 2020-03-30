@@ -9,33 +9,40 @@
     android:background="@color/quantum_bluegrey900">
 
     <TextView
-        android:textColor="@color/quantum_white_100"
+        android:textColor="@color/colorPrimaryText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rate Rider"
-        />
+        android:textAlignment="center"
+        android:textSize="32dp"
+        android:text="Rate Rider" />
 
     <TextView
-        android:textColor="@color/quantum_white_100"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rider's Name"
-        android:id="@+id/rider_name" />
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="24dp"
+        android:text="Please rate the Rider"
+        android:id="@+id/rider_name_str"
+        android:layout_marginTop="6dp" />
 
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:id="@+id/rating"
         android:numStars="5"
         android:theme="@style/RatingBar"/>
 
     <Button
-        android:background="@drawable/btn_round"
-        android:textColor="@color/quantum_white_100"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/submit_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
         android:text="Confirm Rating" />
 
 </LinearLayout>
