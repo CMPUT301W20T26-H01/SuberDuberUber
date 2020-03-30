@@ -147,7 +147,6 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
 
         public void shrink() {
             popup.setVisibility(View.GONE);
-            view.setBackgroundColor(Color.WHITE);
         }
         private void togglePopupState() {
             if(popup.getVisibility() == View.GONE) {
@@ -155,7 +154,6 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
             }
             else {
                 popup.setVisibility(View.GONE);
-                view.setBackgroundColor(Color.WHITE);
             }
         }
 
