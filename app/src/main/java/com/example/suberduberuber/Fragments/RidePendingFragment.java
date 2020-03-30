@@ -210,7 +210,7 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
     }
 
     private void displayInProgressState(Request request) {
-        titleText.setText("Ride in Progress");
+        titleText.setVisibility(View.GONE);
         completeButton.setText("Almost There!");
         cancelButton.setVisibility(View.GONE);
         viewDriverDetailsButton.setVisibility(View.GONE);
@@ -254,7 +254,9 @@ public class RidePendingFragment extends Fragment implements OnMapReadyCallback 
 
     private void driverEnd() {
         completeButton.setVisibility(View.VISIBLE);
-        completeButton.setText("Ride Completed!");
+        titleText.setVisibility(View.VISIBLE);
+        titleText.setText("Ride Completed");
+        completeButton.setText("Pay Driver!");
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
