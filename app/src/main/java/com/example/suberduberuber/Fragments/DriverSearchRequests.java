@@ -119,7 +119,6 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
 
         noRequestsMessage = view.findViewById(R.id.no_requests_message);
 
-
         viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
             @Override
             public void onChanged(List<Request> requests) {
@@ -280,6 +279,12 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                setBounds(location);
+            }
+        });
     }
     @Override
     public void onPause() {
