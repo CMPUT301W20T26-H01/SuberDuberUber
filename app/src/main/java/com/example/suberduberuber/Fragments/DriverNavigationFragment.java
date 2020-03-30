@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
@@ -74,6 +75,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
     protected NavController navController;
     private ImageButton doneRideButton;
+    private TextView titleText;
 
     public DriverNavigationFragment() {
         // Required empty public constructor
@@ -95,6 +97,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         navController = Navigation.findNavController(view);
 
         doneRideButton = view.findViewById(R.id.done_button);
+        titleText = view.findViewById(R.id.title_text);
 
         navigationViewModel= new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
@@ -106,6 +109,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
             @Override
             public void onClick(View v) {
                 if(showingPickupRoute) {
+                    titleText.setText("Path to Destination");
                     showRideRoute();
                     setRequestToInProgress();
                 } else {
