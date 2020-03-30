@@ -57,12 +57,7 @@ public class RequestRepository {
 
     public Query getAllRequests() {
         return myDb.collection("requests")
-                .whereEqualTo("status", "PENDING_ACCEPTANCE")
-                .orderBy("time");
-    }
-
-    public Task<Void> acceptRequest(Request request) {
-        return myDb.collection("requests").document(request.getRequestID()).update("status", "claimed");
+                .whereEqualTo("status", "PENDING_ACCEPTANCE");
     }
 
     public void cancelRequest(Request request) {

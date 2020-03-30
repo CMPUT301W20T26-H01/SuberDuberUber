@@ -22,6 +22,7 @@ import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Adapters.AvailableRequestListAdapter;
 import com.example.suberduberuber.ViewModels.ViewRequestsViewModel;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class ViewRequestsFragment extends Fragment implements AvailableRequestLi
     private RecyclerView.LayoutManager layoutManager;
     private AvailableRequestListAdapter adapter;
     private NavController navController;
+    private LatLngBounds bounds;
 
     public ViewRequestsFragment() {
         // Required empty public constructor
@@ -66,6 +68,7 @@ public class ViewRequestsFragment extends Fragment implements AvailableRequestLi
             }
         });
     }
+
 
     private void configureRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext());

@@ -9,8 +9,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.suberduberuber.Models.UserLocation;
+
 import com.example.suberduberuber.Models.Car;
 import com.example.suberduberuber.Models.Driver;
+
 import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.Models.User;
 import com.google.firebase.firestore.DocumentSnapshot;

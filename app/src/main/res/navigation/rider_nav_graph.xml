@@ -6,17 +6,6 @@
     app:startDestination="@id/selectDestinationFragment">
 
     <fragment
-        android:id="@+id/confirmRideFragment2"
-        android:name="com.example.suberduberuber.Fragments.ConfirmRideFragment"
-        android:label="fragment_confirm_ride"
-        tools:layout="@layout/fragment_confirm_ride" >
-        <action
-            android:id="@+id/action_confirmRideFragment2_to_ridePendingFragment"
-            app:destination="@id/ridePendingFragment"
-            app:enterAnim="@android:anim/slide_out_right" />
-    </fragment>
-
-    <fragment
         android:id="@+id/rateDriverFragment"
         android:name="com.example.suberduberuber.Fragments.RateDriverFragment"
         android:label="fragment_rate_driver"
@@ -37,6 +26,9 @@
         <action
             android:id="@+id/action_ridePendingFragment_to_selectDestinationFragment"
             app:destination="@id/selectDestinationFragment" />
+        <action
+            android:id="@+id/action_ridePendingFragment_to_driverDetailsFragment"
+            app:destination="@id/driverDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectDestinationFragment"
@@ -125,6 +117,27 @@
         <action
             android:id="@+id/action_editInformationFragment_to_viewProfileFragment"
             app:destination="@id/viewProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/driverDetailsFragment"
+        android:name="com.example.suberduberuber.Fragments.DriverDetailsFragment"
+        android:label="fragment_driver_details"
+        tools:layout="@layout/fragment_driver_details" >
+        <argument
+            android:name="driverEmail"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_driverDetailsFragment_to_ridePendingFragment"
+            app:destination="@id/ridePendingFragment" />
+        <argument
+            android:name="driverPhone"
+            app:argType="string" />
+        <argument
+            android:name="driverRating"
+            app:argType="float" />
+        <argument
+            android:name="driverName"
+            app:argType="string" />
     </fragment>
 
 </navigation>

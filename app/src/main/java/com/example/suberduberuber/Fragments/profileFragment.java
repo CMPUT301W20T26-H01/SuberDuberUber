@@ -131,7 +131,9 @@ public class profileFragment extends Fragment {
             color.setText(car.getColor());
             plateNumber.setText(car.getLicensePlate());
 
-        } else {year.setVisibility(View.GONE);
+        } else {
+            this.user = user;
+            year.setVisibility(View.GONE);
             make.setVisibility(View.GONE);
             model.setVisibility(View.GONE);
             color.setVisibility(View.GONE);
