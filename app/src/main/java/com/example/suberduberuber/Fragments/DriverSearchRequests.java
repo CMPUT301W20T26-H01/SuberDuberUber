@@ -1,6 +1,7 @@
 package com.example.suberduberuber.Fragments;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,8 +32,11 @@ import android.widget.Toast;
 import com.example.suberduberuber.Adapters.AvailableRequestListAdapter;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
+import com.example.suberduberuber.Services.LocationService;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 import com.example.suberduberuber.ViewModels.ViewRequestsViewModel;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,6 +49,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -56,6 +61,8 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.Distance;
 import com.google.maps.model.Duration;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +83,13 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     private RecyclerView requestRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AvailableRequestListAdapter adapter;
+
+    private LatLngBounds bound;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private double DISTANCE_FACTOR = 0.16;
+
+    private TextView noRequestsMessage;
+
 
     public DriverSearchRequests() {
         // Required empty public constructor
@@ -98,22 +112,33 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         viewRequestsViewModel = new ViewModelProvider(requireActivity()).get(ViewRequestsViewModel.class);
 
         initGoogleMap(savedInstanceState);
-
-        viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
-            @Override
-            public void onChanged(List<Request> requests) {
-                setMapBounds(requests);
-                displayRequests(requests);
-            }
-        });
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         requestRecyclerView = view.findViewById(R.id.request_list);
         configureRecyclerView();
 
+        noRequestsMessage = view.findViewById(R.id.no_requests_message);
+
+
         viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
             @Override
             public void onChanged(List<Request> requests) {
-                adapter.setRequestDataset(requests);
+                if(requests.size() > 0) {
+                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            setBounds(location);
+                            noRequestsMessage.setVisibility(View.GONE);
+                            displayRequests(requests);
+                            adapter.setRequestDataset(requests);
+                        }
+                    });
+
+                }
+                else {
+                    noRequestsMessage.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
@@ -124,6 +149,21 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
             }
         });
     }
+
+    private void setBounds(Location location) {
+        double latDist = DISTANCE_FACTOR;
+        double longDist = DISTANCE_FACTOR/Math.cos(Math.toRadians(location.getLatitude()));
+        LatLng min = new LatLng(location.getLatitude() - latDist, location.getLongitude() - longDist);
+        LatLng max = new LatLng(location.getLatitude() + latDist, location.getLongitude() + longDist);
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        builder.include(min);
+        builder.include(max);
+        bound = builder.build();
+        if (mMap != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bound, DEFAULT_ZOOM));
+        }
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -160,23 +200,14 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         return -1;
     }
 
-    private void setMapBounds(List<Request> requests) {
-        LatLngBounds.Builder builder = LatLngBounds.builder();
-        for(Request request : requests) {
-            builder.include(request.getPath().getStartLocation().getLatLng());
-        }
-        mapBounds = builder.build();
-        if (mMap != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, DEFAULT_ZOOM));
-        }
-
-    }
 
     private void displayRequests(List<Request> requests) {
         if (mMap != null) {
             mMap.setOnMarkerClickListener(this);
             for (Request request : requests) {
-                displayRequest(request);
+                if (bound.contains(request.getPath().getStartLocation().getLatLng())) {
+                    displayRequest(request);
+                }
             }
         }
     }
