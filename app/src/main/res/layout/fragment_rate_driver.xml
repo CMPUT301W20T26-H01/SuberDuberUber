@@ -6,7 +6,7 @@
     tools:context=".Fragments.SelectDestinationFragment"
     android:orientation="vertical"
     android:layout_margin="20dp"
-    android:background="@color/quantum_bluegrey900">
+    android:background="@color/colorPrimaryLight">
 
     <TextView
         android:textColor="@color/colorPrimaryText"

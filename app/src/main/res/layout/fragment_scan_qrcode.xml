@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_margin="20dp"
     android:id="@+id/scan_qr_layout"
-    android:background="@color/quantum_bluegrey900">
+    android:background="@color/colorPrimaryLight">
 
     <TextView
         android:textColor="@color/colorPrimaryText"
@@ -32,7 +32,7 @@
     </TextView>
 
     <TextView
-        android:textColor="@color/quantum_white_100"
+        android:textColor="@color/colorPrimaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
