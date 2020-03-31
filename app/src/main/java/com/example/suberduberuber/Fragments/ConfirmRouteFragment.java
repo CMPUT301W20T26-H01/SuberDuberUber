@@ -47,6 +47,7 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.Distance;
 import com.google.maps.model.Duration;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,7 +104,8 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
         setTextViews();
 
         pickupTimeTextView = view.findViewById(R.id.pickupTime);
-        pickupTimeTextView.setText(tempRequest.getTime().toString());
+        String timeFormat = "HH:mm - EEE MMM dd, YYYY";;
+        pickupTimeTextView.setText(new SimpleDateFormat(timeFormat).format(tempRequest.getTime()));
 
         bidAmount = view.findViewById(R.id.bid_amount);
 

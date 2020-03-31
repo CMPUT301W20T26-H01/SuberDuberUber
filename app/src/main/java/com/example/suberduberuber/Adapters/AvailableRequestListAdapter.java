@@ -72,7 +72,7 @@ public class AvailableRequestListAdapter extends RecyclerView.Adapter<AvailableR
             holder.origin.setText("Unknown Location");
         }
         holder.riderName.setText(request.getRequestingUser().getUsername());
-        holder.price.setText(Double.toString(request.getPrice()));
+        holder.price.setText(String.format("%.2f", request.getPrice()));
     }
 
 
