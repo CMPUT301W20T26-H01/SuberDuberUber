@@ -139,6 +139,8 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
                         }
                     }
                 });
+                viewRequestsViewModel.removeObservers(getViewLifecycleOwner());
+                getAllRequests();
             }
         });
 
@@ -285,17 +287,7 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         navController.navigate(R.id.action_driverSearchRequests_to_driverNavigationFragment);
     }
 
-    @Override
-    public void onMapReady(GoogleMap map) {
-        mMap = map;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                setBounds(location);
-                noRequestsMessage.setVisibility(View.VISIBLE);
-            }
-        });
+    public void getAllRequests() {
         viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
             @Override
             public void onChanged(List<Request> requests) {
@@ -303,23 +295,41 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
                     fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                         @Override
                         public void onComplete(@NonNull Task<Location> task) {
-                            mMap.clear();
-                            setBounds(task.getResult());
-                            if (displayRequests(requests, task.getResult()).size() > 0) {
-                                noRequestsMessage.setVisibility(View.GONE);
-                                adapter.setRequestDataset(displayRequests(requests, task.getResult()));
-                            }
-                            else {
-                                noRequestsMessage.setVisibility(View.VISIBLE);
+                            if (task.getResult() != null) {
+                                mMap.clear();
+                                setBounds(task.getResult());
+                                if (displayRequests(requests, task.getResult()).size() > 0) {
+                                    noRequestsMessage.setVisibility(View.GONE);
+                                    adapter.setRequestDataset(displayRequests(requests, task.getResult()));
+                                } else {
+                                    noRequestsMessage.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
                     });
                 } else {
+                    mMap.clear();
                     noRequestsMessage.setVisibility(View.VISIBLE);
                 }
 
             }
         });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    setBounds(location);
+                    noRequestsMessage.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        getAllRequests();
     }
     @Override
     public void onPause() {
