@@ -11,14 +11,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginTop="30dp"
+            app:srcCompat="@drawable/suber_duber_uber_logo" />
+
         <TextView
             android:textColor="@color/colorPrimaryText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register"
             android:textAlignment="center"
-            android:layout_marginBottom="50dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2" />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
         <Switch
             android:id="@+id/isDriver"

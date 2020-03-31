@@ -49,5 +49,4 @@ public class UserRepository {
                 .update("deviceToken", token);
     }
 
-
 }
