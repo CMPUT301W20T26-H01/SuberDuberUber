@@ -43,7 +43,7 @@
     </TextView>
 
     <Button
-    android:background="@color/colorPrimary"
+    android:background="@drawable/button_option1"
     android:textColor="@color/colorPrimaryText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -54,12 +54,12 @@
     android:id="@+id/next_button"/>
 
     <Button
+        android:background="@drawable/button_option1"
         android:id="@+id/rescan_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
         android:text="Rescan QR Code"
         android:textColor="@color/colorPrimaryText"
         android:textSize="15dp" />

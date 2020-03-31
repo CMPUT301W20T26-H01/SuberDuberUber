@@ -36,7 +36,7 @@
         android:theme="@style/RatingBar"/>
 
     <Button
-        android:background="@color/colorPrimary"
+        android:background="@drawable/button_option1"
         android:textColor="@color/colorPrimaryText"
         android:layout_gravity="center_horizontal"
         android:id="@+id/submit_button"
