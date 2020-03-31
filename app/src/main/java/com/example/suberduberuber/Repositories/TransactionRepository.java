@@ -46,6 +46,5 @@ public class TransactionRepository {
                         Log.e(TAG, e.toString());
                     }
                 });;
-
     }
 }

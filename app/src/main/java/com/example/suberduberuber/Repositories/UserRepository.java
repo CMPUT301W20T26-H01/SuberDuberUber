@@ -49,7 +49,4 @@ public class UserRepository {
                 .document(myAuth.getCurrentUser().getUid())
                 .update("deviceToken", token);
     }
-
-
-
 }

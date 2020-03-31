@@ -61,7 +61,7 @@ public class DriverLocationViewModel extends AndroidViewModel {
     }
 
     public LiveData<GeoPoint> getDriverLocation(Request request) {
-        if (request != null && (Objects.equals(request.getStatus(), "IN_PROGRESS") || Objects.equals(request.getStatus(), "ACCEPTED"))) {
+        if (request != null && (request.getStatus().equals("ACCEPTED") || request.getStatus().equals("PENDING_ACCEPTANCE"))) {
             Driver driver = request.getDriver();
             userLocationRepository.getLocation(driver).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
@@ -77,9 +77,7 @@ public class DriverLocationViewModel extends AndroidViewModel {
                 }
             });
         }
-        else {
-            currentLocation = null;
-        }
+
         return currentLocation;
     }
 

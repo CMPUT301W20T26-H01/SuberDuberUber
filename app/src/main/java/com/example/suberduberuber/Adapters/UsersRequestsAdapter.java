@@ -138,7 +138,7 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
 
         @Override
         public void onClick(View v) {
-            if (Objects.equals(this.status.getText(), "PENDING_ACCEPTANCE") | Objects.equals(this.status.getText(), "ACCEPTED")) {
+            if (!Objects.equals(this.status.getText(), "IN_PROGRESS")) {
                 usersRequestTouchListener.shrinkAllPopups();
                 togglePopupState();
                 setButtonListeners();
@@ -147,16 +147,13 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
 
         public void shrink() {
             popup.setVisibility(View.GONE);
-            view.setBackgroundColor(Color.WHITE);
         }
         private void togglePopupState() {
             if(popup.getVisibility() == View.GONE) {
                 popup.setVisibility(View.VISIBLE);
-                view.setBackgroundColor(Color.GREEN);
             }
             else {
                 popup.setVisibility(View.GONE);
-                view.setBackgroundColor(Color.WHITE);
             }
         }
 
