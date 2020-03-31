@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firestore.v1.UpdateDocumentRequest;
 
 import java.util.Map;
 
@@ -48,6 +49,7 @@ public class UserRepository {
                 .document(myAuth.getCurrentUser().getUid())
                 .update("deviceToken", token);
     }
+
 
 
 }
