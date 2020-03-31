@@ -138,7 +138,7 @@ public class UsersRequestsAdapter extends RecyclerView.Adapter<UsersRequestsAdap
 
         @Override
         public void onClick(View v) {
-            if (!Objects.equals(this.status.getText(), "IN_PROGRESS")) {
+            if (!Objects.equals(this.status.getText(), "Currently on this Ride")) {
                 usersRequestTouchListener.shrinkAllPopups();
                 togglePopupState();
                 setButtonListeners();
