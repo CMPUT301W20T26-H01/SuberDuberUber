@@ -80,4 +80,7 @@
             android:id="@+id/action_driverSearchRequests_to_driverNavigationFragment"
             app:destination="@id/driverNavigationFragment" />
     </fragment>
+    <action
+        android:id="@+id/action_to_viewRequests"
+        app:destination="@id/driverSearchRequests" />
 </navigation>
