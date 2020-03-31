@@ -22,7 +22,7 @@
             android:layout_height="45dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:cardBackgroundColor="@color/colorPrimary"
+            app:cardBackgroundColor="@color/colorPrimaryLight"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -31,9 +31,9 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:background="@color/colorPrimaryDark"
+                android:background="@color/colorPrimary"
                 android:text="Refresh Location"
-                android:textColor="@color/colorSecondaryText"
+                android:textColor="@color/black"
                 android:gravity="center_vertical"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -77,21 +77,22 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/no_requests_message"
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
+                android:layout_height="120dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardBackgroundColor="@color/colorPrimaryLight"
                 app:layout_constraintTop_toTopOf="parent"
                 android:visibility="gone">
+>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@color/colorPrimary"
                     android:text="There are not requests right now!"
-                    android:textColor="@color/colorSecondaryText"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"

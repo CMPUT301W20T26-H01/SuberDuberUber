@@ -323,6 +323,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.getUiSettings().setMapToolbarEnabled(true);
 
     }
     @Override
