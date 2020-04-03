@@ -85,7 +85,8 @@
     <Button
         android:id="@+id/editButton"
         android:layout_width="match_parent"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryText"
+        android:background="@drawable/button_option1"
         android:layout_height="wrap_content"
         android:text="Edit Information" />
 

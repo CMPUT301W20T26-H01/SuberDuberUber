@@ -68,4 +68,8 @@ import com.google.firebase.firestore.QuerySnapshot;
     public LiveData<Driver> getCurrentDriver(){
         return currentDriver;
     }
+
+    public void updateEmail(String email, String password){
+
+    }
 }
