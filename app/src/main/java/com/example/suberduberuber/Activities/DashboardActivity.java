@@ -73,7 +73,26 @@ import im.delight.android.location.SimpleLocation;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
+
+
+
 /*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+
     This activity currently holds fragments for a rider's ride request creation.
     It also includes a toolbar with a hamburger menu that contains home (select
     a destination for a ride request), profile (currently a dummy place for the

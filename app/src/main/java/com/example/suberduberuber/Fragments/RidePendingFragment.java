@@ -1,5 +1,34 @@
 package com.example.suberduberuber.Fragments;
 
+/*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+
+Fragment to display a pending request for a user. Allows the user to see their current route request
+and gives the user the option to cancel the request. Once a driver accepts their request map changes to
+include a marker showing the real time location of their driver. Disables cancel button once driver is within
+roughly 200m of pickup location. Prompts user to pay driver upon arrival at destination and redirects to
+camera to scan wallet. Extends GoogleMapsFragment.
+Sources include:
+    GoogleMaps SKD Android Documentation - https://developers.google.com/maps/documentation/android-sdk/intro
+    GooglePlaces SDK Android Documentation - https://developers.google.com/places/android-sdk/intro
+    GoogleMaps YouTube Playlist by User CodingWithMitch - https://www.youtube.com/watch?v=RQxY7rrZATU&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT3gi
+    Permission Services Code from GitHub User mitchtabian - https://gist.github.com/mitchtabian/2b9a3dffbfdc565b81f8d26b25d059bf
+ */
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;

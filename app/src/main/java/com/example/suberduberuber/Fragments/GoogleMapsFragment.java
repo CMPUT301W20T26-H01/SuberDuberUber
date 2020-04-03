@@ -1,5 +1,33 @@
 package com.example.suberduberuber.Fragments;
 
+/*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+
+Fragment to handle all background GoogleMaps functions. Handles creating and updating the map for fragments
+which extend this one. Provides extending fragments with functions to draw routes and set bounds. Maintains
+all GoogleMaps functionality. Extended by several other fragments.
+Sources include:
+    GoogleMaps SKD Android Documentation - https://developers.google.com/maps/documentation/android-sdk/intro
+    GooglePlaces SDK Android Documentation - https://developers.google.com/places/android-sdk/intro
+    GoogleDirections API Documentation - https://developers.google.com/maps/documentation/directions/intro
+    GoogleDirections code based on code from GitHub User mitchtabian - https://gist.github.com/mitchtabian/b8a2dee2804bd1a58c09b045515e430e
+    GoogleMaps YouTube Playlist by User CodingWithMitch - https://www.youtube.com/watch?v=RQxY7rrZATU&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT3gi
+ */
+
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;

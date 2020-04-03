@@ -1,5 +1,32 @@
 package com.example.suberduberuber.Fragments;
 
+/*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+
+Fragment to show information to the driver about the ride they have accepted. Allows the driver to see
+a route to the pickup location of the rider and after confirming arrival displays a route to the drop
+off location. After confirming drop off redirects to users wallet to accept payment. Extends GoogleMapsFragment.
+Sources include:
+    GoogleMaps SKD Android Documentation - https://developers.google.com/maps/documentation/android-sdk/intro
+    GooglePlaces SDK Android Documentation - https://developers.google.com/places/android-sdk/intro
+    GoogleMaps YouTube Playlist by User CodingWithMitch - https://www.youtube.com/watch?v=RQxY7rrZATU&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT3gi
+    Permission Services Code from GitHub User mitchtabian - https://gist.github.com/mitchtabian/2b9a3dffbfdc565b81f8d26b25d059bf
+ */
+
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;

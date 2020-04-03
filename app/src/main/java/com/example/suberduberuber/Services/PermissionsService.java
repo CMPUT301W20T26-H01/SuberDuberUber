@@ -1,5 +1,31 @@
 package com.example.suberduberuber.Services;
 
+/*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+
+Permissions Service to request location permissions where needed. Checks if location services have been
+enabled already and if not prompts user to allow location services.
+Sources:
+    GoogleMaps SKD Android Documentation - https://developers.google.com/maps/documentation/android-sdk/intro
+    GooglePlaces SDK Android Documentation - https://developers.google.com/places/android-sdk/intro
+    GoogleMaps YouTube Playlist by User CodingWithMitch - https://www.youtube.com/watch?v=RQxY7rrZATU&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT3gi
+    Permission Services Code from GitHub User mitchtabian - https://gist.github.com/mitchtabian/2b9a3dffbfdc565b81f8d26b25d059bf
+ */
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -34,10 +60,6 @@ public class PermissionsService {
         this.activity = activity;
     }
 
-    // ALL METHODS BELOW ARE FROM GITHUB
-    // USER: mitchtabian
-    // URL: https://gist.github.com/mitchtabian/2b9a3dffbfdc565b81f8d26b25d059bf
-    // Code is to ask user for permission to use location services for maps
     public boolean checkMapServices(){
         if(isServicesOK()){
             if(isMapsEnabled()){
