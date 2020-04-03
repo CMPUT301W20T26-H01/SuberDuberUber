@@ -9,6 +9,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This class encapsulates all interactions with the transaction collection in the database. The main
+ * functionalities are to save the transaction in the database and update the balances of the user
+ * based on the paid amount.
+ */
 
 public class TransactionRepository {
     private static final String TAG = "TRANSACTION_REPOSITORY";
