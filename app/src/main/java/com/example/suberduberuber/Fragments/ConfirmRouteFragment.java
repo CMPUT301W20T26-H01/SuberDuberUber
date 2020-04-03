@@ -134,6 +134,10 @@ public class ConfirmRouteFragment extends GoogleMapsFragment {
                         saveRequest();
                         getRideViewModel.commitTempRequest();
                         navController.navigate(R.id.action_confrimRouteFragment_to_ridePendingFragment2);
+                    } else if (bid < tempRequest.getPath().getEstimatedFare()) {
+                        bidAmount.setText(Double.toString(tempRequest.getPath().getEstimatedFare()));
+                        bidAmount.setError("Bid is less than recommended amount");
+
                     } else if (tempRequest.getPath().getEstimatedFare() > balance) {
                         dialog = new AlertDialog.Builder(getActivity()).create();
                         dialog.setTitle("You do not have enough QRBucks in your wallet!");
@@ -147,27 +151,23 @@ public class ConfirmRouteFragment extends GoogleMapsFragment {
                         });
                         dialog.show();
                     } else if (bid > balance) {
-                    dialog = new AlertDialog.Builder(getActivity()).create();
-                    dialog.setTitle("You do not have enough QRBucks in your wallet!");
-                    dialog.setMessage("Your balance of $".concat(String.format("%.2f", balance).concat(" is not enough to cover your bid. Please lower your bid or add funds to your wallet.")));
-                    dialog.setCancelable(false);
-                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Add Funds", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            navController.navigate(R.id.action_to_wallet);
-                        }
-                    });
-                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Lower Bid", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
-                }
-                else {
-                    bidAmount.setText(Double.toString(tempRequest.getPath().getEstimatedFare()));
-                        bidAmount.setError("Bid is less than recommended amount");
+                        dialog = new AlertDialog.Builder(getActivity()).create();
+                        dialog.setTitle("You do not have enough QRBucks in your wallet!");
+                        dialog.setMessage("Your balance of $".concat(String.format("%.2f", balance).concat(" is not enough to cover your bid. Please lower your bid or add funds to your wallet.")));
+                        dialog.setCancelable(false);
+                        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Add Funds", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                navController.navigate(R.id.action_to_wallet);
+                            }
+                        });
+                        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Lower Bid", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
                     }
                 }
                 catch (Exception exception) {
