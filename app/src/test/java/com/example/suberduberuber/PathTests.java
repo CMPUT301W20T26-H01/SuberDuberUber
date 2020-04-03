@@ -28,20 +28,4 @@ public class PathTests {
         assertEquals(test2, path.getStartLocation());
         assertEquals(0, path.getEstimatedFare());
     }
-
-//    @Test
-//    public void testGenerateEstimatedFare() {
-//        Path path = mockPath();
-//        CustomLocation test1 = path.getDestination();
-//        CustomLocation test2 = path.getStartLocation();
-//        double expectedFare = 0.05 * test2.getDistanceBetween(test1);
-//        assertEquals(expectedFare, path.getEstimatedFare());
-//
-//        CustomLocation test3 = new CustomLocation("X3, Y3", "There's A Lady Who's Sure", "All That Glitters Is Gold");
-//        CustomLocation test4 = new CustomLocation("X4, Y4", "Please Allow Me To Introduce Myself", "I'm A Man Of Wealth And Taste");
-//        path.setStartLocation(test3);
-//        path.setDestination(test4);
-//        expectedFare = 0.05 * test3.getDistanceBetween(test4);
-//        assertEquals(expectedFare, path.getEstimatedFare());
-//    }
 }
