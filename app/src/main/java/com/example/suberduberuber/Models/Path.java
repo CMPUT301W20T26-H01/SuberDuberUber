@@ -22,19 +22,9 @@ locations as well as the route between them and estimated fare. This will be upd
 GoogleRoutes API.
  */
 
-import android.content.res.Resources;
-import android.util.Log;
-
-import com.example.suberduberuber.R;
-import com.google.maps.DirectionsApiRequest;
-import com.google.maps.GeoApiContext;
-import com.google.maps.PendingResult;
-import com.google.maps.model.DirectionsResult;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.List;
+
 
 public class Path {
 
