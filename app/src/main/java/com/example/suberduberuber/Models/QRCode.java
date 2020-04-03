@@ -9,11 +9,15 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+/**
+ * Class to create a qrCode bitmap given the activity context and string of the qrCode.
+ *
+ * Reference: https://www.android-examples.com/generate-qr-code-in-android-using-zxing-library-in-android-studio/
+ */
+
 public class QRCode {
     private String id;
     private Context context;
-    private Bitmap qrCode;
-
 
     public QRCode(Context context, String id) {
         this.context = context;
