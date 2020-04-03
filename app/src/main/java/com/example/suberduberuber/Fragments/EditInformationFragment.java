@@ -145,8 +145,13 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
             public void onClick(DialogInterface dialog, int which) {
                 if (id != 0) {
                     TextView temp = v.findViewById(id);
+                    if(id == emailEdit.getId()){
+
+
+                    }
                     temp.setText(newInfoField.getText());
                 }
+
             }
         });
        dialog2 = new AlertDialog.Builder(getActivity()).create();
