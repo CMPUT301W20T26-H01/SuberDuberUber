@@ -29,6 +29,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.regex.Pattern;
 
@@ -39,6 +43,7 @@ import java.util.regex.Pattern;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth;
+    private FirebaseFirestore db;
 
     private RegisterViewModel registerViewModel;
 
@@ -89,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register_button);
 
         myAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         carInfo.setVisibility(View.GONE);
         carYear.setVisibility(View.GONE);
@@ -124,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptRegistration();
+                isUsernameUnique(usernameField.getText().toString().trim());
             }
         });
     }
@@ -209,7 +215,7 @@ public class RegisterActivity extends AppCompatActivity {
         String userName = usernameField.getText().toString().trim();
 
         if(userName.isEmpty()) {
-            usernameField.setError("A unique username is required.");
+            usernameField.setError("A username is required");
             return false;
         }
 
@@ -330,4 +336,22 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 
+    public void isUsernameUnique(String username) {
+        CollectionReference users = db.collection("users");
+        Query query = users.whereEqualTo("username", username);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot qSnap = task.getResult();
+                    if (qSnap.isEmpty()) {
+                        usernameField.setError(null);
+                        attemptRegistration();
+                    } else {
+                        usernameField.setError("Username already taken");
+                    }
+                }
+            }
+        });
+    }
 }

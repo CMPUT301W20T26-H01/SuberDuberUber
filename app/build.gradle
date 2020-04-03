@@ -7,7 +7,7 @@ android {
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "com.example.suberduberuber"
-        minSdkVersion 24
+        minSdkVersion 27
         targetSdkVersion 29
         multiDexEnabled true
         versionCode 1

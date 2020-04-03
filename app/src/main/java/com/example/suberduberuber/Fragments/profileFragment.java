@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +35,8 @@ public class profileFragment extends Fragment {
     private ProfileViewModel profileViewModel;
     private NavController navController;
     private TextView usernamePro;
+    private LinearLayout carInfo;
+    private RatingBar ratingBar;
     private TextView year;
     private TextView make;
     private TextView model;
@@ -80,6 +84,8 @@ public class profileFragment extends Fragment {
         model = view.findViewById(R.id.carModel);
         color = view.findViewById(R.id.carColor);
         plateNumber = view.findViewById(R.id.carPlate);
+        carInfo = view.findViewById(R.id.carInformation);
+        ratingBar = view.findViewById(R.id.ratingStarBar);
 
 
         profileViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
@@ -119,11 +125,7 @@ public class profileFragment extends Fragment {
             assert driver != null;
             Car car = driver.getCar();
             assert car != null;
-            year.setVisibility(View.VISIBLE);
-            make.setVisibility(View.VISIBLE);
-            model.setVisibility(View.VISIBLE);
-            color.setVisibility(View.VISIBLE);
-            plateNumber.setVisibility(View.VISIBLE);
+            carInfo.setVisibility(View.VISIBLE);
 
             year.setText(Integer.toString(car.getYear()));
             make.setText(car.getMake());
@@ -138,12 +140,16 @@ public class profileFragment extends Fragment {
             model.setVisibility(View.GONE);
             color.setVisibility(View.GONE);
             plateNumber.setVisibility(View.GONE);
+            carInfo.setVisibility(View.GONE);
+
         }
 
         usernamePro.setText(user.getUsername());
         emailPro.setText(user.getEmail());
         phoneNumberPro.setText(PhoneNumberUtils.formatNumber(user.getPhone(), "CA"));
-        ratingPro.setText(String.valueOf(user.getRating()));
+        String r = String.format("%.2f", user.getRating()) + " (" + user.getNumberOfRatings() + ")";
+        ratingPro.setText(r);
+        ratingBar.setRating((float) user.getRating());
     }
 
     private void editUserDetails(){

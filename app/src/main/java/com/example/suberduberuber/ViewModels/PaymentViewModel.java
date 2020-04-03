@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.Rider;
 import com.example.suberduberuber.Models.Transaction;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.Repositories.TransactionRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,6 +25,7 @@ public class PaymentViewModel extends AndroidViewModel {
 
     private MutableLiveData<Rider> currentRider = new MutableLiveData<Rider>();
     private MutableLiveData<Driver> userFound = new MutableLiveData<Driver>();
+    private MutableLiveData<User> currentUser = new MutableLiveData<User>();
 
     private MutableLiveData<Driver> currentDriver = new MutableLiveData<Driver>();
     private String currentDriverUID;
@@ -88,6 +90,30 @@ public class PaymentViewModel extends AndroidViewModel {
         Transaction transaction = new Transaction(rider, driver, amount, new Date());
         transactionRepository.saveTransaction(transaction);
 
+    }
+
+    public void findCurrentUser(String uid) {
+        userRepository.getUser(uid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    currentUser.setValue(documentSnapshot.toObject(User.class));
+                }
+            }
+        });
+    }
+
+    public User getCurrentUser() {
+        return this.currentUser.getValue();
+    }
+
+    public void sendFundsCompleteTransaction(User payingUser, User paidUser, String paidUserUID, double amount) {
+        double newPayingBalance = payingUser.getBalance() - amount;
+        double newPaidBalance = paidUser.getBalance() + amount;
+
+        transactionRepository.processTransaction(paidUserUID, newPayingBalance, newPaidBalance);
+        //Transaction transaction = new Transaction((Rider) payingUser, (Driver) paidUser, amount, new Date());
+        //transactionRepository.saveTransaction(transaction);
     }
 
 }

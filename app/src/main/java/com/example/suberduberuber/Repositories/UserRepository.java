@@ -51,10 +51,13 @@ public class UserRepository {
                 .update("deviceToken", token);
     }
 
+<<<<<<< HEAD
 
     public void deleteUser(){
         myDb.collection("users")
                 .document(myAuth.getCurrentUser().getUid());
     }
 
+=======
+>>>>>>> f0f30e177327598044837af51b487f21b61084b9
 }

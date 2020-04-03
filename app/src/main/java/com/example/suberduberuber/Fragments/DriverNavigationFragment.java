@@ -22,6 +22,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.Models.User;
@@ -51,6 +54,7 @@ import com.google.maps.model.DirectionsRoute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,8 +76,12 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     private AuthViewModel authViewModel;
     private DriverPaidRateViewModel driverPaidRateViewModel;
 
+    private Boolean reqSetup;
+
     protected NavController navController;
-    private ImageButton doneRideButton;
+
+    private LinearLayout arrivedButton;
+    private TextView navStatusBar;
 
     public DriverNavigationFragment() {
         // Required empty public constructor
@@ -90,11 +98,13 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        reqSetup = false;
         mMapView = (MapView) view.findViewById(R.id.route_map);
 
         navController = Navigation.findNavController(view);
 
-        doneRideButton = view.findViewById(R.id.done_button);
+        arrivedButton = view.findViewById(R.id.arrived_button);
+        navStatusBar = view.findViewById(R.id.driverNavStatus);
 
         navigationViewModel= new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
@@ -102,7 +112,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
 
         showPickupRoute();
 
-        doneRideButton.setOnClickListener(new View.OnClickListener() {
+        arrivedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(showingPickupRoute) {
@@ -121,30 +131,44 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
         authViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                navigationViewModel.getCurrentRequest(user).observe(getViewLifecycleOwner(), new Observer<Request>() {
+                navigationViewModel.getCurrentRequestOnEvent(user).observe(getViewLifecycleOwner(), new Observer<Request>() {
                     @Override
                     public void onChanged(Request request) {
-                        driverPaidRateViewModel.setRequest(request);
-                        driverPaidRateViewModel.setRider(request.getRequestingUser());
-                        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                LatLng start;
-                                LatLng finish;
-
-                                if(showingPickupRoute & location != null) {
-                                    start = new LatLng(location.getLatitude(), location.getLongitude());
-                                    finish = request.getPath().getStartLocation().getLatLng();
-                                    setLatLngBounds(start, finish);
-                                    calculateDirections(start, finish, request);
-                                } else {
-                                    start = request.getPath().getStartLocation().getLatLng();
-                                    finish = request.getPath().getDestination().getLatLng();
-                                    setLatLngBounds(start, finish);
-                                    calculateDirections(start, finish, request);
-                                }
+                        // reqSetup accounts for the first onChange where request can == null from not being setup
+                        if (request == null && reqSetup) {
+                            reqSetup = false;
+                            Toast.makeText(getActivity(), "Rider has cancelled the rider", Toast.LENGTH_SHORT).show();
+                            navController.navigate(R.id.action_to_viewRequests);
+                        }
+                        else if (request != null) {
+                            if (Objects.equals(request.getStatus(), "IN_PROGRESS")) {
+                                showingPickupRoute = Boolean.FALSE;
                             }
-                        });
+
+                            driverPaidRateViewModel.setRequest(request);
+                            driverPaidRateViewModel.setRider(request.getRequestingUser());
+                            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    LatLng start;
+                                    LatLng finish;
+
+                                    if (showingPickupRoute & location != null) {
+                                        start = new LatLng(location.getLatitude(), location.getLongitude());
+                                        finish = request.getPath().getStartLocation().getLatLng();
+                                        setLatLngBounds(start, finish);
+                                        calculateDirections(start, finish, request);
+                                    } else {
+                                        navStatusBar.setText("Route to drop off location");
+                                        start = request.getPath().getStartLocation().getLatLng();
+                                        finish = request.getPath().getDestination().getLatLng();
+                                        setLatLngBounds(start, finish);
+                                        calculateDirections(start, finish, request);
+                                    }
+                                }
+                            });
+                        }
+                        reqSetup = true;
                     }
                 });
             }
@@ -299,6 +323,7 @@ public class DriverNavigationFragment extends Fragment implements OnMapReadyCall
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.getUiSettings().setMapToolbarEnabled(true);
 
     }
     @Override
