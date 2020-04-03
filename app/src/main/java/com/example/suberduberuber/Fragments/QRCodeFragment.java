@@ -52,17 +52,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ****************************************************************************************************
-
-    Fragment that generates a QR code based on the user's email.
-
-    Eventually will remove the on click button and have the QR
-    code generate automatically and may change the email string
-    to a user id.
+    
+/**
+ * Wallet fragment for each user to generate their qr code and give them the ability to add/send
+ * funds outside of the ride process. The send funds function allows them to scan another user's
+ * qr code to send over funds.
+ *
+ * Reference: https://www.android-examples.com/generate-qr-code-in-android-using-zxing-library-in-android-studio/
  */
-
 public class QRCodeFragment extends Fragment {
-    private NavController navController;
-    private UserRepository userRepository;
     private PaymentViewModel paymentViewModel;
 
     private ImageView qrImageView;
@@ -79,7 +77,6 @@ public class QRCodeFragment extends Fragment {
     private AlertDialog confirmDialog;
     private AlertDialog pickAmount;
     private AlertDialog transactionConfirmDialog;
-    private int id;
 
     private QRCodeViewModel qrCodeViewModel;
     private double balance;
@@ -87,7 +84,6 @@ public class QRCodeFragment extends Fragment {
     private String scannedUid;
     private User scannedUser;
     private String userID;
-    private User currentUser;
     private double amount;
 
     public QRCodeFragment() {
@@ -105,8 +101,6 @@ public class QRCodeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         qrCodeViewModel = ViewModelProviders.of(this).get(QRCodeViewModel.class);
-        navController = Navigation.findNavController(view);
-        userRepository = new UserRepository();
         paymentViewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
 
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();

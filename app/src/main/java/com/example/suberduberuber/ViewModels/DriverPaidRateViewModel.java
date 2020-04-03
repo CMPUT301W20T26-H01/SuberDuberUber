@@ -34,6 +34,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+/**
+ * This is a viewmodel class to handle the payment and ratings for the driver side of the app. It
+ * stores the driver and rider in the current request to keep them accessible throughout each of
+ * the fragments. The main functionalities of this viewmodel are to update the rider's rating and
+ * complete the request process.
+ */
+
 public class DriverPaidRateViewModel extends AndroidViewModel {
     private UserRepository userRepository;
     private RatingRepository ratingRepository;

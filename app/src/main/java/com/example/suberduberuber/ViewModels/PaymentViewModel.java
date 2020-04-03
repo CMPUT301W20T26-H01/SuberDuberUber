@@ -35,6 +35,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Date;
 
+/**
+ * This is a viewmodel class to handle the payment for the rider side of the app. It stores the rider
+ * and the driver of the scanned QR code to keep them accessible through the payment and rating
+ * fragments. The main functionalities of this viewmodel are to update complete transactions between
+ * a rider and driver.
+ */
+
 public class PaymentViewModel extends AndroidViewModel {
     private UserRepository userRepository;
     private TransactionRepository transactionRepository;

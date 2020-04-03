@@ -177,6 +177,12 @@ abstract class DashboardActivity extends AppCompatActivity {
         }
     }
 
+    /*
+        Methods below reference medium.com
+        Author: Sylvain Saurel
+        URL: https://medium.com/@ssaurel/implement-a-navigation-drawer-with-a-toolbar-on-android-m-68162f13d220
+        Code used to configure the hamburger menu
+     */
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         getMenuInflater().inflate(getMenuLayoutId(), navigationView.getMenu());
@@ -237,6 +243,7 @@ abstract class DashboardActivity extends AppCompatActivity {
         }
         return true;
     }
+    // End of medium.com code
 
     private void logout() {
         myAuth.signOut();

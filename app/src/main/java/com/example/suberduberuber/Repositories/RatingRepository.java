@@ -26,6 +26,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+/**
+ * This class encapsulates all the interactions with the firebase database that are related to user
+ * ratings. Main functionalities are to update the rating and number of ratings for a specific
+ * user.
+ */
+
 public class RatingRepository {
     private static final String TAG = "RATING_REPOSITORY";
 

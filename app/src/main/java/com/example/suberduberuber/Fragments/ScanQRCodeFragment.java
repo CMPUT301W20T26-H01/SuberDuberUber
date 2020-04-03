@@ -45,7 +45,10 @@ limitations under the License.
     Fragment for scanning a QR code. Launches a zxing activity to the camera and
     auto detection of a QR code. Once a QR code is scanned, returns to this fragment
     to display the QR code string and next button to rate my driver fragment.
+
+    Reference: https://www.android-examples.com/generate-qr-code-in-android-using-zxing-library-in-android-studio/
  */
+
 public class ScanQRCodeFragment extends Fragment {
     private NavController navController;
     private PaymentViewModel paymentViewModel;

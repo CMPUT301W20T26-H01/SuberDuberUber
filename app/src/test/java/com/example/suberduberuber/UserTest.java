@@ -13,8 +13,8 @@ public class UserTest {
 
     @BeforeEach
     public void setup() {
-        rider = new User("rider", "rider@test.ca", false);
-        driver = new User("driver", "driver@test.ca", true);
+        rider = new User("rider", "rider@test.ca", "123", false);
+        driver = new User("driver", "driver@test.ca", "456", true);
     }
 
     @Test
@@ -43,8 +43,8 @@ public class UserTest {
 
     @Test
     public void getSetPhone() {
-        assertEquals("", rider.getPhone());
-        assertEquals("", driver.getPhone());
+        assertEquals("123", rider.getPhone());
+        assertEquals("456", driver.getPhone());
 
         rider.setPhone("1234567890");
         assertEquals("1234567890", rider.getPhone());

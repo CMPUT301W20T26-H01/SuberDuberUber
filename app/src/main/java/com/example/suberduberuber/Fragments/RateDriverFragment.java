@@ -37,8 +37,10 @@ import com.example.suberduberuber.ViewModels.PaymentViewModel;
 import com.example.suberduberuber.ViewModels.RatingViewModel;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Rider fragment to rate the driver at the end of a trip. Takes in the rating and updates the driver's
+ * score through the viewmodel.
  */
+
 public class RateDriverFragment extends Fragment {
 
     private NavController navController;

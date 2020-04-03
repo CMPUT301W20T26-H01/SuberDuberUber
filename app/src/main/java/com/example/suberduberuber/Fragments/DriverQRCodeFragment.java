@@ -44,6 +44,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.zxing.WriterException;
 
+/**
+ * Driver fragment to generate their qr code and notify the driver when a payment is received.
+ */
+
 public class DriverQRCodeFragment extends Fragment {
     private NavController navController;
     private DriverPaidRateViewModel driverPaidRateViewModel;

@@ -24,6 +24,11 @@ import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Repositories.RatingRepository;
 import com.example.suberduberuber.Repositories.UserRepository;
 
+/**
+ *  This is a viewmodel class to handle the rating for the rider side of the app. The main functionality
+ *  of this viewmodel is to update the driver rating based on what the rider rated them.
+ */
+
 public class RatingViewModel extends AndroidViewModel {
 
     private UserRepository userRepository;
