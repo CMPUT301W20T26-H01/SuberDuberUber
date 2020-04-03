@@ -7,4 +7,13 @@
     android:layout_width="match_parent"
     android:background="@color/quantum_bluegrey950"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/suber_duber_uber_white" />
+    </LinearLayout>
+</androidx.appcompat.widget.Toolbar>

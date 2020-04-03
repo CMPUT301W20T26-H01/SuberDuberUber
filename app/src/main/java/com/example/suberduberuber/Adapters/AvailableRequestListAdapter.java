@@ -14,11 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
 import com.example.suberduberuber.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This is a custom adapter that is used to bind a list of data to the recycler view elements, and \
@@ -46,10 +48,31 @@ public class AvailableRequestListAdapter extends RecyclerView.Adapter<AvailableR
 
         Request request = dataset.get(position);
 
-        holder.origin.setText(request.getPath().getStartLocation().getLocationName());
-        holder.destination.setText(request.getPath().getDestination().getLocationName());
+        // set fields
+        Path path = request.getPath();
+        if (path.getDestination().getLocationName() != null && !(Objects.equals(path.getDestination().getLocationName(), "Selected Location"))
+                && !(Objects.equals(path.getDestination().getLocationName(), "Current Location"))) {
+            holder.destination.setText(path.getDestination().getLocationName());
+        } else if (path.getDestination().getAddress() != null) {
+            holder.destination.setText(path.getDestination().getAddress());
+        } else if (path.getDestination().getCoordinate() != null) {
+            holder.destination.setText((path.getDestination().getCoordinate()));
+        } else {
+            holder.destination.setText("Unknown Location");
+        }
+
+        if (path.getStartLocation().getLocationName() != null && !(Objects.equals(path.getStartLocation().getLocationName(), "Selected Location"))
+                && !(Objects.equals(path.getStartLocation().getLocationName(), "Current Location"))) {
+            holder.origin.setText(path.getStartLocation().getLocationName());
+        } else if (path.getStartLocation().getAddress() != null) {
+            holder.origin.setText(path.getStartLocation().getAddress());
+        } else if (path.getStartLocation().getCoordinate() != null) {
+            holder.origin.setText((path.getStartLocation().getCoordinate()));
+        } else {
+            holder.origin.setText("Unknown Location");
+        }
         holder.riderName.setText(request.getRequestingUser().getUsername());
-        holder.price.setText(Double.toString(request.getPath().getEstimatedFare()));
+        holder.price.setText(String.format("%.2f", request.getPrice()));
     }
 
 

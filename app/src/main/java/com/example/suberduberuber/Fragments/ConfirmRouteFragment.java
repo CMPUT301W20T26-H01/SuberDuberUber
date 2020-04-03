@@ -1,5 +1,8 @@
 package com.example.suberduberuber.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,7 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -24,8 +29,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
+import com.example.suberduberuber.ViewModels.QRCodeViewModel;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +54,7 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.Distance;
 import com.google.maps.model.Duration;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,16 +74,19 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
     TextView pickupTimeTextView;
     TextView destinationTextView;
     EditText bidAmount;
-    ImageButton submitBid;
 
 
     private GetRideViewModel getRideViewModel;
+    private QRCodeViewModel qrCodeViewModel;
     private Request tempRequest;
 
     protected NavController navController;
 
     private long duration;
     private long distance;
+
+    private double balance;
+    private AlertDialog dialog;
 
     public ConfirmRouteFragment() {
         // Required empty public constructor
@@ -96,28 +107,77 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
         navController = Navigation.findNavController(view);
 
         getRideViewModel = new ViewModelProvider(requireActivity()).get(GetRideViewModel.class);
+        qrCodeViewModel = ViewModelProviders.of(this).get(QRCodeViewModel.class);
+
         tempRequest = getRideViewModel.getTempRequest().getValue();
+
+        qrCodeViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                setBalance(user);
+            }
+        });
 
         pickupTextView = view.findViewById(R.id.pickupLocation);
         destinationTextView = view.findViewById(R.id.destination);
         setTextViews();
 
         pickupTimeTextView = view.findViewById(R.id.pickupTime);
-        pickupTimeTextView.setText(tempRequest.getTime().toString());
+        String timeFormat = "HH:mm - EEE MMM dd, YYYY";;
+        pickupTimeTextView.setText(new SimpleDateFormat(timeFormat).format(tempRequest.getTime()));
 
         bidAmount = view.findViewById(R.id.bid_amount);
-        submitBid = view.findViewById(R.id.confirm_bid_button);
-        submitBid.setOnClickListener(new View.OnClickListener() {
+
+        submitButton = view.findViewById(R.id.submit_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Submit ride to database
                 try {
+                    bidAmount.setError(null);
                     double bid = Double.valueOf(bidAmount.getText().toString());
-                    if (bid >= tempRequest.getPath().getEstimatedFare()) {
+                    if (bid >= tempRequest.getPath().getEstimatedFare() & bid <= balance) {
                         tempRequest.setPrice(bid);
-                        Toast.makeText(getContext(), "Bid Updated", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(getContext(), "Bid is less than recommended amount", Toast.LENGTH_LONG).show();
+                        if (bid > tempRequest.getPath().getEstimatedFare()) {
+                            Toast.makeText(getContext(), "Bid Updated", Toast.LENGTH_SHORT).show();
+                        }
+                        saveRequest();
+                        getRideViewModel.commitTempRequest();
+                        navController.navigate(R.id.action_confrimRouteFragment_to_ridePendingFragment2);
+                    } else if (tempRequest.getPath().getEstimatedFare() > balance) {
+                        dialog = new AlertDialog.Builder(getActivity()).create();
+                        dialog.setTitle("You do not have enough QRBucks in your wallet!");
+                        dialog.setMessage("Your balance of $".concat(String.format("%.2f", balance).concat(" is not enough to cover the minimum fare. Please add funds to your wallet.")));
+                        dialog.setCancelable(false);
+                        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Add Funds", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                navController.navigate(R.id.action_to_wallet);
+                            }
+                        });
+                        dialog.show();
+                    } else if (bid > balance) {
+                    dialog = new AlertDialog.Builder(getActivity()).create();
+                    dialog.setTitle("You do not have enough QRBucks in your wallet!");
+                    dialog.setMessage("Your balance of $".concat(String.format("%.2f", balance).concat(" is not enough to cover your bid. Please lower your bid or add funds to your wallet.")));
+                    dialog.setCancelable(false);
+                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Add Funds", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            navController.navigate(R.id.action_to_wallet);
+                        }
+                    });
+                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Lower Bid", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                }
+                else {
+                    bidAmount.setText(Double.toString(tempRequest.getPath().getEstimatedFare()));
+                        bidAmount.setError("Bid is less than recommended amount");
                     }
                 }
                 catch (Exception exception) {
@@ -125,18 +185,11 @@ public class ConfirmRouteFragment extends Fragment implements OnMapReadyCallback
                 }
             }
         });
-
-        submitButton = view.findViewById(R.id.submit_button);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Submit ride to database
-                saveRequest();
-                getRideViewModel.commitTempRequest();
-                navController.navigate(R.id.action_confrimRouteFragment_to_ridePendingFragment2);
-            }
-        });
         initGoogleMap(savedInstanceState);
+    }
+
+    private void setBalance(User user) {
+        balance = user.getBalance();
     }
 
     private void setTextViews() {

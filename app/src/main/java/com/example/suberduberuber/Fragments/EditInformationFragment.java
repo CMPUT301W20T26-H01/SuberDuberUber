@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,11 +51,9 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
     private TextView modelEdit;
     private TextView colorEdit;
 
+    private LinearLayout carLayout;
 
     private AlertDialog dialog;
-
-
-
 
     public EditInformationFragment() {
         // Required empty public constructor
@@ -95,6 +94,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
         modelEdit = view.findViewById(R.id.modelEdit);
         colorEdit = view.findViewById(R.id.colorEdit);
 
+        carLayout = view.findViewById(R.id.car_edit);
 
         if(isDriver){
             driver = (Driver) user;
@@ -105,10 +105,9 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
             modelEdit.setOnClickListener(this);
             colorEdit.setOnClickListener(this);
 
-        } else{ yearEdit.setVisibility(View.GONE);
-            makeEdit.setVisibility(View.GONE);
-            modelEdit.setVisibility(View.GONE);
-            colorEdit.setVisibility(View.GONE);}
+        } else{
+            carLayout.setVisibility(View.GONE);
+        }
 
         Button confirmButton = view.findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(this);
@@ -118,8 +117,7 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
 
     }
 
-    @Override
-    public void onClick(View v) {
+    public void createDialogs(View v) {
         dialog = new AlertDialog.Builder(getActivity()).create();
         newInfoField = new EditText(getActivity());
         dialog.setTitle("Edit User Information");
@@ -134,34 +132,46 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        createDialogs(v);
         switch(v.getId()) {
             case R.id.emailEdit:
                 newInfoField.setText(emailEdit.getText());
+                dialog.setTitle("Edit Email Address");
                 dialog.show();
                 id = v.getId();
                 break;
             case R.id.phoneNumberEdit:
                 newInfoField.setText(phoneNumberEdit.getText().toString());
+                dialog.setTitle("Edit Phone Number");
                 dialog.show();
                 id = v.getId();
                 break;
             case R.id.yearEdit:
                 newInfoField.setText(yearEdit.getText());
+                dialog.setTitle("Edit Car Year");
                 dialog.show();
                 id = v.getId();
                 break;
             case R.id.makeEdit:
                 newInfoField.setText(makeEdit.getText());
+                dialog.setTitle("Edit Car Make");
                 dialog.show();
                 id = v.getId();
                 break;
             case R.id.modelEdit:
                 newInfoField.setText(modelEdit.getText());
+                dialog.setTitle("Edit Car Model");
                 dialog.show();
                 id = v.getId();
                 break;
             case R.id.colorEdit:
                 newInfoField.setText(colorEdit.getText());
+                dialog.setTitle("Edit Car Colour");
                 dialog.show();
                 id = v.getId();
                 break;
@@ -184,10 +194,10 @@ public class EditInformationFragment extends Fragment implements View.OnClickLis
     }
 
     private void displayDriver(Car car){
-        yearEdit.setVisibility(View.VISIBLE);
-        makeEdit.setVisibility(View.VISIBLE);
-        modelEdit.setVisibility(View.VISIBLE);
-        colorEdit.setVisibility(View.VISIBLE);
+//        yearEdit.setVisibility(View.VISIBLE);
+//        makeEdit.setVisibility(View.VISIBLE);
+//        modelEdit.setVisibility(View.VISIBLE);
+//        colorEdit.setVisibility(View.VISIBLE);
 
         yearEdit.setText(Integer.toString(car.getYear()));
         makeEdit.setText(car.getMake());

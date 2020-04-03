@@ -52,7 +52,7 @@ public class DriverQRCodeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_qrcode_page, container, false);
+        return inflater.inflate(R.layout.fragment_driver_qrcode, container, false);
     }
 
     @Override
@@ -64,9 +64,6 @@ public class DriverQRCodeFragment extends Fragment {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         qrImageView = view.findViewById(R.id.qrCodeImage);
-
-        view.findViewById(R.id.balanceTextView).setVisibility(View.GONE);
-        view.findViewById(R.id.addFundsButton).setVisibility(View.GONE);
 
         previousBalance = 0;
         updatedBalance = 0;

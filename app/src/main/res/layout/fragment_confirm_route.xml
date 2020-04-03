@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="0dp"
     android:orientation="vertical"
-    tools:context=".Fragments.SelectDestinationFragment"
-    android:layout_margin="5dp">
+    tools:context=".Fragments.SelectDestinationFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,122 +21,137 @@
             android:id="@+id/route_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            map:uiZoomGestures="false"
+            map:uiScrollGestures="false"
+            map:uiRotateGestures="false"
+            map:uiTiltGestures="false"
+            android:layout_weight="1"
+            android:fadingEdgeLength="10dp"
+            android:requiresFadingEdge="horizontal|vertical" />
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/selectedPickupLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
-            android:text="Your Selected Pickup Location:" />
+            android:text="Your Selected Pickup Location:"
+            android:textColor="@color/colorPrimaryText" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/pickupLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:text="Pickup"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/selectedDestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:text="Your Selected Destination:" />
+            android:text="Your Selected Destination:"
+            android:textColor="@color/colorPrimaryText" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:text="Destination"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/selectedTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:text="Pickup Time" />
+            android:text="Pickup Time"
+            android:textColor="@color/colorPrimaryText" />
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
             android:id="@+id/pickupTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="5dp"
             android:text="12:00 AM"
-            android:textSize="18sp" />
-        <TextView
             android:textColor="@color/colorPrimaryText"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/how_much"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
-            android:text="Bid Amount (Must be greater than amount shown)" />
-        <LinearLayout
+            android:text="Bid Amount \n(Must be greater than or equal too estimated fare)"
+            android:textColor="@color/colorPrimaryText" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="right|center"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            android:gravity="center|right">
+
             <TextView
                 android:id="@+id/dollar_sign"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="5dp"
                 android:inputType="numberDecimal"
                 android:text="$"
-                android:gravity="right"
+                android:textAlignment="textEnd"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorPrimaryText" />
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bid_amount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <EditText
                 android:id="@+id/bid_amount"
-                android:layout_width="220dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
+                android:layout_marginEnd="128dp"
                 android:hint="How Much?"
                 android:inputType="numberDecimal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorPrimaryText" />
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/dollar_sign"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/confirm_bid_button"
-                android:layout_width="94dp"
-                android:layout_height="82dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_confirm" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <Button
-            android:textColor="@color/colorSecondaryText"
-            android:background="@color/colorSecondary"
-            android:layout_marginTop="10dp"
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_weight="0"
-            android:text="Let's Fucking Do This!" />
+            android:background="@color/colorSecondary"
+            android:text="Let's Do This!"
+            android:textColor="@color/colorSecondaryText" />
 
     </LinearLayout>
 

@@ -1,11 +1,13 @@
 package com.example.suberduberuber.Fragments;
 
+import android.app.Application;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -30,9 +32,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.suberduberuber.Adapters.AvailableRequestListAdapter;
+import com.example.suberduberuber.Clients.UserClient;
 import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Services.LocationService;
+import com.example.suberduberuber.ViewModels.DriverLocationViewModel;
 import com.example.suberduberuber.ViewModels.GetRideViewModel;
 import com.example.suberduberuber.ViewModels.ViewRequestsViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -49,9 +54,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
@@ -66,6 +74,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DriverSearchRequests extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,  AvailableRequestListAdapter.RequestCardTouchListener {
 
@@ -76,7 +85,6 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     private static final String TAG = "Auto Complete Log";
     private GeoApiContext mGeoApiContext = null;
 
-    private LatLngBounds mapBounds;
 
     private ViewRequestsViewModel viewRequestsViewModel;
     protected NavController navController;
@@ -84,11 +92,11 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     private RecyclerView.LayoutManager layoutManager;
     private AvailableRequestListAdapter adapter;
 
-    private LatLngBounds bound;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private double DISTANCE_FACTOR = 0.16;
 
-    private TextView noRequestsMessage;
+    private CardView noRequestsMessage;
+    private TextView refreshLocation;
 
 
     public DriverSearchRequests() {
@@ -118,27 +126,21 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         configureRecyclerView();
 
         noRequestsMessage = view.findViewById(R.id.no_requests_message);
+        refreshLocation = view.findViewById(R.id.refresh_location);
 
-
-        viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
+        refreshLocation.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(List<Request> requests) {
-                if(requests.size() > 0) {
-                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            setBounds(location);
-                            noRequestsMessage.setVisibility(View.GONE);
-                            displayRequests(requests);
-                            adapter.setRequestDataset(requests);
+            public void onClick(View v) {
+                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.getResult() != null) {
+                            setBounds(task.getResult());
                         }
-                    });
-
-                }
-                else {
-                    noRequestsMessage.setVisibility(View.VISIBLE);
-                }
-
+                    }
+                });
+                viewRequestsViewModel.removeObservers(getViewLifecycleOwner());
+                getAllRequests();
             }
         });
 
@@ -150,7 +152,7 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         });
     }
 
-    private void setBounds(Location location) {
+    private LatLngBounds getBounds(Location location) {
         double latDist = DISTANCE_FACTOR;
         double longDist = DISTANCE_FACTOR/Math.cos(Math.toRadians(location.getLatitude()));
         LatLng min = new LatLng(location.getLatitude() - latDist, location.getLongitude() - longDist);
@@ -158,9 +160,12 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         LatLngBounds.Builder builder = LatLngBounds.builder();
         builder.include(min);
         builder.include(max);
-        bound = builder.build();
+        return builder.build();
+    }
+
+    private void setBounds(Location location) {
         if (mMap != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bound, DEFAULT_ZOOM));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(location), DEFAULT_ZOOM));
         }
     }
 
@@ -201,15 +206,21 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
     }
 
 
-    private void displayRequests(List<Request> requests) {
+    private List<Request> displayRequests(List<Request> requests, Location location) {
         if (mMap != null) {
-            mMap.setOnMarkerClickListener(this);
+            //mMap.setOnMarkerClickListener(this);
             for (Request request : requests) {
-                if (bound.contains(request.getPath().getStartLocation().getLatLng())) {
-                    displayRequest(request);
+                if (location != null) {
+                    if (getBounds(location).contains(request.getPath().getStartLocation().getLatLng())) {
+                        displayRequest(request);
+                    }
+                    else {
+                        requests.remove(request);
+                    }
                 }
             }
         }
+        return requests;
     }
 
     private void displayRequest(Request request) {
@@ -276,14 +287,54 @@ public class DriverSearchRequests extends Fragment implements OnMapReadyCallback
         navController.navigate(R.id.action_driverSearchRequests_to_driverNavigationFragment);
     }
 
+    public void getAllRequests() {
+        viewRequestsViewModel.getAllRequests().observe(getViewLifecycleOwner(), new Observer<List<Request>>() {
+            @Override
+            public void onChanged(List<Request> requests) {
+                if (requests.size() > 0) {
+                    fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            if (task.getResult() != null) {
+                                mMap.clear();
+                                setBounds(task.getResult());
+                                if (displayRequests(requests, task.getResult()).size() > 0) {
+                                    noRequestsMessage.setVisibility(View.GONE);
+                                    adapter.setRequestDataset(displayRequests(requests, task.getResult()));
+                                } else {
+                                    noRequestsMessage.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    mMap.clear();
+                    noRequestsMessage.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+    }
+
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    setBounds(location);
+                    noRequestsMessage.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        getAllRequests();
     }
     @Override
     public void onPause() {
         mMapView.onPause();
+        viewRequestsViewModel.removeObservers(getViewLifecycleOwner());
         super.onPause();
     }
 

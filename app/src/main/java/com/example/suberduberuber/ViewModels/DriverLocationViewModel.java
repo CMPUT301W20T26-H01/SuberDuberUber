@@ -38,9 +38,8 @@ public class DriverLocationViewModel extends AndroidViewModel {
         userLocationRepository = new UserLocationRepository();
     }
 
-    public LiveData<GeoPoint> getDriverLocation(Request request) {
-        if (request != null && Objects.equals(request.getStatus(), "IN_PROGRESS")) {
-            Driver driver = request.getDriver();
+    public LiveData<GeoPoint> getLiveLocation(User driver) {
+        if (driver != null) {
             userLocationRepository.getLocation(driver).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -59,7 +58,27 @@ public class DriverLocationViewModel extends AndroidViewModel {
             currentLocation = null;
         }
         return currentLocation;
+    }
 
+    public LiveData<GeoPoint> getDriverLocation(Request request) {
+        if (request != null && (request.getStatus().equals("ACCEPTED") || request.getStatus().equals("PENDING_ACCEPTANCE"))) {
+            Driver driver = request.getDriver();
+            userLocationRepository.getLocation(driver).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if (queryDocumentSnapshots != null && queryDocumentSnapshots.getDocuments().size() > 0) {
+                        try {
+                            currentLocation.setValue(queryDocumentSnapshots.getDocuments().get(0).toObject(UserLocation.class).getGeoPoint());
+                        }
+                        catch (NullPointerException exception) {
+                            Log.i(TAG, "Null Pointer Exception");
+                        }
+                    }
+                }
+            });
+        }
+
+        return currentLocation;
     }
 
     public void removeObserver(Observer<GeoPoint> observer) {

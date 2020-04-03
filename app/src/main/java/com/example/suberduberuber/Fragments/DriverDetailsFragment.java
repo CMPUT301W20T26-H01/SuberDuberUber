@@ -1,7 +1,10 @@
 package com.example.suberduberuber.Fragments;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
@@ -10,10 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -21,6 +27,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.suberduberuber.Clients.UserClient;
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.UserRepository;
@@ -41,6 +48,7 @@ public class DriverDetailsFragment extends Fragment {
     private TextView username;
     private TextView rating;
     private Button backButton;
+    private RatingBar ratingBar;
 
 
 
@@ -63,7 +71,7 @@ public class DriverDetailsFragment extends Fragment {
         String driverName = getArguments().getString("driverName");
         String driverEmail = getArguments().getString("driverEmail");
         String driverPhone = getArguments().getString("driverPhone");
-        double driverRating = getArguments().getInt("driverRating");
+        float driverRating = getArguments().getFloat("driverRating");
         if (getArguments().size() < 4) {
             navController.navigate(R.id.action_driverDetailsFragment_to_ridePendingFragment);
         }
@@ -77,8 +85,8 @@ public class DriverDetailsFragment extends Fragment {
         phone = view.findViewById(R.id.phone_number);
         phone.setText(driverPhone);
 
-        rating = view.findViewById(R.id.rating);
-        rating.setText(String.valueOf(driverRating));
+        ratingBar = view.findViewById(R.id.ratingBar);
+        ratingBar.setRating(driverRating);
 
         backButton = view.findViewById(R.id.Return);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -88,5 +96,37 @@ public class DriverDetailsFragment extends Fragment {
             }
         });
 
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dial(driverPhone);
+            }
+        });
+
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail(driverEmail, ((UserClient)(getActivity().getApplicationContext())).getUser().getUsername());
+            }
+        });
+
+    }
+    private void dial(String phone) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) ==
+                PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:".concat(phone)));
+            startActivity(intent);
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CALL_PHONE}, 1);
+        }
+    }
+
+    private void sendEmail(String email, String userName) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("plain/text");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {email});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "SuberDuberUber: Message from ".concat(userName));
+        startActivity(intent);
     }
 }

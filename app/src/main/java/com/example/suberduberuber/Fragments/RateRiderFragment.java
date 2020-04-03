@@ -64,8 +64,10 @@ public class RateRiderFragment extends Fragment {
 
         rating = view.findViewById(R.id.rating);
 
-        riderName = view.findViewById(R.id.rider_name);
-        riderName.setText(driverPaidRateViewModel.getRider().getUsername());
+        riderName = view.findViewById(R.id.rider_name_str);
+
+        String riderStr = "Please rate " + driverPaidRateViewModel.getRider().getUsername();
+        riderName.setText(riderStr);
 
         ratingRepository.findId(driverPaidRateViewModel.getRider().getEmail()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

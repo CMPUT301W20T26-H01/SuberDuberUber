@@ -2,8 +2,10 @@ package com.example.suberduberuber.ViewModels;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -18,7 +20,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * This is a ViewModelClass used to expose livedata to the fragments and activities that persists their
@@ -49,7 +54,6 @@ public class ViewRequestsViewModel extends AndroidViewModel {
                 }
             }
         });
-
         return allRequests;
     }
 
@@ -68,4 +72,10 @@ public class ViewRequestsViewModel extends AndroidViewModel {
             }
         });
     }
+
+    public void removeObservers(LifecycleOwner owner) {
+        allRequests.removeObservers(owner);
+        allRequests = new MutableLiveData<>();
+    }
+
 }
