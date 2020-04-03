@@ -14,7 +14,7 @@ public class RiderTest {
 
     @BeforeEach
     public void setup() {
-        r = new Rider("testUsername", "test@test.ca");
+        r = new Rider("testUsername", "test@test.ca", "123");
     }
 
 
@@ -51,21 +51,20 @@ public class RiderTest {
 
     @Test
     public void testAddRequest() {
-        Request req1 = new Request(1, r, null, "time", "initiated");
+        Request req1 = new Request(r, null, null);
         r.addRequest(req1);
 
         assertEquals(req1, r.getRequests().get(0));
-        Request req2 = new Request(2, r, null, "time", "initiated");
+        Request req2 = new Request(r, null, null);
         r.addRequest(req2);
 
         assertEquals(2, r.getRequests().size());
-        assertEquals(2, r.getRequests().get(1).getRequestID());
         assertThrows(IllegalArgumentException.class, () -> { r.addRequest(req1); });
     }
 
     @Test
     public void testRemoveRequest() {
-        Request req = new Request(1, r, null, "time", "initiated");
+        Request req = new Request(r, null, null);
         r.addRequest(req);
         r.removeRequest(req);
 

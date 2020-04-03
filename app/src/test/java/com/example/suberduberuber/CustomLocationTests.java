@@ -22,10 +22,4 @@ public class CustomLocationTests {
         assertNotEquals("Mother Should I Build The Wall", location.getLocationName());
     }
 
-    @Test
-    public void testGetDistanceBetween() {
-        CustomLocation location = mockLocation();
-        CustomLocation location1 = mockLocation();
-        assertEquals(0, location.getDistanceBetween(location1)); //TODO Update once function has been implemented
-    }
 }

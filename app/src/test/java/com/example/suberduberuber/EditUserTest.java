@@ -15,7 +15,7 @@ public class EditUserTest {
 
     @Before
     public void setup() {
-        user = new User("testUsername", "test@test.ca");
+        user = new User("testUsername", "test@test.ca", "123", false);
     }
 
     @Test

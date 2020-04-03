@@ -3,31 +3,22 @@ package com.example.suberduberuber;
 import com.example.suberduberuber.Models.CustomLocation;
 import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.Request;
+import com.example.suberduberuber.Models.Rider;
 import com.example.suberduberuber.Models.User;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
 import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RequestTest {
+    Date d;
 
     private Request mockRequest() {
-        Request request = new Request(123, null, null, "8:50", "initiated");
+        d = new Date();
+        Request request = new Request(null, null, d);
         return request;
-    }
-
-    @Test
-    public void testChangeStatus() {
-        Request request = mockRequest();
-        assertThrows(IllegalArgumentException.class, () -> { request.changeStatus("12123435"); });
-        assertThrows(IllegalArgumentException.class, () -> { request.changeStatus("destroyed"); });
-        assertThrows(IllegalArgumentException.class, () -> { request.changeStatus("initiated_complete"); });
-    }
-
-    @Test
-    public void testGetRequestID() {
-        Request request = mockRequest();
-        assertEquals(123, request.getRequestID());
     }
 
     @Test
@@ -45,19 +36,19 @@ public class RequestTest {
     @Test
     public void testGetTime() {
         Request request = mockRequest();
-        assertTrue(Objects.equals("8:50", request.getTime()));
+        assertTrue(Objects.equals(d, request.getTime()));
     }
 
     @Test
     public void testGetStatus() {
         Request request = mockRequest();
-        assertTrue(Objects.equals("initiated", request.getStatus()));
+        assertTrue(Objects.equals("PENDING_ACCEPTANCE", request.getStatus()));
     }
 
     @Test
     public void testSetRequestingUser() {
         Request request = mockRequest();
-        User user = new User("username", "email", false);
+        Rider user = new Rider("username", "email", "123");
         request.setRequestingUser(user);
         assertEquals(user, request.getRequestingUser());
     }
@@ -73,15 +64,21 @@ public class RequestTest {
     @Test
     public void testSetTime() {
         Request request = mockRequest();
-        request.setTime("6:00");
-        assertEquals("6:00", request.getTime());
+        Date d2 = new Date();
+        request.setTime(d2);
+        assertEquals(d2, request.getTime());
     }
 
     @Test
-    public void testSetStatus() {
+    public void testStatusChange() {
         Request request = mockRequest();
-        request.setStatus("completed");
-        assertEquals("completed", request.getStatus());
-        assertThrows(IllegalArgumentException.class, () -> {request.changeStatus("invalid");});
+        request.accept(null);
+        assertEquals("ACCEPTED", request.getStatus());
+
+        request.pickup();
+        assertEquals("IN_PROGRESS", request.getStatus());
+
+        request.complete();
+        assertEquals("COMPLETED", request.getStatus());
     }
 }
