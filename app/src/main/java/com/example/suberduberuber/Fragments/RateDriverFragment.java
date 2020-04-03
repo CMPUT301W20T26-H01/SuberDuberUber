@@ -20,6 +20,8 @@ import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.PaymentViewModel;
 import com.example.suberduberuber.ViewModels.RatingViewModel;
 
+import java.util.Observable;
+
 /**
  * A simple {@link Fragment} subclass.
  */

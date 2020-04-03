@@ -47,7 +47,7 @@
         </androidx.cardview.widget.CardView>
 
         <com.google.android.gms.maps.MapView
-            android:id="@+id/route_map"
+            android:id="@+id/google_map"
             map:uiZoomGestures="false"
             map:uiScrollGestures="false"
             map:uiRotateGestures="false"

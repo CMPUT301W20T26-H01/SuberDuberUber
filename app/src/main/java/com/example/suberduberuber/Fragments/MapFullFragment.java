@@ -28,44 +28,28 @@ Sources include:
     GoogleMaps YouTube Playlist by User CodingWithMitch - https://www.youtube.com/watch?v=RQxY7rrZATU&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT3gi
     Permission Services Code from GitHub User mitchtabian - https://gist.github.com/mitchtabian/2b9a3dffbfdc565b81f8d26b25d059bf
  */
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
-import com.example.suberduberuber.Models.Path;
 import com.example.suberduberuber.Models.DroppedPinPlace;
 import com.example.suberduberuber.R;
-import com.example.suberduberuber.Services.MapsServices;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.example.suberduberuber.Services.PermissionsService;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -77,25 +61,21 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.gson.internal.$Gson$Preconditions;
 
 import java.io.IOError;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import im.delight.android.location.SimpleLocation;
-
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 
-public class MapFullFragment extends MapsServices {
+public class MapFullFragment extends GoogleMapsFragment {
 
     private static final float DEFAULT_ZOOM = 15;
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
-    private static final String TAG = "Auto Complete Log";
+    private static final String TAG = "Full Map Fragment";
 
     ImageButton confirmButton;
     EditText textView;
@@ -103,13 +83,8 @@ public class MapFullFragment extends MapsServices {
     Place initPlace = null;
     Marker currentMarker = null;
     PlacesClient placesClient;
-    LatLng mDefaultLocation = new LatLng(53.2734, -7.77832031);
     int AUTOCOMPLETE_REQUEST_CODE = 1;
 
-
-    public static final String ERROR_TAG = "Login Activity";
-
-    private MapsServices mapsServices;
 
     public MapFullFragment() {
         // Required Empty Constructor
@@ -119,7 +94,16 @@ public class MapFullFragment extends MapsServices {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_map_full, container, false);
+        mMapView = view.findViewById(R.id.google_map);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        permissionsService = new PermissionsService(getContext(), getActivity());
+        initMap(savedInstanceState);
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         confirmButton = view.findViewById(R.id.confirmButton);
         textView = view.findViewById(R.id.autocomplete);
 
@@ -138,17 +122,6 @@ public class MapFullFragment extends MapsServices {
                 startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
-        return view;
-    }
-
-    private void updateMarker() {
-        if (currentMarker != null) {
-            currentMarker.remove();
-        }
-        currentMarker = mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title(currentPlace.getName()).snippet(currentPlace.getAddress()));
-        currentMarker.showInfoWindow();
-        textView.setText(currentPlace.getName());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
     }
 
     @Override
@@ -170,23 +143,7 @@ public class MapFullFragment extends MapsServices {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
-        if (mapViewBundle == null) {
-            mapViewBundle = new Bundle();
-            outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
-        }
-        mMapView.onSaveInstanceState(mapViewBundle);
-    }
-
-    private void getDeviceLocation() {
+    private void makeCurrentLocationMarker() {
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Class<?> currentClass = this.getClass();
             fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
@@ -214,6 +171,7 @@ public class MapFullFragment extends MapsServices {
 
     @Override
     public void setupMap() {
+        super.setupMap();
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -230,9 +188,17 @@ public class MapFullFragment extends MapsServices {
                 }
             }
         });
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        getDeviceLocation();
+        makeCurrentLocationMarker();
+    }
+
+    private void updateMarker() {
+        if (currentMarker != null) {
+            currentMarker.remove();
+        }
+        currentMarker = mMap.addMarker(new MarkerOptions().position(currentPlace.getLatLng()).title(currentPlace.getName()).snippet(currentPlace.getAddress()));
+        currentMarker.showInfoWindow();
+        textView.setText(currentPlace.getName());
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace.getLatLng(), DEFAULT_ZOOM));
     }
 }
 
