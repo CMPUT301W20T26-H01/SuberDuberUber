@@ -125,7 +125,7 @@
         android:id="@+id/Return"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@drawable/button_option1"
         android:text="Back to Ride"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryText" />

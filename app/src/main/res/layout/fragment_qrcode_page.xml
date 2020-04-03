@@ -30,7 +30,7 @@
         android:layout_marginTop="6dp">
 
         <Button
-            android:background="@color/colorPrimary"
+            android:background="@drawable/button_option1"
             android:id="@+id/addFundsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:text="@string/add_funds" />
 
         <Button
-            android:background="@color/colorPrimary"
+            android:background="@drawable/button_option1"
             android:id="@+id/sendFundsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

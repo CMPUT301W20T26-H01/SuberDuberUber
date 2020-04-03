@@ -23,7 +23,7 @@
 
     <Button
         android:textColor="@color/colorPrimaryText"
-        android:background="@drawable/btn_round"
+        android:background="@drawable/button_option1"
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
