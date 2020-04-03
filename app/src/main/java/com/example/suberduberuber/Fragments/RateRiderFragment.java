@@ -18,18 +18,19 @@ import androidx.navigation.Navigation;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.RatingRepository;
 import com.example.suberduberuber.ViewModels.DriverPaidRateViewModel;
-import com.example.suberduberuber.ViewModels.PaymentViewModel;
-import com.example.suberduberuber.ViewModels.RatingViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QuerySnapshot;
+
+/**
+ * Driver fragment to rate the rider at the end of a trip. Takes in the rating and updates the
+ * rider's rating score through the viewmodel.
+ */
 
 public class RateRiderFragment extends Fragment {
     private NavController navController;
     private RatingRepository ratingRepository;
 
-    private PaymentViewModel paymentViewModel;
-    private RatingViewModel ratingViewModel;
     private DriverPaidRateViewModel driverPaidRateViewModel;
     private String riderID;
 
@@ -56,8 +57,6 @@ public class RateRiderFragment extends Fragment {
         navController = Navigation.findNavController(view);
         ratingRepository = new RatingRepository();
 
-        paymentViewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
-        ratingViewModel = new ViewModelProvider(requireActivity()).get(RatingViewModel.class);
         driverPaidRateViewModel = new ViewModelProvider(requireActivity()).get(DriverPaidRateViewModel.class);
 
         submitButton = view.findViewById(R.id.submit_button);
