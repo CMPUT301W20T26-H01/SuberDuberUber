@@ -26,35 +26,41 @@ import androidx.navigation.Navigation;
 
 import com.example.suberduberuber.Models.Driver;
 import com.example.suberduberuber.Models.QRCode;
-import com.example.suberduberuber.Models.Transaction;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.UserRepository;
 import com.example.suberduberuber.ViewModels.PaymentViewModel;
 import com.example.suberduberuber.ViewModels.QRCodeViewModel;
 import com.example.suberduberuber.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 /*
-    Fragment that generates a QR code based on the user's email.
+Copyright [2020] [SuberDuberUber]
 
-    Eventually will remove the on click button and have the QR
-    code generate automatically and may change the email string
-    to a user id.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+    
+/**
+ * Wallet fragment for each user to generate their qr code and give them the ability to add/send
+ * funds outside of the ride process. The send funds function allows them to scan another user's
+ * qr code to send over funds.
+ *
+ * Reference: https://www.android-examples.com/generate-qr-code-in-android-using-zxing-library-in-android-studio/
  */
-
 public class QRCodeFragment extends Fragment {
-    private NavController navController;
-    private UserRepository userRepository;
     private PaymentViewModel paymentViewModel;
 
     private ImageView qrImageView;
@@ -71,7 +77,6 @@ public class QRCodeFragment extends Fragment {
     private AlertDialog confirmDialog;
     private AlertDialog pickAmount;
     private AlertDialog transactionConfirmDialog;
-    private int id;
 
     private QRCodeViewModel qrCodeViewModel;
     private double balance;
@@ -79,7 +84,6 @@ public class QRCodeFragment extends Fragment {
     private String scannedUid;
     private User scannedUser;
     private String userID;
-    private User currentUser;
     private double amount;
 
     public QRCodeFragment() {
@@ -97,8 +101,6 @@ public class QRCodeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         qrCodeViewModel = ViewModelProviders.of(this).get(QRCodeViewModel.class);
-        navController = Navigation.findNavController(view);
-        userRepository = new UserRepository();
         paymentViewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
 
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();

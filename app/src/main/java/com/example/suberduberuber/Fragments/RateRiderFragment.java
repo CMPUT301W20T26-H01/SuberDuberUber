@@ -1,5 +1,21 @@
 package com.example.suberduberuber.Fragments;
 
+/*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,18 +34,19 @@ import androidx.navigation.Navigation;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.Repositories.RatingRepository;
 import com.example.suberduberuber.ViewModels.DriverPaidRateViewModel;
-import com.example.suberduberuber.ViewModels.PaymentViewModel;
-import com.example.suberduberuber.ViewModels.RatingViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QuerySnapshot;
+
+/**
+ * Driver fragment to rate the rider at the end of a trip. Takes in the rating and updates the
+ * rider's rating score through the viewmodel.
+ */
 
 public class RateRiderFragment extends Fragment {
     private NavController navController;
     private RatingRepository ratingRepository;
 
-    private PaymentViewModel paymentViewModel;
-    private RatingViewModel ratingViewModel;
     private DriverPaidRateViewModel driverPaidRateViewModel;
     private String riderID;
 
@@ -56,8 +73,6 @@ public class RateRiderFragment extends Fragment {
         navController = Navigation.findNavController(view);
         ratingRepository = new RatingRepository();
 
-        paymentViewModel = new ViewModelProvider(requireActivity()).get(PaymentViewModel.class);
-        ratingViewModel = new ViewModelProvider(requireActivity()).get(RatingViewModel.class);
         driverPaidRateViewModel = new ViewModelProvider(requireActivity()).get(DriverPaidRateViewModel.class);
 
         submitButton = view.findViewById(R.id.submit_button);

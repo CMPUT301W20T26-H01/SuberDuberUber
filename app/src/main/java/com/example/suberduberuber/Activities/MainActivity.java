@@ -1,32 +1,34 @@
 package com.example.suberduberuber.Activities;
 
+/*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.suberduberuber.Models.User;
 import com.example.suberduberuber.R;
 import com.example.suberduberuber.ViewModels.AuthViewModel;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -34,13 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth myAuth = FirebaseAuth.getInstance();
     private AuthViewModel authViewModel;
-
-    public boolean locationPermissionGranted = false;
-    public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
-    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
-    public static final int ERROR_DIALOG_REQUEST = 9001;
-    public static final String ERROR_TAG = "Login Activity";
-
     private ProgressBar spinner;
 
     @Override

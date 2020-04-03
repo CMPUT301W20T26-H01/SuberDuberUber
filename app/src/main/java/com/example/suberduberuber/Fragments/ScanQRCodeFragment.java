@@ -26,10 +26,29 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 /*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+
     Fragment for scanning a QR code. Launches a zxing activity to the camera and
     auto detection of a QR code. Once a QR code is scanned, returns to this fragment
     to display the QR code string and next button to rate my driver fragment.
+
+    Reference: https://www.android-examples.com/generate-qr-code-in-android-using-zxing-library-in-android-studio/
  */
+
 public class ScanQRCodeFragment extends Fragment {
     private NavController navController;
     private PaymentViewModel paymentViewModel;

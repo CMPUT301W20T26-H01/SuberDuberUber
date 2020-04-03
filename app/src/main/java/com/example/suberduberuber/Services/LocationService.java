@@ -1,5 +1,31 @@
 package com.example.suberduberuber.Services;
 
+/*
+Copyright [2020] [SuberDuberUber]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+****************************************************************************************************
+Service to track location of user while app is running. Continues to run in the background with a notification
+tray icon notifying users the app is still running.
+
+Code for this service was sourced from YouTube playlist on GoogleMaps by user CodingWithMitch
+https://www.youtube.com/watch?v=pj4thEAYrGU&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT3gi&index=15
+Code provided through videos by GitHub user mitchtabian
+https://gist.github.com/mitchtabian/d3fee0954426f55c94807513a5a18a96
+
+ */
+
 import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -15,7 +41,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -28,8 +53,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;

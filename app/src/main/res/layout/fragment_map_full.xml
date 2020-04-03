@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <com.google.android.gms.maps.MapView
-            android:id="@+id/full_map"
+            android:id="@+id/google_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.8" />

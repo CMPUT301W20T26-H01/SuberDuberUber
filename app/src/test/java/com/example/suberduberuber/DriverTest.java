@@ -10,12 +10,13 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DriverTest {
     Driver d;
     private Driver createDriver() {
         Car c = new Car("ABC123");
-        Driver d = new Driver("testUsername", "test@test.ca", c);
+        Driver d = new Driver("testUsername", "test@test.ca", "123", c);
         return d;
     }
 
@@ -42,18 +43,10 @@ public class DriverTest {
     }
 
     @Test
-    public void testSetGetCurrentRide() {
-        assertEquals("", d.getCurrentRide());
-
-        d.setCurrentRide("Current Ride");
-        assertEquals("Current Ride", d.getCurrentRide());
-    }
-
-    @Test
     public void testAddAcceptedReq() {
-        Rider r = new Rider("rider1", "ride@rider.ca");
-        Request req1 = new Request(1, r, null, "time", "initiated");
-        Request req2 = new Request(2, r, null, "time", "initiated");
+        Rider r = new Rider("rider1", "ride@rider.ca", "123");
+        Request req1 = new Request(r, null, new Date());
+        Request req2 = new Request(r, null, new Date());
         d.addAcceptedRequests(req1);
 
         assertEquals(req1, d.getAcceptedRequests().get(0));
@@ -64,8 +57,8 @@ public class DriverTest {
 
     @Test
     public void testRemoveAcceptedReq() {
-        Rider r = new Rider("rider1", "ride@rider.ca");
-        Request req1 = new Request(1, r, null, "time", "initiated");
+        Rider r = new Rider("rider1", "ride@rider.ca", "123");
+        Request req1 = new Request(r, null, new Date());
         d.addAcceptedRequests(req1);
         d.removeAcceptedRequests(req1);
         assertEquals(0, d.getAcceptedRequests().size());
@@ -74,9 +67,9 @@ public class DriverTest {
 
     @Test
     public void testGetAcceptedReq() {
-        Rider r = new Rider("rider1", "ride@rider.ca");
-        Request req1 = new Request(1, r, null, "time", "initiated");
-        Request req2 = new Request(2, r, null, "time", "initiated");
+        Rider r = new Rider("rider1", "ride@rider.ca", "123");
+        Request req1 = new Request(r, null, new Date());
+        Request req2 = new Request(r, null, new Date());
         ArrayList<Request> a = new ArrayList<>();
         a.add(req1);
         a.add(req2);
